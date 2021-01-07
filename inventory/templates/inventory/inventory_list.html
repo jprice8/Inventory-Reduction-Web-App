@@ -1,0 +1,45 @@
+{% extends 'inventory/base.html' %}
+
+{% block content %}
+    <h1 class="mt-4">View myInventory</h1>
+    {% if inventory_list %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Period</th>
+                    <th scope="col">Facility</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Unit ID</th>
+                    <th scope="col">IMMS #</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Vendor</th>
+                    <th scope="col">Mfr. Cat. No.</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Unit Cost</th>
+                    <th scope="col">UoM</th>
+                    <th scope="col">Extended Cost</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in inventory_list %}
+                    <tr>
+                        <td>{{ item.period }}</td>
+                        <td>{{ item.facility_no }}</td>
+                        <td>{{ item.location }}</td>
+                        <td>{{ item.unit_id }}</td>
+                        <td>{{ item.imms }}</td>
+                        <td>{{ item.description }}</td>
+                        <td>{{ item.vendor }}</td>
+                        <td>{{ item.mfr_cat_no }}</td>
+                        <td>{{ item.qty }}</td>
+                        <td>{{ item.cost }}</td>
+                        <td>{{ item.uom }}</td>
+                        <td>{{ item.ext }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h2>Could not find items... Are you sure you have the correct access privileges?</h2>
+    {% endif %}
+{% endblock %}
