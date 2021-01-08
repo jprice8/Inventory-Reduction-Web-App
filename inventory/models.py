@@ -4,85 +4,59 @@ from django.contrib.auth.models import User
 
 class Invcount(models.Model):
     period = models.DateTimeField()
-    facility_no = models.CharField(max_length=50)
+    fac = models.CharField(max_length=50)
     location = models.CharField(max_length=50)
-    unit_id = models.CharField(max_length=100)
+    unit_id = models.CharField(max_length=100, null=True)
     imms = models.CharField(max_length=50)
-    description = models.CharField(max_length=255)
-    vendor = models.CharField(max_length=100)
-    mfr_cat_no = models.CharField(max_length=50)
+    description = models.CharField(max_length=255, null=True)
+    vendor = models.CharField(max_length=100, null=True)
+    mfr_cat_no = models.CharField(max_length=50, null=True)
     qty = models.IntegerField(default=0)
-    cost = models.FloatField()
-    uom = models.CharField(max_length=50)
-    ext = models.FloatField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    cost = models.FloatField(null=True)
+    uom = models.CharField(max_length=50, null=True)
+    ext = models.FloatField(null=True)
 
     class Meta:
         ordering = ('-ext', )
 
     def __str__(self):
-        return f'item: {self.description} with qty: {self.qty} and ext: {self.ext}'
+        return f'item: {self.description}, at facility: {self.fac}, with qty: {self.qty} and ext: {self.ext}'
 
     def calculate_ext_cost(self):
         return self.qty * self.cost
 
 
-class Issue(models.Model):
-    facility_name = models.CharField(max_length=100)
-    category = models.CharField(max_length=100)
-    sub_category = models.CharField(max_length=100)
-    facility_no = models.CharField(max_length=50)
-    dept_id = models.CharField(max_length=100)
-    account_number = models.CharField(max_length=100)
-    trans_code = models.CharField(max_length=100)
-    issue_date = models.DateTimeField()
-    imms = models.CharField(max_length=50)
-    description = models.CharField(max_length=255)
-    adjustment_number = models.CharField(max_length=100)
-    qty = models.IntegerField(default=0)
-    uom = models.CharField(max_length=50)
-    wt_avg_cost = models.FloatField()
-    ext_cost = models.FloatField()
-    created_at = models.DateTimeField(auto_now_add=True)
+class CountUsageList(models.Model):
+    period = models.DateTimeField(null=False)
+    fac = models.CharField(max_length=50, null=False)
+    imms = models.CharField(max_length=50, null=False)
+    count_qty = models.IntegerField(null=False)
+    issue_qty = models.IntegerField(null=False)
+    po_qty = models.IntegerField(null=False)
+    facility_name = models.CharField(max_length=50, null=False)
+    mfr = models.CharField(max_length=100, null=False)
+    mfr_cat_no = models.CharField(max_length=100, null=False)
+    description = models.CharField(max_length=100, null=False)
+    imms_create_date = models.DateTimeField(null=False)
+    vendor = models.CharField(max_length=100, null=False)
+    vend_cat_no = models.CharField(max_length=100, null=False)
+    default_uom = models.CharField(max_length=10, null=False)
+    default_uom_conv = models.IntegerField(null=False)
+    default_uom_price = models.FloatField(null=False)
+    luom = models.CharField(max_length=10, null=False)
+    luom_conv = models.IntegerField(null=False)
 
     class Meta:
-        ordering = ('-ext_cost', )
+        ordering = ('-default_uom_price', )
 
     def __str__(self):
-        return f'issue no: {self.adjustment_number}, facility no: {self.facility_no}, item name: {self.description}, ext: {self.ext_cost}'
+        return f'item: {self.description}, at facility: {self.fac}, with qty: {self.count_qty}'
 
+    def calculate_ext_cost(self):
+        # may need to come back and adjust this measure for UOM.
+        return self.count_qty * self.default_uom_price
 
-class PurchaseOrder(models.Model): 
-    facility_no = models.CharField(max_length=50)
-    facility_name = models.CharField(max_length=100)
-    po_date = models.DateTimeField()
-    po_no = models.CharField(max_length=100)
-    po_code = models.CharField(max_length=100)
-    po_submit_type = models.CharField(max_length=100)
-    vend_submit_type = models.CharField(max_length=100)
-    po_line_no = models.IntegerField()
-    imms = models.CharField(max_length=50)
-    description = models.CharField(max_length=255)
-    imms_vend_no = models.CharField(max_length=100)
-    vendor = models.CharField(max_length=100)
-    vendor_cat = models.CharField(max_length=100)
-    imms_contr_exp = models.CharField(max_length=100)
-    imms_contr_no = models.CharField(max_length=100)
-    mfr = models.CharField(max_length=100)
-    mfr_cat = models.CharField(max_length=100)
-    expense_acct_no = models.CharField(max_length=100)
-    expense_acct_desc = models.CharField(max_length=100)
-    dept_acct_no = models.CharField(max_length=100)
-    department = models.CharField(max_length=100)
-    po_qty = models.IntegerField(default=0)
-    po_price = models.FloatField()
-    po_ext = models.FloatField()
-    po_uom = models.CharField(max_length=100)
-    po_uom_mult = models.IntegerField()
-    low_uom_price = models.FloatField()
-
-    class Meta:
-        ordering = ('-po_ext', )
-
-    def __str__(self):
-        return f'purchase no: {self.adjustment_number}, facility no: {self.facility_no}, item name: {self.description}, ext: {self.po_ext}'
+    def is_no_move(self):
+        # if issue_qty and po_qty are false then yes.
+        if self.issue_qty == 0 & self.po_qty == 0:
+            return True

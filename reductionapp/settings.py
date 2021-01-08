@@ -82,8 +82,12 @@ WSGI_APPLICATION = 'reductionapp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'reductionapp',
+        'USER': 'jacksonprice',
+        'PASSWORD': sec_vars.DB_PW,
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
