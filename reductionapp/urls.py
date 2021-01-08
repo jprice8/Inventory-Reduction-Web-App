@@ -15,4 +15,7 @@ urlpatterns = [
 
     # inventory urls
     path('', include('inventory.urls')),
+
+    # target urls
+    path('target/', include('target.urls')),
 ]

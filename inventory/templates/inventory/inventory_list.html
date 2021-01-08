@@ -17,7 +17,6 @@
                     <th scope="col">Quantity</th>
                     <th scope="col">Unit Cost</th>
                     <th scope="col">UoM</th>
-                    <th scope="col">Extended Cost</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,7 +33,6 @@
                         <td>{{ item.qty }}</td>
                         <td>{{ item.cost }}</td>
                         <td>{{ item.uom }}</td>
-                        <td>{{ item.calculate_ext_cost }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
