@@ -18,4 +18,7 @@ urlpatterns = [
 
     # target urls
     path('target/', include('target.urls')),
+
+    # act urls
+    path('act/', include('act.urls')),
 ]

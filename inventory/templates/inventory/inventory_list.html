@@ -1,43 +1,53 @@
 {% extends 'inventory/base.html' %}
 
+{% load humanize %}
+
 {% block content %}
-    <h1 class="mt-4">View myInventory</h1>
-    {% if inventory_list %}
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">Period</th>
-                    <th scope="col">Facility</th>
-                    <th scope="col">Location</th>
-                    <th scope="col">Unit ID</th>
-                    <th scope="col">IMMS #</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Vendor</th>
-                    <th scope="col">Mfr. Cat. No.</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Unit Cost</th>
-                    <th scope="col">UoM</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in inventory_list %}
+   
+        {% if bmc_count_usage_list %}
+        <main role="main" class="container-fluid">
+            <h1 class="m-4">View myInventory</h1>
+            <table class="table table-hover" id="tablez">
+                <thead>
                     <tr>
-                        <td>{{ item.period }}</td>
-                        <td>{{ item.fac }}</td>
-                        <td>{{ item.location }}</td>
-                        <td>{{ item.unit_id }}</td>
-                        <td>{{ item.imms }}</td>
-                        <td>{{ item.description }}</td>
-                        <td>{{ item.vendor }}</td>
-                        <td>{{ item.mfr_cat_no }}</td>
-                        <td>{{ item.qty }}</td>
-                        <td>{{ item.cost }}</td>
-                        <td>{{ item.uom }}</td>
+                        <th scope="col">Period</th>
+                        <th scope="col">Facility</th>
+                        <th scope="col">IMMS #</th>
+                        <th scope="col">Count Qty</th>
+                        <th scope="col">Issue Qty</th>
+                        <th scope="col">PO Qty</th>
+                        <th scope="col">Manufacturer</th>
+                        <th scope="col">Mfr. Cat. No.</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">UoM</th>
+                        <th scope="col">Extended Cost</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <h2>Could not find items... Are you sure you have the correct access privileges?</h2>
-    {% endif %}
+                </thead>
+                <tbody>
+                    {% for item in bmc_count_usage_list %}
+                        <tr>
+                            <td>{{ item.period|date:"d M Y" }}</td>
+                            <td>{{ item.facility_name }}</td>
+                            <td>{{ item.imms }}</td>
+                            <td>{{ item.count_qty }}</td>
+                            <td>{{ item.issue_qty }}</td>
+                            <td>{{ item.po_qty }}</td>
+                            <td>{{ item.mfr }}</td>
+                            <td>{{ item.mfr_cat_no }}</td>
+                            <td>{{ item.description }}</td>
+                            <td>${{ item.default_uom_price|floatformat|intcomma }}</td>
+                            <td>{{ item.default_uom }}</td>
+                            <td>${{ item.calculate_ext_cost|floatformat|intcomma }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </main>
+        {% else %}
+        <main role="main" class="container">
+            <h1 class="mt-4">View myInventory</h1>
+            <h4 class="mt-5">Could not find items... Are you sure you have the correct access privileges?</h4>
+        </main>
+        {% endif %}
 {% endblock %}

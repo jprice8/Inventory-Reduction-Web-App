@@ -19,6 +19,7 @@ import sec_vars
 BASE_DIR = Path(__file__).resolve().parent.parent
 INVENTORY_TEMPLATE_DIR = os.path.join(BASE_DIR, "inventory", "templates")
 TARGET_TEMPLATE_DIR = os.path.join(BASE_DIR, "target", "templates")
+ACT_TEMPLATE_DIR = os.path.join(BASE_DIR, "act", "templates")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -45,6 +46,8 @@ INSTALLED_APPS = [
     'inventory',
     'users',
     'target',
+    'act',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -65,6 +68,7 @@ TEMPLATES = [
         'DIRS': [
             INVENTORY_TEMPLATE_DIR,
             TARGET_TEMPLATE_DIR,
+            ACT_TEMPLATE_DIR,
             ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -137,6 +141,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "inventory", "static"),
     os.path.join(BASE_DIR, "target", "static"),
+    os.path.join(BASE_DIR, "act", "static"),
 ]
 
 LOGIN_REDIRECT_URL = 'index'

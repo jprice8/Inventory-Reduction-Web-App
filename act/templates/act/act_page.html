@@ -1,0 +1,62 @@
+{% extends 'inventory/base.html' %}
+
+{% block content %}
+    <main role="main" class="container">
+
+        <!-- Top row. Name and summary stats.-->
+        <div class="row">
+            <div class="col-sm">
+                <h2 class="mt-4">Welcome, {{ user.get_username }}</h2>
+                <h5>Baptist Medical Center</h5>
+            </div>
+            <div class="col-sm">
+                <div class="card mt-4" style="width: 75%;">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Total No Move Inventory: $500,000</li>
+                        <li class="list-group-item">Total Targeted Inventory: $250,000</li>
+                        <li class="list-group-item">Total Reduced Inventory: $100,000</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second row. Items requested for movement.-->
+        <div class="row">
+            <div class="col-sm">
+                <h4 class="mt-5">Pending Requests to your Facility: </h4>
+                <div class="mt-3">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr scope="col">
+                                <th>Requesting Facility</th>
+                                <th>Item Description</th>
+                                <th>IMMS #</th>
+                                <th>Sending Qty</th>
+                                <th>Unit Cost</th>
+                                <th>Ext. Cost</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>952</td>
+                                <td>Spine Screw</td>
+                                <td>90210</td>
+                                <td>2</td>
+                                <td>$400</td>
+                                <td>$800</td>
+                                <td>
+                                    <div class="btn-group" role="group" aria-label="Action">
+                                        <button type="button" class="btn btn-success">Accept</button>
+                                        <button type="button" class="btn btn-danger">Reject</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </main>
+{% endblock %}
