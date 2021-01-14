@@ -36,9 +36,9 @@
                             <td>{{ item.mfr }}</td>
                             <td>{{ item.mfr_cat_no }}</td>
                             <td>{{ item.description }}</td>
-                            <td>${{ item.default_uom_price|floatformat|intcomma }}</td>
+                            <td>${{ item.default_uom_price|floatformat:0|intcomma }}</td>
                             <td>{{ item.default_uom }}</td>
-                            <td>${{ item.calculate_ext_cost|floatformat|intcomma }}</td>
+                            <td>${{ item.calculate_ext_cost|floatformat:0|intcomma }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

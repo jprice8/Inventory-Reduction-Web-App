@@ -2,8 +2,9 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
+from django.contrib.auth.models import User
 
-from .models import Invcount 
+from .models import Invcount, Facility
 from target.models import CountUsageList
 
 def index(request):
@@ -12,7 +13,11 @@ def index(request):
 # Inventory views
 @login_required
 def inventory_list(request):
+
+    dmm = Facility.objects.filter(dmm=request.user)[0]
+    
     context = {
-        'bmc_count_usage_list': CountUsageList.objects.filter(fac='939')[:50]
+        'bmc_count_usage_list': CountUsageList.objects.filter(fac=dmm.fac),
+        'dmm': Facility.objects.all()
     }
     return render(request, 'inventory/inventory_list.html', context)
