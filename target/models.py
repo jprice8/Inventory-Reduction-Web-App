@@ -20,7 +20,12 @@ class CountUsageList(models.Model):
     default_uom_price = models.FloatField(null=False)
     luom = models.CharField(max_length=10, null=False)
     luom_conv = models.IntegerField(null=False)
-    isTargeted = models.BooleanField(default=False)
+    LISTINGS = (
+        (1, 'No Move'),
+        (2, 'Target'),
+        (3, 'Completed'),
+    )
+    listing = models.IntegerField(null=False, default=1, choices=LISTINGS)
 
     class Meta:
         ordering = ('-default_uom_price', )

@@ -1,71 +1,79 @@
-{% extends 'inventory/base.html' %}
+{% extends 'inventory/base.html' %} 
 
-{% load humanize %}
+{% load humanize %} 
+{% load static %} 
 
 {% block content %}
-    {% if bmc_count_usage_list %}
-    <main role="main" class="container-fluid">
-    <h1 class="m-4">Target Non-moving Items</h1>
-        <div class="row m-4">
-            <div class="col-sm">
-                <h3>No Move List</h3>
-                <ul>
-                    {% for item in bmc_count_usage_list %}
-                        <li draggable="true" style="list-style-type: none;">
-                            <div class="card mt-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ item.description }}</h5>
-                                    <div class="row">
-                                        <div class="col-sm">
-                                            <h6 class="card-subtitle mb-2 text-muted">IMMS #: {{ item.imms }}</h6>
-                                        </div>
-                                        <div class="col-sm">
-                                            <p class="card-text">Qty: {{ item.count_qty }}</p>
-                                        </div>
-                                        <div class="col-sm">
-                                            <p class="card-text">Cost: ${{ item.default_uom_price|floatformat|intcomma }}</p>
-                                        </div>
-                                        <div class="col-sm">
-                                            <p class="card-text">Ext: ${{ item.calculate_ext_cost|floatformat|intcomma }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
+{% if bmc_count_usage_list %}
+<main role="main" class="container-fluid">
+  <h1 class="m-4">Target Non-moving Items</h1>
+  <div class="row m-4">
+    <!--No Move List-->
+    <div class="col-sm">
+      <h3>No Move List</h3>
+      <ul id="nomovelist" ondrop="drop(event)" ondragover="allowDrop(event)">
+        {% for item in bmc_count_usage_list %}
+        <li
+          draggable="true"
+          ondragstart="drag(event)"
+          style="list-style-type: none;"
+          id={{ item.id }}
+        >
+          <div class="card mt-3">
+            <div class="card-body">
+              <h5 class="card-title">{{ item.description }}</h5>
+              <div class="row">
+                <div class="col-sm">
+                  <h6 class="card-subtitle mb-2 text-muted">
+                    IMMS #: {{ item.imms }}
+                  </h6>
+                </div>
+                <div class="col-sm">
+                  <p class="card-text">Qty: {{ item.count_qty }}</p>
+                </div>
+                <div class="col-sm">
+                  <p class="card-text">
+                    Cost: ${{ item.default_uom_price|floatformat|intcomma }}
+                  </p>
+                </div>
+                <div class="col-sm">
+                  <p class="card-text">
+                    Ext: ${{ item.calculate_ext_cost|floatformat|intcomma }}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div class="col-sm">
-                <h3>Target List</h3>
-                <ul>
-                    <li>Test Target List</li>
-                </ul>
-            </div>
-            <div class="col-sm">
-                <h3>Completed List</h3>
-                <ul>
-                    <li>Test Completed List</li>
-                </ul>
-            </div>
-        </div>
-    </main>
-    {% else %}
-    <main role="main" class="container">
-        <h1 class="mt-4">View Targets</h1>
-        <h4 class="mt-5">Could not find items... Are you sure you have the correct access privileges?</h4>
-    </main>
-    {% endif %}
-    <script>
-        $('.targ').on("click", function(){
-            $.ajax({
-                type: "POST",
-                url: "target/istarget/",
-                data: {
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
 
-                }
+    <!--Target List-->
+    <div class="col-sm">
+      <h3>Target List</h3>
+      <ul id="targetlist" style="padding-bottom: 400px;" ondrop="drop(event)" ondragover="allowDrop(event)">
+      </ul>
+    </div>
 
-                
-            })
-        });
-    </script>
+    <!--Completed List-->
+    <div class="col-sm">
+      <h3>Completed List</h3>
+      <ul id="completedlist" style="padding-bottom: 400px;" ondrop="drop(event)" ondragover="allowDrop(event)">
+      </ul>
+    </div>
+  </div>
+</main>
+{% else %}
+<main role="main" class="container">
+  <h1 class="mt-4">View Targets</h1>
+  <h4 class="mt-5">
+    Could not find items... Are you sure you have the correct access privileges?
+  </h4>
+</main>
+{% endif %} 
 {% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'target/javascript/target.js' %}"></script>
+{% endblock %} 

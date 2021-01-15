@@ -1,5 +1,7 @@
 {% extends 'inventory/base.html' %}
 
+{% load static %}
+
 {% block content %}
     <main role="main" class="container">
         <div style="margin-top: 50px;" class="jumbotron">
@@ -21,4 +23,8 @@
             </div>    
         </div>
     </main>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'inventory/javascript/landing.js' %}"></script>
 {% endblock %}
