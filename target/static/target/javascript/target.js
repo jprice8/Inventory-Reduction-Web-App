@@ -1,3 +1,5 @@
+// BELIEVE IN YOURSELF
+
 // allow the drop
 function allowDrop(ev) {
   ev.preventDefault();
