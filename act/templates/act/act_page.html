@@ -1,5 +1,7 @@
 {% extends 'inventory/base.html' %}
 
+{% load humanize %}
+
 {% block content %}
     <main role="main" class="container">
 
@@ -12,7 +14,7 @@
             <div class="col-sm">
                 <div class="card mt-4" style="width: 75%;">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Total No Move Inventory: $500,000</li>
+                        <li class="list-group-item">Total No Move Inventory: ${{ no_move|floatformat:0|intcomma }}</li>
                         <li class="list-group-item">Total Targeted Inventory: $250,000</li>
                         <li class="list-group-item">Total Reduced Inventory: $100,000</li>
                     </ul>

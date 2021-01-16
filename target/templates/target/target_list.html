@@ -4,15 +4,40 @@
 {% load static %} 
 
 {% block content %}
-{% if bmc_count_usage_list %}
+{% if count_usage_list %}
 <main role="main" class="container-fluid">
+  <!--Modal for selecting reduction qty-->
+
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Select Reduction Quantity</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
+        </div>
+        <div class="modal-body">
+          <form role="form">
+            <div class="form-group">
+              <label for="reductionqty">How many units of this SKU would you like to remove?</label>
+              <input type="number" class="form-control" id="reductionqty" placeholder="Quantity"/>
+            </div>
+            <button type="submit" class="btn btn-success btn-block">Submit</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <h1 class="m-4">Target Non-moving Items</h1>
   <div class="row m-4">
     <!--No Move List-->
     <div class="col-sm">
       <h3>No Move List</h3>
       <ul id="nomovelist" ondrop="drop(event)" ondragover="allowDrop(event)">
-        {% for item in bmc_count_usage_list %}
+        {% for item in count_usage_list %}
         <li
           draggable="true"
           ondragstart="drag(event)"
@@ -38,7 +63,7 @@
                 </div>
                 <div class="col-sm">
                   <p class="card-text">
-                    Ext: ${{ item.calculate_ext_cost|floatformat|intcomma }}
+                    Ext: ${{ item.ext_cost|floatformat|intcomma }}
                   </p>
                 </div>
               </div>

@@ -20,6 +20,8 @@ class CountUsageList(models.Model):
     default_uom_price = models.FloatField(null=False)
     luom = models.CharField(max_length=10, null=False)
     luom_conv = models.IntegerField(null=False)
+    ext_cost = models.FloatField(null=False)
+    reduction_qty = models.IntegerField(null=False, default=0)
     LISTINGS = (
         (1, 'No Move'),
         (2, 'Target'),
@@ -28,14 +30,10 @@ class CountUsageList(models.Model):
     listing = models.IntegerField(null=False, default=1, choices=LISTINGS)
 
     class Meta:
-        ordering = ('-default_uom_price', )
+        ordering = ('-ext_cost', )
 
     def __str__(self):
         return f'item: {self.description}, at facility: {self.fac}, with qty: {self.count_qty}'
-
-    def calculate_ext_cost(self):
-        # may need to come back and adjust this measure for UOM.
-        return self.count_qty * self.default_uom_price
 
     def is_no_move(self):
         # if issue_qty and po_qty are false then yes.

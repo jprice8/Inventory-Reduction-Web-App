@@ -3,51 +3,64 @@
 {% load humanize %}
 
 {% block content %}
-   
-        {% if bmc_count_usage_list %}
-        <main role="main" class="container-fluid">
-            <h1 class="m-4">View myInventory</h1>
-            <table class="table table-hover" id="tablez">
-                <thead>
+
+    {% if count_usage_list %}
+    <main role="main" class="container-fluid">
+        <h1 class="m-4">View myInventory</h1>
+        <table class="table table-hover" id="tablez">
+            <thead>
+                <tr>
+                    <th scope="col">Period</th>
+                    <th scope="col">Facility</th>
+                    <th scope="col">IMMS #</th>
+                    <th scope="col">Count Qty</th>
+                    <th scope="col">Issue Qty</th>
+                    <th scope="col">PO Qty</th>
+                    <th scope="col">Manufacturer</th>
+                    <th scope="col">Mfr. Cat. No.</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">UoM</th>
+                    <th scope="col">Extended Cost</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in count_usage_list %}
                     <tr>
-                        <th scope="col">Period</th>
-                        <th scope="col">Facility</th>
-                        <th scope="col">IMMS #</th>
-                        <th scope="col">Count Qty</th>
-                        <th scope="col">Issue Qty</th>
-                        <th scope="col">PO Qty</th>
-                        <th scope="col">Manufacturer</th>
-                        <th scope="col">Mfr. Cat. No.</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">UoM</th>
-                        <th scope="col">Extended Cost</th>
+                        <td>{{ item.period|date:"d M Y" }}</td>
+                        <td>{{ item.facility_name }}</td>
+                        <td>{{ item.imms }}</td>
+                        <td>{{ item.count_qty }}</td>
+                        <td>{{ item.issue_qty }}</td>
+                        <td>{{ item.po_qty }}</td>
+                        <td>{{ item.mfr }}</td>
+                        <td>{{ item.mfr_cat_no }}</td>
+                        <td>{{ item.description }}</td>
+                        <td>${{ item.default_uom_price|floatformat:0|intcomma }}</td>
+                        <td>{{ item.default_uom }}</td>
+                        <td>${{ item.ext_cost|floatformat:0|intcomma }}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    {% for item in bmc_count_usage_list %}
-                        <tr>
-                            <td>{{ item.period|date:"d M Y" }}</td>
-                            <td>{{ item.facility_name }}</td>
-                            <td>{{ item.imms }}</td>
-                            <td>{{ item.count_qty }}</td>
-                            <td>{{ item.issue_qty }}</td>
-                            <td>{{ item.po_qty }}</td>
-                            <td>{{ item.mfr }}</td>
-                            <td>{{ item.mfr_cat_no }}</td>
-                            <td>{{ item.description }}</td>
-                            <td>${{ item.default_uom_price|floatformat:0|intcomma }}</td>
-                            <td>{{ item.default_uom }}</td>
-                            <td>${{ item.calculate_ext_cost|floatformat:0|intcomma }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </main>
-        {% else %}
-        <main role="main" class="container">
-            <h1 class="mt-4">View myInventory</h1>
-            <h4 class="mt-5">Could not find items... Are you sure you have the correct access privileges?</h4>
-        </main>
-        {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </main>
+    {% else %}
+    <main role="main" class="container">
+        <h1 class="mt-4">View myInventory</h1>
+        <h4 class="mt-5">Could not find items... Are you sure you have the correct access privileges?</h4>
+    </main>
+    {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+    <!-- Data tables CDN script -->
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js" defer></script>
+    <script>
+        // Data tables to target table
+        $(document).ready(function () {
+            $('#tablez').DataTable();
+        });
+    </script>
 {% endblock %}

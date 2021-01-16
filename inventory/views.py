@@ -17,7 +17,7 @@ def inventory_list(request):
     dmm = Facility.objects.filter(dmm=request.user)[0]
     
     context = {
-        'bmc_count_usage_list': CountUsageList.objects.filter(fac=dmm.fac),
+        'count_usage_list': CountUsageList.objects.filter(fac=dmm.fac),
         'dmm': Facility.objects.all()
     }
     return render(request, 'inventory/inventory_list.html', context)

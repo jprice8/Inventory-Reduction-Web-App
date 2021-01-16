@@ -25,5 +25,5 @@ class Invcount(models.Model):
 
 class Facility(models.Model):
     fac = models.CharField(null=False, max_length=50)
-    facility_name = models.CharField(null=False, max_length=100, default='939')
+    facility_name = models.CharField(null=False, max_length=100)
     dmm = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
