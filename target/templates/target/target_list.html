@@ -13,13 +13,13 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="staticBackdropLabel">Select Reduction Quantity</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
         </div>
         <div class="modal-body">
-          <form role="form">
+          <form method="POST" id="reduction-qty-form">
+            {% csrf_token %}
             <div class="form-group">
               <label for="reductionqty">How many units of this SKU would you like to remove?</label>
-              <input type="number" class="form-control" id="reductionqty" placeholder="Quantity"/>
+              <input type="number" class="form-control" id="reduction-qty-input" placeholder="Quantity"/>
             </div>
             <button type="submit" class="btn btn-success btn-block">Submit</button>
           </form>
@@ -65,6 +65,14 @@
                   <p class="card-text">
                     Ext: ${{ item.ext_cost|floatformat|intcomma }}
                   </p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm">
+                  <h6 class="card-text rex">Units to Reduce: {{ item.reduction_qty }}</h6>
+                </div>
+                <div class="col-sm">
+                  <h6 class="btn btn-danger">Set Movement Plan</h6>
                 </div>
               </div>
             </div>

@@ -5,5 +5,6 @@ urlpatterns = [
 
   # target urls
   path('', views.count_usage_list, name='count-usage-list'),
-  path('api/', views.ajax_post_target, name='target-api'),
+  path('api/listing/', views.ajax_post_target, name='target-api-listing'),
+  path('api/reduction/', views.ajax_reduction_qty, name='target-api-reduction'),
 ]
