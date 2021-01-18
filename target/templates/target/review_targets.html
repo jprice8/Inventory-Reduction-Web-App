@@ -1,0 +1,68 @@
+{% extends 'inventory/base.html' %}
+
+{% load humanize %}
+
+{% block content %}
+<main role="main" class="container">
+  <!--Modal for selecting reduction qty-->
+
+ <h1 class="m-4">Review Target Items and Create Movement Plans</h1>
+  <div class="row m-4">
+    <!--No Move List-->
+    <div class="col-sm">
+      <h3>Target List</h3>
+    </div>
+    <div class="col-sm">
+      <a class="btn btn-primary" href="{% url 'count-usage-list' %}">Back to No Move List</a>
+    </div>
+  </div>
+  {% if target_list %}
+  <ul id="targetlist">
+    {% for item in target_list %}
+    <li
+      style="list-style-type: none;"
+      id={{ item.id }}
+    >
+      <div class="card mt-3">
+        <div class="card-body">
+          <h5 class="card-title">{{ item.description }}</h5>
+
+          <div class="row">
+            <div class="col-sm">
+              <h6 class="card-subtitle mb-2 text-muted">
+                IMMS #: {{ item.imms }}
+              </h6>
+            </div>
+            <div class="col-sm">
+              <p class="card-text">Qty: {{ item.count_qty }}</p>
+            </div>
+            <div class="col-sm">
+              <p class="card-text">
+                Cost: ${{ item.default_uom_price|floatformat|intcomma }}
+              </p>
+            </div>
+            <div class="col-sm">
+              <p class="card-text">
+                Ext: ${{ item.ext_cost|floatformat|intcomma }}
+              </p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm">
+              <a class="btn btn-danger" href="{% url 'move-targets' item.id %}">Set Movement Plan</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+</main>
+
+{% else %}
+  <h4 class="mt-5">
+    No items targeted yet. Go back to the no move list and start identifying items for reduction!
+  </h4>
+{% endif %} 
+{% endblock %}
