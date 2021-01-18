@@ -24,12 +24,7 @@ class CountUsageList(models.Model):
     luom_conv = models.IntegerField(null=False)
     ext_cost = models.FloatField(null=False)
     reduction_qty = models.IntegerField(null=False, default=0)
-    LISTINGS = (
-        (1, 'No Move'),
-        (2, 'Target'),
-        (3, 'Completed'),
-    )
-    listing = models.IntegerField(null=False, default=1, choices=LISTINGS)
+    isTarget = models.BooleanField(null=False, default=False)
 
     class Meta:
         ordering = ('-ext_cost', )
@@ -53,6 +48,7 @@ class MovementPlan(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class ShipFacilities(models.TextChoices):
+        NAN = '000', _('Not Shipping')
         BMC = '939', _('Baptist Medical Center')
         MTB = '971', _('Mission Trail Baptist Hospital')
         SLB = '952', _('Saint Lukes Baptist Hospital')

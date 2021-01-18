@@ -5,7 +5,7 @@ urlpatterns = [
 
   # target urls
   path('', views.count_usage_list, name='count-usage-list'),
-  path('api/listing/', views.ajax_post_target, name='target-api-listing'),
-  path('api/reduction/', views.ajax_reduction_qty, name='target-api-reduction'),
+  path('<int:pk>/settrue/', views.target_item_true, name='target-item-true'),
+  path('<int:pk>/setfalse/', views.target_item_false, name='target-item-false'),
   path('<int:pk>/moving/', views.move_targets, name='move-targets'),
 ]

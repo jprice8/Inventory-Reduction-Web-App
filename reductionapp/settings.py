@@ -62,18 +62,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# Django cors headers module allow origins.
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8000',
-    'http://127.0.0.1:8000',
-]
-
-# Django docs csrf trusted origins
-CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:8000',
-    'http://127.0.0.1:8000',
-]
-
 ROOT_URLCONF = 'reductionapp.urls'
 
 TEMPLATES = [

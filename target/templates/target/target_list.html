@@ -4,109 +4,163 @@
 {% load static %} 
 
 {% block content %}
-{% if count_usage_list %}
-<main role="main" class="container-fluid">
+{% if no_move_list or target_list %}
+<main role="main" class="container">
   <!--Modal for selecting reduction qty-->
 
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Select Reduction Quantity</h5>
-        </div>
-        <div class="modal-body">
-          <form method="POST" id="reduction-qty-form">
-            {% csrf_token %}
-            <div class="form-group">
-              <label for="reductionqty">How many units of this SKU would you like to remove?</label>
-              <input type="number" class="form-control" id="reduction-qty-input" placeholder="Quantity"/>
-            </div>
-            <button type="submit" class="btn btn-success btn-block">Submit</button>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
+  <h1 class="m-4">Target Non-moving Items</h1>
+    <div class="row m-4">
+      <!--No Move List-->
+      <div class="col-sm">
+        <h3>No Move List</h3>
+      </div>
+      <div class="col-sm">
+        <a class="btn btn-primary" href="#">See Target Items Only</a>
       </div>
     </div>
-  </div>
+      <ul id="nomovelist">
+          {% for item in no_move_list %}
+          <li
+            style="list-style-type: none;"
+            id={{ item.id }}
+          >
+            <div class="card mt-3">
+              <div class="card-body">
+                <h5 class="card-title">{{ item.description }}</h5>
 
-  <h1 class="m-4">Target Non-moving Items</h1>
-  <div class="row m-4">
-    <!--No Move List-->
-    <div class="col-sm">
-      <h3>No Move List</h3>
-      <ul id="nomovelist" ondrop="drop(event)" ondragover="allowDrop(event)">
-        {% for item in count_usage_list %}
-        <li
-          draggable="true"
-          ondragstart="drag(event)"
-          style="list-style-type: none;"
-          id={{ item.id }}
-        >
-          <div class="card mt-3">
-            <div class="card-body">
-              <h5 class="card-title">{{ item.description }}</h5>
-              <div class="row">
-                <div class="col-sm">
-                  <h6 class="card-subtitle mb-2 text-muted">
-                    IMMS #: {{ item.imms }}
-                  </h6>
+                <div class="row">
+                  <div class="col-sm">
+                    <h6 class="card-subtitle mb-2 text-muted">
+                      IMMS #: {{ item.imms }}
+                    </h6>
+                  </div>
+                  <div class="col-sm">
+                    <p class="card-text">Qty: {{ item.count_qty }}</p>
+                  </div>
+                  <div class="col-sm">
+                    <p class="card-text">
+                      Cost: ${{ item.default_uom_price|floatformat|intcomma }}
+                    </p>
+                  </div>
+                  <div class="col-sm">
+                    <p class="card-text">
+                      Ext: ${{ item.ext_cost|floatformat|intcomma }}
+                    </p>
+                  </div>
                 </div>
-                <div class="col-sm">
-                  <p class="card-text">Qty: {{ item.count_qty }}</p>
-                </div>
-                <div class="col-sm">
-                  <p class="card-text">
-                    Cost: ${{ item.default_uom_price|floatformat|intcomma }}
-                  </p>
-                </div>
-                <div class="col-sm">
-                  <p class="card-text">
-                    Ext: ${{ item.ext_cost|floatformat|intcomma }}
-                  </p>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm">
-                  <h6 class="card-text rex">Units to Reduce: {{ item.reduction_qty }}</h6>
-                </div>
-                <div class="col-sm">
-                  <a class="btn btn-danger" href="{% url 'move-targets' item.id %}">Set Movement Plan</a>
+
+                <div class="row">
+                  <div class="col-sm">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" data-id={{ item.id }}>
+                      <label class="form-check-label" for="flexSwitchCheckDefault">Target Item</label>
+                    </div>
+                  </div>
+                  <div class="col-sm">
+                    <a class="btn btn-danger" href="{% url 'move-targets' item.id %}">Set Movement Plan</a>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </li>
-        {% endfor %}
+          </li>
+          {% endfor %}
       </ul>
-    </div>
-
-    <!--Target List-->
-    <div class="col-sm">
-      <h3>Target List</h3>
-      <ul id="targetlist" style="padding-bottom: 400px;" ondrop="drop(event)" ondragover="allowDrop(event)">
-      </ul>
-    </div>
-
-    <!--Completed List-->
-    <div class="col-sm">
-      <h3>Completed List</h3>
-      <ul id="completedlist" style="padding-bottom: 400px;" ondrop="drop(event)" ondragover="allowDrop(event)">
-      </ul>
-    </div>
-  </div>
 </main>
+
 {% else %}
+
 <main role="main" class="container">
   <h1 class="mt-4">View Targets</h1>
   <h4 class="mt-5">
     Could not find items... Are you sure you have the correct access privileges?
   </h4>
 </main>
+
 {% endif %} 
+
 {% endblock %}
 
 {% block extra_js %}
+<!-- Local js script -->
 <script src="{% static 'target/javascript/target.js' %}"></script>
+<script>
+  const csrftoken = getCookie('csrftoken');
+
+  $("input[type='checkbox']").change(function() {
+    // If target item is checked...
+    const selectedCheckbox = $(this).closest('input');
+    const selectedId = $(this).attr('data-id');
+
+    if (selectedCheckbox.is(":checked")) {
+      const urlTrue = `http://127.0.0.1:8000/target/${selectedId}/settrue/`;
+      $.ajax({
+        url: urlTrue,
+        method: 'POST',
+        headers: {'X-CSRFToken': csrftoken},
+        data: {'setIsTarget': true}
+      })
+      .done(function(response) {
+        console.log(response);
+      })
+      .fail(function(error) {
+        console.log(error);
+      });
+
+      // If target item is unchecked...
+    } else {
+      const urlFalse = `http://127.0.0.1:8000/target/${selectedId}/setfalse/`;
+      $.ajax({
+        url: urlFalse,
+        method: 'POST',
+        headers: {'X-CSRFToken': csrftoken},
+        data: {'setIsTarget': false}
+      })
+      .done(function(response) {
+        console.log(response);
+      })
+      .fail(function(error) {
+        console.log(error);
+      });
+    }
+  });
+
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+  }
+
+  // $('#nomovelist input').on('click', function() {
+  //   const selectedTarget = $(this).closest('li');
+  //   const selectedId = $(this).attr('data-id');
+
+  //   const urlTrue = `http://127.0.0.1:8000/target/${selectedId}/settrue/`;
+
+  //   $.ajax({
+  //     url: urlTrue,
+  //     method: "POST",
+  //     headers: {'X-CSRFToken': csrftoken},
+  //     data: {
+  //       'itemsId': selectedId,
+  //       'setTargetTrue': true,
+  //     }
+  //   }).done(function(response) {
+  //     console.log(response);
+  //   }).fail(function(error) {
+  //     console.log(error);
+  //   });
+
+  // });
+
+</script>
 {% endblock %} 
