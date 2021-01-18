@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 
 
 class CountUsageList(models.Model):
@@ -39,3 +41,27 @@ class CountUsageList(models.Model):
         # if issue_qty and po_qty are false then yes.
         if self.issue_qty == 0 & self.po_qty == 0:
             return True
+
+
+class MovementPlan(models.Model):
+    dmm = models.ForeignKey(User, on_delete=models.CASCADE)
+    item = models.ForeignKey(CountUsageList, on_delete=models.CASCADE)
+    ship_qty = models.IntegerField(null=False)
+    isMove = models.BooleanField(null=False)
+    isSell = models.BooleanField(null=False)
+    isTrash = models.BooleanField(null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class ShipFacilities(models.TextChoices):
+        BMC = '939', _('Baptist Medical Center')
+        MTB = '971', _('Mission Trail Baptist Hospital')
+        SLB = '952', _('Saint Lukes Baptist Hospital')
+        RHH = '872', _('Resolute Health Hospital')
+        NBH = '968', _('Northeast Baptist Hospital')
+        NCB = '954', _('North Central Baptist Hospital')
+
+    ship_fac = models.CharField(
+        max_length=3,
+        choices=ShipFacilities.choices,
+    )
+        

@@ -1,0 +1,23 @@
+{% extends 'inventory/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<div class="container">
+  {% if matched_items %}
+    <h2 class="mb-3">The following hospitals are showing movement for item: {{ target_item.mfr_cat_no }}</h2>
+    {% for item in matched_items %}
+      <h3 class="mt-2">{{ item.fac }}</h3>
+      <h4>Recorded count quantity on {{ item.period|date:"M Y" }}: {{ item.count_qty|intcomma }}</h4>
+      <h4>Purchase Order Quantity in 2020: {{ item.po_qty|intcomma }}</h4>
+      <h4>Issue Quantity in 2020: {{ item.issue_qty|intcomma }}</h4>
+      <a class="btn btn-success" href="#">Move to this Facility</a>
+    {% endfor %}
+  {% else %}
+    <h2>Could not find any movement for this item within the health system.</h2>
+  {% endif %}
+    <div class="mt-3">
+      <h3>Not enough movement? Request quote to sell to Third Party</h3>
+      <a class="btn btn-secondary" href="#">Sell to Third Party</a>
+    </div>
+</div>
+{% endblock %}

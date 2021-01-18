@@ -29,6 +29,21 @@ def count_usage_list(request):
     return render(request, 'target/target_list.html', context)
 
 @login_required
+def move_targets(request, pk):
+    dmm = Facility.objects.filter(dmm=request.user)[0]
+    item_from_id = get_object_or_404(CountUsageList, pk=pk)
+
+    matched_items = CountUsageList.objects.filter(mfr_cat_no=item_from_id.mfr_cat_no)
+
+    context = {
+        'target_item': item_from_id,
+        'matched_items': matched_items,
+        'dmm': dmm,
+    }
+
+    return render(request, 'target/target_movement.html', context)
+
+@login_required
 @ensure_csrf_cookie
 def ajax_post_target(request):
     listing_from_item = json.loads(request.body)['listing_data']
