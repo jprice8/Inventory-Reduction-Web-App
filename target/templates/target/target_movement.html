@@ -5,12 +5,14 @@
 {% block content %}
 <div class="container">
   {% if matched_items %}
-    <h2 class="mb-3">The following hospitals are showing movement for item: {{ target_item.mfr_cat_no }}</h2>
+    <h2 class="m-4">The following hospitals are showing movement for item:{{ target_item.description }}; {{ target_item.mfr_cat_no }}</h2>
     {% for item in matched_items %}
-      <h3 class="mt-2">{{ item.fac }}</h3>
+    <div class="m-4">
+      <h3>{{ item.fac }}</h3>
       <h4>Recorded count quantity on {{ item.period|date:"M Y" }}: {{ item.count_qty|intcomma }}</h4>
       <h4>Purchase Order Quantity in 2020: {{ item.po_qty|intcomma }}</h4>
       <h4>Issue Quantity in 2020: {{ item.issue_qty|intcomma }}</h4>
+    </div>
     {% endfor %}
   {% else %}
     <h2>Could not find any movement for this item within the health system.</h2>
@@ -27,5 +29,7 @@
       </div>
     </form>
   </div>
+  <!-- Back button -->
+  <input class="btn btn-secondary mt-2" type="button" value="Back" onclick="window.history.back();return false;">
 </div>
 {% endblock %}

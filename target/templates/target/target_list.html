@@ -4,7 +4,6 @@
 {% load static %} 
 
 {% block content %}
-{% if no_move_list or target_list %}
 <main role="main" class="container">
   <!--Modal for selecting reduction qty-->
 
@@ -18,6 +17,7 @@
         <a class="btn btn-primary" href="{% url 'review-targets' %}">Review Target Items</a>
       </div>
     </div>
+    {% if no_move_list %}
       <ul id="nomovelist">
           {% for item in no_move_list %}
           <li
@@ -66,12 +66,9 @@
 
 {% else %}
 
-<main role="main" class="container">
-  <h1 class="mt-4">View Targets</h1>
   <h4 class="mt-5">
     Could not find items... Are you sure you have the correct access privileges?
   </h4>
-</main>
 
 {% endif %} 
 
@@ -136,28 +133,6 @@
     }
     return cookieValue;
   }
-
-  // $('#nomovelist input').on('click', function() {
-  //   const selectedTarget = $(this).closest('li');
-  //   const selectedId = $(this).attr('data-id');
-
-  //   const urlTrue = `http://127.0.0.1:8000/target/${selectedId}/settrue/`;
-
-  //   $.ajax({
-  //     url: urlTrue,
-  //     method: "POST",
-  //     headers: {'X-CSRFToken': csrftoken},
-  //     data: {
-  //       'itemsId': selectedId,
-  //       'setTargetTrue': true,
-  //     }
-  //   }).done(function(response) {
-  //     console.log(response);
-  //   }).fail(function(error) {
-  //     console.log(error);
-  //   });
-
-  // });
 
 </script>
 {% endblock %} 

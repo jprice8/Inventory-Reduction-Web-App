@@ -54,23 +54,25 @@ def review_target_items(request):
 
 @login_required
 def move_targets(request, pk):
-    dmm = Facility.objects.filter(dmm=request.user)[0]
+    d_facility = Facility.objects.filter(dmm=request.user)[0]
     item_from_id = get_object_or_404(CountUsageList, pk=pk)
 
     matched_items = CountUsageList.objects.filter(mfr_cat_no=item_from_id.mfr_cat_no)
 
     if request.method == 'POST':
         form = MovementPlanForm(request.POST)
+        form.instance.dmm = request.user
+        form.instance.item = item_from_id
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('count-usage-list', args=(pk,)))
+            return HttpResponseRedirect(reverse('review-targets',))
     else:
         form = MovementPlanForm()
 
     context = {
         'target_item': item_from_id,
         'matched_items': matched_items,
-        'dmm': dmm,
+        'd_facility': d_facility,
         'form': form,
     }
 
