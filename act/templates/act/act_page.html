@@ -3,62 +3,128 @@
 {% load humanize %}
 
 {% block content %}
-    <main role="main" class="container">
+  <main role="main" class="container">
 
-        <!-- Top row. Name and summary stats.-->
-        <div class="row">
-            <div class="col-sm">
-                <h2 class="mt-4">Welcome, {{ user.get_username }}</h2>
-                <h5>DMM at {{ facility.facility_name  }}</h5>
-            </div>
-            <div class="col-sm">
-                <div class="card mt-4" style="width: 75%;">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Total No Move Inventory: ${{ no_move|floatformat:0|intcomma }}</li>
-                        <li class="list-group-item">Total Targeted Inventory: $250,000</li>
-                        <li class="list-group-item">Total Reduced Inventory: $100,000</li>
-                    </ul>
-                </div>
-            </div>
+    <!-- Top row. Name and summary stats.-->
+    <div class="row">
+      <div class="col-sm">
+        <h2 class="mt-4">Welcome, {{ user.get_username }}</h2>
+        <h5>DMM at {{ facility.facility_name }}</h5>
+      </div>
+        <div class="col-sm">
+          <div class="card mt-4" style="width: 75%;">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Your facility shows <mark>${{ no_move_ext|floatformat:0|intcomma }}</mark> of inventory with no recorded intake.</li>
+              <!-- If no target ext then 0 else show figure -->
+              {% if target_ext %}
+              <li class="list-group-item">You have targeted <mark>${{ target_ext|floatformat:0|intcomma }}</mark> of that inventory.</li>
+              {% else %}
+              <li class="list-group-item">You have targeted <mark>$0</mark> of that inventory.</li>
+              {% endif %}
+              <li class="list-group-item">You have removed <mark>${{ completed_ext|floatformat:0|intcomma }}</mark> of your targeted inventory.</li>
+            </ul>
+          </div>
         </div>
+      </div>
 
-        <!-- Second row. Items requested for movement.-->
-        <div class="row">
-            <div class="col-sm">
-                <h4 class="mt-5">Pending Requests to your Facility: </h4>
-                <div class="mt-3">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr scope="col">
-                                <th>Requesting Facility</th>
-                                <th>Item Description</th>
-                                <th>IMMS #</th>
-                                <th>Sending Qty</th>
-                                <th>Unit Cost</th>
-                                <th>Ext. Cost</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>952</td>
-                                <td>Spine Screw</td>
-                                <td>90210</td>
-                                <td>2</td>
-                                <td>$400</td>
-                                <td>$800</td>
-                                <td>
-                                    <div class="btn-group" role="group" aria-label="Action">
-                                        <button type="button" class="btn btn-success">Accept</button>
-                                        <button type="button" class="btn btn-danger">Reject</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+      <!-- Second row. Items requested for movement.-->
+      <div class="row">
+          <div class="col-sm">
+              <h4 class="mt-5">Pending Requests to your Facility: </h4>
+              <div class="mt-3">
+                  {% if plans %}
+                  <table class="table table-hover">
+                    <thead>
+                      <tr scope="col">
+                        <th>Requesting DMM</th>
+                        <th>Item Description</th>
+                        <th>Mfr Cat No</th>
+                        <th>Sending Qty</th>
+                        <th>Unit Cost</th>
+                        <th></th>
+                      </tr>
+                    </thead>
 
-            </div>
-        </div>
-    </main>
+                    <tbody>
+                      {% for plan in plans %}
+                      <tr>
+                        <td>{{ plan.dmm }}</td>
+                        <td>{{ plan.item.description }}</td>
+                        <td>{{ plan.item.mfr_cat_no }}</td>
+                        <td>{{ plan.ship_qty }}</td>
+                        <td>${{ plan.item.default_uom_price|floatformat:0|intcomma }}</td>
+                        <td>
+                          <div class="btn-group" role="group" aria-label="Action">
+                            <button data-id={{ plan.id }} type="button" class="btn btn-success">Accept</button>
+                            <button data-id={{ plan.id }} type="button" class="btn btn-danger">Reject</button>
+                        </div>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+
+                  {% else %}
+                  <h3>No pending requests at this time!</h3>
+                  {% endif %}
+              </div>
+          </div>
+      </div>
+  </main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const csrftoken = getCookie('csrftoken');
+
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+    }
+  }
+  return cookieValue;
+}
+
+// Accept button pressed...
+$('.btn-success').click(function() {
+  const selectedId = $(this).attr('data-id');
+
+  dmmRespond('accepted', selectedId);
+});
+
+// Reject button pressed...
+$('.btn-danger').click(function() {
+  const selectedId = $(this).attr('data-id');
+
+  dmmRespond('rejected', selectedId);
+});
+
+function dmmRespond(decision, itemId) {
+  const URL = `http://127.0.0.1:8000/act/${itemId}/resulthandler/`;
+  $.ajax({
+      url: URL,
+      method: 'POST',
+      headers: {'X-CSRFToken': csrftoken},
+      data: {'action': decision}
+  })
+  .done(function(response) {
+      console.log(response);
+  })
+  .fail(function(error) {
+      console.log(error);
+  });
+
+  // refresh page to show list item disappears
+  window.location.reload();
+}
+
+</script>
 {% endblock %}

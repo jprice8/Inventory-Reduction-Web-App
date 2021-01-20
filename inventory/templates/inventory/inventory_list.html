@@ -31,9 +31,9 @@
                         <td>{{ item.period|date:"d M Y" }}</td>
                         <td>{{ item.facility_name }}</td>
                         <td>{{ item.imms }}</td>
-                        <td>{{ item.count_qty }}</td>
-                        <td>{{ item.issue_qty }}</td>
-                        <td>{{ item.po_qty }}</td>
+                        <td>{{ item.count_qty|intcomma }}</td>
+                        <td>{{ item.issue_qty|intcomma }}</td>
+                        <td>{{ item.po_qty|intcomma }}</td>
                         <td>{{ item.mfr }}</td>
                         <td>{{ item.mfr_cat_no }}</td>
                         <td>{{ item.description }}</td>

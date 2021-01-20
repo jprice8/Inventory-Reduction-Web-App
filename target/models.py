@@ -60,4 +60,21 @@ class MovementPlan(models.Model):
         max_length=3,
         choices=ShipFacilities.choices,
     )
-        
+    
+    class Result(models.TextChoices):
+        outstanding = 'outstanding', _('Outstanding')
+        accepted = 'accepted', _('Accepted')
+        rejected = 'rejected', _('Rejected')
+        sold = 'sold', _('Sold')
+        discarded = 'discarded', _('Discarded')
+
+    result = models.CharField(
+        max_length=50,
+        choices=Result.choices,
+        default=Result.outstanding,
+    )
+
+    def __str__(self):
+        return f'movement plan by {self.dmm}, for {self.item}, created on {self.created_at}'
+
+    

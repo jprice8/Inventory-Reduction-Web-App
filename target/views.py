@@ -36,6 +36,25 @@ def count_usage_list(request):
 def review_target_items(request):
     dmm = Facility.objects.filter(dmm=request.user)[0]
 
+    # get all plans for displaying result status
+    all_plans = MovementPlan.objects.all()
+    
+    # get a list of item ids with movement plans that are outstanding
+    plans_outstanding = MovementPlan.objects.filter(
+        result=MovementPlan.Result.outstanding
+    )
+    outstanding_ids = []
+    for i in plans_outstanding:
+        outstanding_ids.append(i.item_id)
+
+    # get a list of item ids with movement plans that are not outstanding
+    plans_not_outstanding = MovementPlan.objects.exclude(
+        result=MovementPlan.Result.outstanding
+    )
+    not_outstanding_ids = []
+    for i in plans_not_outstanding:
+        not_outstanding_ids.append(i.item_id)
+
     context = {
         'target_list': CountUsageList.objects.filter(
             fac=dmm.fac
@@ -47,7 +66,10 @@ def review_target_items(request):
             count_qty__gt=0
         ).filter(
             isTarget=True
-        )[:100]
+        )[:100],
+        'outstanding_ids': outstanding_ids,
+        'not_outstanding_ids': not_outstanding_ids,
+        'all_plans': all_plans,
     }
 
     return render(request, 'target/review_targets.html', context)

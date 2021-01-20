@@ -27,24 +27,29 @@
       <div class="card mt-3">
         <div class="card-body">
           <h5 class="card-title">{{ item.description }}</h5>
+          <div class="row">
+            <div class="col-sm">
+              <p class="card-text">Mfr Cat No: {{ item.mfr_cat_no }}</p>
+            </div>
+            <div class="col-sm">
+              <p class="card-text">IMMS #: {{ item.imms }}</p>
+            </div>
+            <div class="col-sm">
+            </div>
+          </div>
 
           <div class="row">
             <div class="col-sm">
-              <h6 class="card-subtitle mb-2 text-muted">
-                IMMS #: {{ item.imms }}
-              </h6>
-            </div>
-            <div class="col-sm">
-              <p class="card-text">Qty: {{ item.count_qty }}</p>
+              <p class="card-text">Qty: {{ item.count_qty|intcomma }}</p>
             </div>
             <div class="col-sm">
               <p class="card-text">
-                Cost: ${{ item.default_uom_price|floatformat|intcomma }}
+                Cost: ${{ item.default_uom_price|floatformat:0|intcomma }}
               </p>
             </div>
             <div class="col-sm">
               <p class="card-text">
-                Ext: ${{ item.ext_cost|floatformat|intcomma }}
+                Ext: ${{ item.ext_cost|floatformat:0|intcomma }}
               </p>
             </div>
           </div>
@@ -57,7 +62,20 @@
               </div>
             </div>
             <div class="col-sm">
+              {% if item.id in not_outstanding_ids %}
+              <a class="btn btn-success" href="{% url 'move-targets' item.id %}">Set Movement Plan</a>
+              {% elif item.id in outstanding_ids %}
+              <a class="btn btn-warning" href="{% url 'move-targets' item.id %}">Set Movement Plan</a>
+              {% else %}
               <a class="btn btn-danger" href="{% url 'move-targets' item.id %}">Set Movement Plan</a>
+              {% endif %}
+            </div>
+            <div class="col-sm">
+              {% for plan in all_plans %}
+                {% if item.id == plan.item_id %}
+                <p>Current Status: {{ plan.result }}</p>
+                {% endif %}
+              {% endfor %}
             </div>
           </div>
         </div>
