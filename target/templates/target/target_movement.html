@@ -27,7 +27,7 @@
       <div class="card-body">
         <h4 class="card-title">For Facility: <mark>{{ item.fac }}</mark></h4>
         <p class="card-text">Recorded count quantity on {{ item.period|date:"M Y" }}: {{ item.count_qty|intcomma }}</p>
-        <p class="card-text">Purchase Order Quantity in 2020: {{ item.po_qty|intcomma }}</p>
+        <p class="card-text">Purchase Order Quantity in 2020: {{ item.luom_po_qty|intcomma }}</p>
         <p class="card-text">Issue Quantity in 2020: {{ item.issue_qty|intcomma }}</p>
       </div>
     </div>
@@ -47,7 +47,5 @@
       </div>
     </form>
   </div>
-  <!-- Back button -->
-  <input class="btn btn-secondary mt-2" type="button" value="Back" onclick="window.history.back();return false;">
 </div>
 {% endblock %}

@@ -21,7 +21,7 @@ def count_usage_list(request):
         ).filter(
             issue_qty=0
         ).filter(
-            po_qty=0
+            luom_po_qty=0
         ).filter(
             count_qty__gt=0
         ).filter(
@@ -61,7 +61,7 @@ def review_target_items(request):
         ).filter(
             issue_qty=0
         ).filter(
-            po_qty=0
+            luom_po_qty=0
         ).filter(
             count_qty__gt=0
         ).filter(

@@ -21,6 +21,7 @@
                     <th scope="col">Description</th>
                     <th scope="col">Price</th>
                     <th scope="col">UoM</th>
+                    <th scope="col">UoM Conv</th>
                     <th scope="col">Extended Cost</th>
                 </tr>
             </thead>
@@ -33,12 +34,13 @@
                         <td>{{ item.imms }}</td>
                         <td>{{ item.count_qty|intcomma }}</td>
                         <td>{{ item.issue_qty|intcomma }}</td>
-                        <td>{{ item.po_qty|intcomma }}</td>
+                        <td>{{ item.luom_po_qty|intcomma }}</td>
                         <td>{{ item.mfr }}</td>
                         <td>{{ item.mfr_cat_no }}</td>
                         <td>{{ item.description }}</td>
-                        <td>${{ item.default_uom_price|floatformat:0|intcomma }}</td>
-                        <td>{{ item.default_uom }}</td>
+                        <td>${{ item.wt_avg_cost|floatformat:0|intcomma }}</td>
+                        <td>{{ item.uom }}</td>
+                        <td>{{ item.uom_conv }}</td>
                         <td>${{ item.ext_cost|floatformat:0|intcomma }}</td>
                     </tr>
                 {% endfor %}

@@ -18,7 +18,7 @@ def act_page(request):
     ).filter(
         issue_qty=0
     ).filter(
-        po_qty=0
+        luom_po_qty=0
     ).filter(
         isTarget=False
     ).aggregate(Sum('ext_cost'))
@@ -29,7 +29,7 @@ def act_page(request):
     ).filter(
         issue_qty=0
     ).filter(
-        po_qty=0
+        luom_po_qty=0
     ).filter(
         isTarget=True
     ).aggregate(Sum('ext_cost'))
@@ -44,7 +44,7 @@ def act_page(request):
     # get completed ext for items reduced
     completed_ext = 0
     for plan in completed_plans:
-        completed_ext += plan.ship_qty * plan.item.default_uom_price
+        completed_ext += plan.ship_qty * plan.item.wt_avg_cost
 
     # all movement plans with the user's facility listed as desired destination
     my_plans = MovementPlan.objects.filter(
