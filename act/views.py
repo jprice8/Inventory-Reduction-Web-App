@@ -44,7 +44,19 @@ def act_page(request):
     # get completed ext for items reduced
     completed_ext = 0
     for plan in completed_plans:
-        completed_ext += plan.ship_qty * plan.item.wt_avg_cost
+        completed_ext += plan.accepted_qty * plan.item.wt_avg_cost
+
+    # get all plans dmm has accepted
+    accepted_plans = MovementPlan.objects.filter(
+        ship_fac=dmm.fac
+    ).filter(
+        result=MovementPlan.Result.accepted
+    )
+
+    # get accepted ext for items moving to dmm facility
+    accepted_ext = 0
+    for plan in accepted_plans:
+        accepted_ext += plan.accepted_qty * plan.item.wt_avg_cost
 
     # all movement plans with the user's facility listed as desired destination
     my_plans = MovementPlan.objects.filter(
@@ -58,7 +70,8 @@ def act_page(request):
         'no_move_ext': total_no_move['ext_cost__sum'],
         'target_ext': total_target['ext_cost__sum'],
         'completed_ext': completed_ext,
-        'plans': my_plans
+        'accepted_ext': accepted_ext,
+        'plans': my_plans,
     }
 
     return render(request, 'act/act_page.html', context)
@@ -68,7 +81,6 @@ def act_page(request):
 @ensure_csrf_cookie
 def result_handler(request, pk):
     dmm_response = request.POST['action']
-    print(dmm_response)
 
     if request.method == 'POST':
         plan_from_id = get_object_or_404(MovementPlan, pk=pk)
@@ -93,5 +105,42 @@ def result_handler(request, pk):
         }
 
     return JsonResponse(response_data)
+
+# Dmm has accepted the request, now set the accepted quantity
+@login_required
+@ensure_csrf_cookie
+def accept_qty_handler(request, pk):
+    dmm_accept_qty = request.POST['accept_qty']
+    print(dmm_accept_qty)
+
+    if request.method == 'POST':
+        plan_from_id = get_object_or_404(MovementPlan, pk=pk)
+        accept_qty_before = plan_from_id.accepted_qty
+        plan_from_id.accepted_qty = dmm_accept_qty
+        plan_from_id.save(update_fields=['accepted_qty'])
+        accept_qty_after = plan_from_id.accepted_qty
+    
+    response_data = {
+        'django_response': f'plan had accepted qty of... {accept_qty_before} and is now {accept_qty_after}'
+    }
+
+    return JsonResponse(response_data)
+
+@login_required
+def review_accepted(request):
+    # facility of requesting dmm
+    dmm = Facility.objects.filter(dmm=request.user)[0]
+
+    accepted_plans = MovementPlan.objects.filter(
+        ship_fac=dmm.fac
+    ).filter(
+        result=MovementPlan.Result.accepted
+    )
+
+    context = {
+        'accepted_plans': accepted_plans,
+    }
+
+    return render(request, 'act/review_accepted.html', context)
     
 

@@ -47,6 +47,7 @@ class MovementPlan(models.Model):
     isSell = models.BooleanField(null=False)
     isTrash = models.BooleanField(null=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    accepted_qty = models.IntegerField(null=False, default=0)
 
     class ShipFacilities(models.TextChoices):
         NAN = '000', _('Not Shipping')
