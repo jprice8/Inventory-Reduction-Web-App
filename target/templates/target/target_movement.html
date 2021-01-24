@@ -35,17 +35,19 @@
   {% else %}
     <h2>Could not find any movement for this item within the health system.</h2>
   {% endif %}
-  <div class="form-section mt-4">
+  
+  <div class="content-section">
     <form method="POST">
       {% csrf_token %}
       <fieldset class="form-group">
-        <legend class="mb-2 border-bottom">Movement Plan</legend>
+        <legend class="border-bottom mb-4">Movement Plan</legend>
         {{ form|crispy }}
       </fieldset>
       <div class="form-group">
-        <button class="btn btn-outline-info" type="submit">Submit</button>
+        <button class="btn btn-primary" type="submit">Submit</button>
       </div>
     </form>
   </div>
+
 </div>
 {% endblock %}

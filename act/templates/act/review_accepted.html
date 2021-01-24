@@ -5,11 +5,14 @@
 {% block content %}
 <section class="container">
   <h2>Review Accepted Movement Plans</h2>
+  <p>NOTE: In excel, "Date Requested" will be in UTC timezone.</p>
 
   <table class="table table-hover">
     <thead>
       <tr scope="col">
-        <th>Requesting DMM</th>
+        <th>Sending Facility</th>
+        <th>Receiving Facility</th>
+        <th>Date Requested</th>
         <th>Item Description</th>
         <th>Mfr Cat No</th>
         <th>IMMS No</th>
@@ -21,7 +24,9 @@
     <tbody>
       {% for plan in accepted_plans %}
       <tr>
-        <td>{{ plan.dmm }}</td>
+        <td>{{ plan.item.fac }}</td>
+        <td>{{ plan.ship_fac }}</td>
+        <td>{{ plan.created_at }}</td>
         <td>{{ plan.item.description }}</td>
         <td>{{ plan.item.mfr_cat_no }}</td>
         <td>{{ plan.item.imms }}</td>
@@ -31,7 +36,12 @@
     {% endfor %}
     </tbody>
   </table>
-  <button class="btn btn-primary">Export to Excel</button>
+  {% if accepted_plans %}
+  <a href="{% url 'export-accepted' %}" class="btn btn-outline-primary">Export to Excel</a>
+  {% else %}
+  <h4>You have not accepted any movement plans yet.</h4>
+  {% endif %}
+  
 </section>
 
 {% endblock %}

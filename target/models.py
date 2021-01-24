@@ -20,7 +20,7 @@ class CountUsageList(models.Model):
     vend_cat_no = models.CharField(max_length=100, null=False)
     uom_conv = models.IntegerField(null=False)
     uom_price = models.FloatField(null=False)
-    luom = models.CharField(max_length=10, null=False)
+    default_uom = models.CharField(max_length=10, null=False)
     luom_no_of_units = models.IntegerField(null=False)
     wt_avg_cost = models.FloatField(null=False)
     ext_cost = models.FloatField(null=False)
@@ -43,11 +43,19 @@ class MovementPlan(models.Model):
     dmm = models.ForeignKey(User, on_delete=models.CASCADE)
     item = models.ForeignKey(CountUsageList, on_delete=models.CASCADE)
     ship_qty = models.IntegerField(null=False)
-    isMove = models.BooleanField(null=False)
-    isSell = models.BooleanField(null=False)
-    isTrash = models.BooleanField(null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     accepted_qty = models.IntegerField(null=False, default=0)
+
+    class MovementOptions(models.TextChoices):
+        ship = 'ship', _('Ship to another facility within the system'),
+        sell = 'sell', _('Sell to a third party vendor'),
+        trash = 'trash', _('Trash the item and write off the books'),
+
+    decision = models.CharField(
+        max_length=50, 
+        choices=MovementOptions.choices,
+        default=MovementOptions.ship,
+    )
 
     class ShipFacilities(models.TextChoices):
         NAN = '000', _('Not Shipping')

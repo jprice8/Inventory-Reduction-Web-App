@@ -27,7 +27,6 @@ invcounts_source = invcounts_source.dropna(subset=["uom"])
 # source data
 issue_source = pd.read_sql_table('issue_detail_full', source_engine)
 issue_source = issue_source.rename(columns={'facility_number': 'fac'})
-bk_joe = invcounts_source.groupby(['fac', 'period', 'imms', 'uom']).agg({'qty': ['sum']})
 
 # pivot quantity out on facility, period, and imms #
 piv = pd.pivot_table(invcounts_source, values='qty', index=['fac', 'period', 'imms', 'uom'],
@@ -63,16 +62,15 @@ invcount_nov_issues = invcount_nov_issues.rename(columns={'qty_x': 'count_qty',
 po_source = pd.read_sql_table('po_detail', source_engine)
 
 # filter pos for 2020 only
-po2020 = po_source[po_source['poDate'].dt.year == 2020]
+po2020 = po_source[po_source['po_date'].dt.year == 2020]
 
 # create new column for po qty in luom using given coversion factor
-po2020['luom_po_qty'] = po2020['poQty'] * po2020['poUOM_mult']
+po2020['luom_po_qty'] = po2020['po_qty'] * po2020['po_uom_conv']
 
 # group the issues dataframe by imms and facility and sum the qty 
-p2020 = po2020.groupby(['fac', 'imms', 'poUOM'], as_index=False)['luom_po_qty'].sum()
-
+p2020 = po2020.groupby(['fac', 'imms', 'luom'], as_index=False)['luom_po_qty'].sum()
 # rename poUOM to uom in order to join tables
-p2020 = p2020.rename(columns={'poUOM': 'uom'})
+p2020 = p2020.rename(columns={'luom': 'uom'})
 
 # merge grouped issues on grouped counts
 invcount_joined = invcount_nov_issues.merge(p2020, how="left", on=["fac", "imms", "uom"])
@@ -104,7 +102,7 @@ cleaned_items = items[['fac', 'TenetFacilityName', 'imms', 'Mfr', 'MfrCat', 'Ite
 cleaned_items = cleaned_items.rename(columns={'TenetFacilityName': 'facility_name', 
     'Mfr': 'mfr', 'MfrCat': 'mfr_cat_no', 'ItemDesc': 'description', 
     'MMISItemCreateDate': 'imms_create_date', 'Vend': 'vendor', 
-    'VendCat': 'vend_cat_no', 'DefaultUOM': 'uom',
+    'VendCat': 'vend_cat_no', 'DefaultUOM': 'default_uom',
     'DefaultUOMConv': 'uom_conv', 'DefaultUOMPrice': 'uom_price', 
     'UOM1': 'luom', 'CONV1': 'luom_no_of_units'})
 
@@ -123,7 +121,7 @@ invcount_joined.imms = invcount_joined.imms.str.strip()
 # some facilities showing duplicate imms # based off of different UOMs...
 # to normalize, I will sort for lowest default uom then
 # remove items with duplicate imms no's.
-cleaned_items = cleaned_items.sort_values(by='luom_price', ascending=True, ignore_index=True)
+cleaned_items = cleaned_items.sort_values(by='uom_price', ascending=True, ignore_index=True)
 
 # need to pull out items for each facility individually and remove duplicate imms #'s
 # then concat them back together before merging
@@ -142,6 +140,8 @@ rhh = rhh.drop_duplicates(subset=['imms'], keep='first')
 ncb = ncb.drop_duplicates(subset=['imms'], keep='first')
 
 new_items = pd.concat([bmc, mtb, slb, nbh, rhh, ncb], ignore_index=True)
+# rename item master luom to uom in order for joining
+new_items = new_items.rename(columns={'luom': 'uom'})
 
 # merge new items with joined counts
 final = invcount_joined.merge(new_items, how="left", on=['fac', 'imms', 'uom'])
