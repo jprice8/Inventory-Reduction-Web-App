@@ -7,14 +7,15 @@
 <main role="main" class="container">
   <!--Modal for selecting reduction qty-->
 
-  <h1 class="m-4">Target Non-moving Items</h1>
+  
     <div class="row m-4">
       <!--No Move List-->
-      <div class="col-sm">
-        <h3>No Move List</h3>
+      <div class="col-sm-8">
+        <h1 class="mt-4 ml-2">Target Non-moving Items <i class="fas fa-crosshairs"></i></h1>
+        <p class="ml-4">These items are showing zero purchase orders and zero issues for FY2020. Limited to top 100 items.</p>
       </div>
       <div class="col-sm">
-        <a class="btn btn-primary" href="{% url 'review-targets' %}">Review Target Items</a>
+        <a class="btn btn-primary mt-5" href="{% url 'review-targets' %}"><i class="fas fa-arrow-right"></i> Review Target Items</a>
       </div>
     </div>
     {% if no_move_list %}
@@ -24,7 +25,7 @@
             style="list-style-type: none;"
             id={{ item.id }}
           >
-            <div class="card mt-3">
+            <div class="card shadow mt-3">
               <div class="card-body">
                 <h5 class="card-title">{{ item.description }}</h5>
 
@@ -52,8 +53,8 @@
                 <div class="row">
                   <div class="col-sm">
                     <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" data-id={{ item.id }}>
-                      <label class="form-check-label" for="flexSwitchCheckDefault">Target Item</label>
+                      <input class="form-check-input" data-size="sm" data-on="Yes" data-off="No" type="checkbox" data-toggle="toggle" data-id={{ item.id }}>
+                      <label class="ml-2" for="flexSwitchCheckDefault">Target Item</label>
                     </div>
                   </div>
                 </div>

@@ -4,7 +4,7 @@
 
 {% block content %}
 <section class="container">
-  <h2 class="mt-4">Review Accepted Movement Plans <i class="fas fa-truck"></i></h2>
+  <h2 class="mt-4">Review Completed Movement Plans <i class="far fa-check-circle"></i></h2>
   <p>NOTE: In excel, "Date Requested" will be in UTC timezone.</p>
 
   <table class="table table-hover">
@@ -18,11 +18,12 @@
         <th>IMMS No</th>
         <th>Accepted Qty</th>
         <th>Unit Cost</th>
+        <th>Reduction Method</th>
       </tr>
     </thead>
 
     <tbody>
-      {% for plan in accepted_plans %}
+      {% for plan in completed_plans %}
       <tr>
         <td>{{ plan.item.fac }}</td>
         <td>{{ plan.ship_fac }}</td>
@@ -32,14 +33,15 @@
         <td>{{ plan.item.imms }}</td>
         <td>{{ plan.accepted_qty }}</td>
         <td>${{ plan.item.wt_avg_cost|floatformat:0|intcomma }}</td>
+        <td>{{ plan.decision }}</td>
       </tr>
     {% endfor %}
     </tbody>
   </table>
-  {% if accepted_plans %}
-  <a href="{% url 'export-accepted' %}" class="btn btn-outline-primary">Export to Excel</a>
+  {% if completed_plans %}
+  <a href="{% url 'export-completed' %}" class="btn btn-outline-primary">Export to Excel</a>
   {% else %}
-  <h4>You have not accepted any movement plans yet.</h4>
+  <h4>You have not completed any movement plans yet.</h4>
   {% endif %}
   
 </section>

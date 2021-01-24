@@ -148,7 +148,24 @@ def review_accepted(request):
     return render(request, 'act/review_accepted.html', context)
 
 @login_required
-def export_excel(request):
+def review_completed(request):
+    # facility of requesting dmm
+    dmm = Facility.objects.filter(dmm=request.user)[0]
+
+    completed_plans = MovementPlan.objects.filter(
+        dmm=request.user
+    ).filter(
+        result=MovementPlan.Result.accepted
+    )
+
+    context = {
+        'completed_plans': completed_plans,
+    }
+
+    return render(request, 'act/review_completed.html', context)
+
+@login_required
+def accepted_export_excel(request):
     # facility of requesting dmm
     dmm = Facility.objects.filter(dmm=request.user)[0]
 
@@ -196,4 +213,53 @@ def export_excel(request):
 
     return ExcelResponse(list_of_plans, output_filename=f'Reduction App Accepted Items {t_month} {t_day} {t_year}')
     
+@login_required
+def completed_export_excel(request):
+    # facility of requesting dmm
+    dmm = Facility.objects.filter(dmm=request.user)[0]
 
+    # get the date for the output filename
+    t_day = dt.datetime.today().day
+    t_month = dt.datetime.today().month
+    t_year = dt.datetime.today().year
+
+    # queryset of plans that the user has accepted
+    completed_plans = MovementPlan.objects.filter(
+        dmm=request.user
+    ).filter(
+        result=MovementPlan.Result.accepted
+    )
+
+    # our list of lists
+    list_of_plans = []
+    # column headers
+    column_headers = [
+        'Sending Facility', 
+        'Receiving Facility', 
+        'Date Requested', 
+        'Item Description', 
+        'Item IMMS No', 
+        'Item Mfr Cat No', 
+        'Shipping Qty', 
+        'Item Wt Avg Cost',
+        'Reduction Method',
+    ]
+    list_of_plans.append(column_headers)
+
+    # iterate through the query set and append desired fields to new list
+    for plan in completed_plans:
+        plan_x = []
+        
+        plan_x.append(plan.item.fac)
+        plan_x.append(plan.ship_fac)
+        plan_x.append(plan.created_at)
+        plan_x.append(plan.item.description)
+        plan_x.append(plan.item.imms)
+        plan_x.append(plan.item.mfr_cat_no)
+        plan_x.append(plan.accepted_qty)
+        plan_x.append(plan.item.wt_avg_cost)
+        plan_x.append(plan.decision)
+
+        list_of_plans.append(plan_x)
+
+    return ExcelResponse(list_of_plans, output_filename=f'Reduction App Reduced Items {t_month} {t_day} {t_year}')

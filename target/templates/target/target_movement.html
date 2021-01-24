@@ -23,7 +23,7 @@
     </div>
   </div>
     {% for item in matched_items %}
-    <div class="card m-4" style="width: fit-content;">
+    <div class="card shadow m-4" style="width: fit-content;">
       <div class="card-body">
         <h4 class="card-title">For Facility: <mark>{{ item.fac }}</mark></h4>
         <p class="card-text">Recorded count quantity on {{ item.period|date:"M Y" }}: {{ item.count_qty|intcomma }}</p>

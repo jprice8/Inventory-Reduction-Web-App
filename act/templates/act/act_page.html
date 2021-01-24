@@ -7,22 +7,23 @@
 
     <!-- Top row. Name and summary stats.-->
     <div class="row">
-      <div class="col-sm">
-        <h2 class="mt-4">Welcome, {{ user.get_username }}</h2>
+      <div class="card shadow col-sm mt-4" align="center">
+        <h2 class="pt-2">Welcome, {{ user.get_username }}</h2>
         <h5>DMM at {{ facility.facility_name }}</h5>
+        <i class="far fa-hospital fa-5x"></i>
       </div>
         <div class="col-sm">
-          <div class="card mt-4" style="width: 75%;">
+          <div class="card shadow mt-4"> 
             <ul class="list-group list-group-flush">
-              <li class="list-group-item">Your facility shows <mark>${{ no_move_ext|floatformat:0|intcomma }}</mark> of inventory with no recorded intake.</li>
+              <li class="list-group-item"><i class="far fa-times-circle"></i> Your facility shows <mark>${{ no_move_ext|floatformat:0|intcomma }}</mark> of inventory with no recorded intake.</li>
               <!-- If no target ext then 0 else show figure -->
               {% if target_ext %}
-              <li class="list-group-item">You have targeted <mark>${{ target_ext|floatformat:0|intcomma }}</mark> of that inventory.</li>
+              <li class="list-group-item"><i class="fas fa-bullseye"></i> You have targeted <mark>${{ target_ext|floatformat:0|intcomma }}</mark> of that inventory.</li>
               {% else %}
               <li class="list-group-item">You have targeted <mark>$0</mark> of that inventory.</li>
               {% endif %}
-              <li class="list-group-item">You have removed <mark>${{ completed_ext|floatformat:0|intcomma }}</mark> of your targeted inventory.</li>
-              <li class="list-group-item"><a href="{% url 'review-accepted' %}">You have accepted <mark>${{ accepted_ext|floatformat:0|intcomma }}</mark> of inventory.</a></li>
+              <li class="list-group-item"><a href="{% url 'review-completed' %}"><i class="far fa-check-circle"></i> You have removed <mark>${{ completed_ext|floatformat:0|intcomma }}</mark> of your targeted inventory.</a></li>
+              <li class="list-group-item"><a href="{% url 'review-accepted' %}"><i class="fas fa-truck"></i> You have accepted <mark>${{ accepted_ext|floatformat:0|intcomma }}</mark> of inventory.</a></li>
             </ul>
           </div>
         </div>
@@ -30,8 +31,8 @@
 
       <!-- Second row. Items requested for movement.-->
       <div class="row">
-          <div class="col-sm">
-              <h4 class="mt-5">Pending Requests to your Facility: </h4>
+          <div class="mt-4 col-sm">
+              <h4 class="mt-2">Pending Requests to your Facility: </h4>
               <div class="mt-3">
                 {% if plans %}
                 <table class="table table-hover">
