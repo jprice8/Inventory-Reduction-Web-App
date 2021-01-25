@@ -6,15 +6,14 @@
 {% block content %}
 <main role="main" class="container">
   <!--Modal for selecting reduction qty-->
-
- <h1 class="m-4">Review Target Items</h1>
   <div class="row m-4">
     <!--No Move List-->
-    <div class="col-sm">
-      <h3>Target List</h3>
+    <div class="col-8">
+      <h1 class="mt-4 ml-2">Review Target Items <i class="fas fa-clipboard-check"></i></h1>
+      <p class="ml-4">Click on "Set Movement Plan" to continue or click Target Item Toggle to remove item from the list.</p>
     </div>
     <div class="col-sm">
-      <a class="btn btn-primary" href="{% url 'count-usage-list' %}">Back to No Move List</a>
+      <a class="btn btn-primary mt-5" href="{% url 'count-usage-list' %}"><i class="fas fa-arrow-left"></i> Back to No Move List</a>
     </div>
   </div>
   {% if target_list %}
@@ -24,7 +23,7 @@
       style="list-style-type: none;"
       id={{ item.id }}
     >
-      <div class="card mt-3">
+      <div class="card shadow mt-3">
         <div class="card-body">
           <h5 class="card-title">{{ item.description }}</h5>
           <div class="row">
@@ -40,11 +39,11 @@
 
           <div class="row">
             <div class="col-sm">
-              <p class="card-text">Qty: {{ item.count_qty|intcomma }}</p>
+              <p class="card-text">Quantity: {{ item.count_qty|intcomma }}</p>
             </div>
             <div class="col-sm">
               <p class="card-text">
-                Cost: ${{ item.default_uom_price|floatformat:0|intcomma }}
+                Cost: ${{ item.wt_avg_cost|floatformat:0|intcomma }}
               </p>
             </div>
             <div class="col-sm">
@@ -56,24 +55,28 @@
 
           <div class="row">
             <div class="col-sm">
-              <div class="form-check form-switch">
-                <input class="form-check-input" checked type="checkbox" data-id={{ item.id }}>
-                <label class="form-check-label" for="flexSwitchCheckDefault">Target Item</label>
+              <div class="form-check form-switch mt-3">
+                <input class="form-check-input" checked type="checkbox" data-toggle="toggle" data-size="sm" data-on="Yes" data-off="No" data-id={{ item.id }}>
+                <label class="form-check-label ml-2" for="flexSwitchCheckDefault">Target Item</label>
               </div>
             </div>
             <div class="col-sm">
               {% if item.id in not_outstanding_ids %}
-              <a class="btn btn-success" href="{% url 'move-targets' item.id %}">Set Movement Plan</a>
+              <a class="btn btn-success mt-3" href="#">Set Movement Plan</a>
               {% elif item.id in outstanding_ids %}
-              <a class="btn btn-warning" href="{% url 'move-targets' item.id %}">Set Movement Plan</a>
+              <a class="btn btn-warning mt-3" href="#">Set Movement Plan</a>
               {% else %}
-              <a class="btn btn-danger" href="{% url 'move-targets' item.id %}">Set Movement Plan</a>
+              <a class="btn btn-danger mt-3" href="{% url 'move-targets' item.id %}">Set Movement Plan</a>
               {% endif %}
             </div>
-            <div class="col-sm">
+            <div class="col-sm mt-2">
               {% for plan in all_plans %}
                 {% if item.id == plan.item_id %}
-                <p>Current Status: {{ plan.result }}</p>
+                  {% if plan.result == 'accepted' %}
+                  <p>Current Status: <mark>{{ plan.result }}</mark><br> Quantity approved: <mark>{{ plan.accepted_qty }}</mark></p>
+                  {% else %}
+                  <p>Current Status: <mark>{{ plan.result }}</mark></p>
+                  {% endif %}
                 {% endif %}
               {% endfor %}
             </div>

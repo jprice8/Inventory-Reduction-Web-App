@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.urls import reverse
+from django.core.exceptions import ValidationError
 
 import json
 
@@ -21,7 +22,7 @@ def count_usage_list(request):
         ).filter(
             issue_qty=0
         ).filter(
-            po_qty=0
+            luom_po_qty=0
         ).filter(
             count_qty__gt=0
         ).filter(
@@ -61,7 +62,7 @@ def review_target_items(request):
         ).filter(
             issue_qty=0
         ).filter(
-            po_qty=0
+            luom_po_qty=0
         ).filter(
             count_qty__gt=0
         ).filter(
@@ -86,10 +87,17 @@ def move_targets(request, pk):
         form.instance.dmm = request.user
         form.instance.item = item_from_id
         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('review-targets',))
+            request_qty = form.cleaned_data['ship_qty']
+            available_qty = item_from_id.count_qty
+            if request_qty > available_qty:
+                return HttpResponse(f"<h2>You are trying to reduce {request_qty} units which is more than your recorded inventory quantity of {available_qty}. Please go back and try again.</h2>")
+            else:
+                form.save()
+                return HttpResponseRedirect(reverse('review-targets',))
+        else:
+            print(form.errors)
     else:
-        form = MovementPlanForm()
+        form = MovementPlanForm(initial={'item_id': pk})
 
     context = {
         'target_item': item_from_id,

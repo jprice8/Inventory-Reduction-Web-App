@@ -23,11 +23,11 @@
     </div>
   </div>
     {% for item in matched_items %}
-    <div class="card m-4" style="width: fit-content;">
+    <div class="card shadow m-4" style="width: fit-content;">
       <div class="card-body">
         <h4 class="card-title">For Facility: <mark>{{ item.fac }}</mark></h4>
         <p class="card-text">Recorded count quantity on {{ item.period|date:"M Y" }}: {{ item.count_qty|intcomma }}</p>
-        <p class="card-text">Purchase Order Quantity in 2020: {{ item.po_qty|intcomma }}</p>
+        <p class="card-text">Purchase Order Quantity in 2020: {{ item.luom_po_qty|intcomma }}</p>
         <p class="card-text">Issue Quantity in 2020: {{ item.issue_qty|intcomma }}</p>
       </div>
     </div>
@@ -35,19 +35,19 @@
   {% else %}
     <h2>Could not find any movement for this item within the health system.</h2>
   {% endif %}
-  <div class="form-section mt-4">
+  
+  <div class="content-section">
     <form method="POST">
       {% csrf_token %}
       <fieldset class="form-group">
-        <legend class="mb-2 border-bottom">Movement Plan</legend>
+        <legend class="border-bottom mb-4">Movement Plan</legend>
         {{ form|crispy }}
       </fieldset>
       <div class="form-group">
-        <button class="btn btn-outline-info" type="submit">Submit</button>
+        <button class="btn btn-primary" type="submit">Submit</button>
       </div>
     </form>
   </div>
-  <!-- Back button -->
-  <input class="btn btn-secondary mt-2" type="button" value="Back" onclick="window.history.back();return false;">
+
 </div>
 {% endblock %}

@@ -7,6 +7,10 @@ from django.http import JsonResponse
 from inventory.models import Facility
 from target.models import CountUsageList, MovementPlan
 
+from excel_response import ExcelResponse
+
+import datetime as dt
+
 @login_required
 def act_page(request):
     # facility of requesting dmm
@@ -18,7 +22,7 @@ def act_page(request):
     ).filter(
         issue_qty=0
     ).filter(
-        po_qty=0
+        luom_po_qty=0
     ).filter(
         isTarget=False
     ).aggregate(Sum('ext_cost'))
@@ -29,7 +33,7 @@ def act_page(request):
     ).filter(
         issue_qty=0
     ).filter(
-        po_qty=0
+        luom_po_qty=0
     ).filter(
         isTarget=True
     ).aggregate(Sum('ext_cost'))
@@ -44,7 +48,19 @@ def act_page(request):
     # get completed ext for items reduced
     completed_ext = 0
     for plan in completed_plans:
-        completed_ext += plan.ship_qty * plan.item.default_uom_price
+        completed_ext += plan.accepted_qty * plan.item.wt_avg_cost
+
+    # get all plans dmm has accepted
+    accepted_plans = MovementPlan.objects.filter(
+        ship_fac=dmm.fac
+    ).filter(
+        result=MovementPlan.Result.accepted
+    )
+
+    # get accepted ext for items moving to dmm facility
+    accepted_ext = 0
+    for plan in accepted_plans:
+        accepted_ext += plan.accepted_qty * plan.item.wt_avg_cost
 
     # all movement plans with the user's facility listed as desired destination
     my_plans = MovementPlan.objects.filter(
@@ -58,7 +74,8 @@ def act_page(request):
         'no_move_ext': total_no_move['ext_cost__sum'],
         'target_ext': total_target['ext_cost__sum'],
         'completed_ext': completed_ext,
-        'plans': my_plans
+        'accepted_ext': accepted_ext,
+        'plans': my_plans,
     }
 
     return render(request, 'act/act_page.html', context)
@@ -68,7 +85,6 @@ def act_page(request):
 @ensure_csrf_cookie
 def result_handler(request, pk):
     dmm_response = request.POST['action']
-    print(dmm_response)
 
     if request.method == 'POST':
         plan_from_id = get_object_or_404(MovementPlan, pk=pk)
@@ -93,5 +109,157 @@ def result_handler(request, pk):
         }
 
     return JsonResponse(response_data)
-    
 
+# Dmm has accepted the request, now set the accepted quantity
+@login_required
+@ensure_csrf_cookie
+def accept_qty_handler(request, pk):
+    dmm_accept_qty = request.POST['accept_qty']
+    print(dmm_accept_qty)
+
+    if request.method == 'POST':
+        plan_from_id = get_object_or_404(MovementPlan, pk=pk)
+        accept_qty_before = plan_from_id.accepted_qty
+        plan_from_id.accepted_qty = dmm_accept_qty
+        plan_from_id.save(update_fields=['accepted_qty'])
+        accept_qty_after = plan_from_id.accepted_qty
+    
+    response_data = {
+        'django_response': f'plan had accepted qty of... {accept_qty_before} and is now {accept_qty_after}'
+    }
+
+    return JsonResponse(response_data)
+
+@login_required
+def review_accepted(request):
+    # facility of requesting dmm
+    dmm = Facility.objects.filter(dmm=request.user)[0]
+
+    accepted_plans = MovementPlan.objects.filter(
+        ship_fac=dmm.fac
+    ).filter(
+        result=MovementPlan.Result.accepted
+    )
+
+    context = {
+        'accepted_plans': accepted_plans,
+    }
+
+    return render(request, 'act/review_accepted.html', context)
+
+@login_required
+def review_completed(request):
+    # facility of requesting dmm
+    dmm = Facility.objects.filter(dmm=request.user)[0]
+
+    completed_plans = MovementPlan.objects.filter(
+        dmm=request.user
+    ).filter(
+        result=MovementPlan.Result.accepted
+    )
+
+    context = {
+        'completed_plans': completed_plans,
+    }
+
+    return render(request, 'act/review_completed.html', context)
+
+@login_required
+def accepted_export_excel(request):
+    # facility of requesting dmm
+    dmm = Facility.objects.filter(dmm=request.user)[0]
+
+    # get the date for the output filename
+    t_day = dt.datetime.today().day
+    t_month = dt.datetime.today().month
+    t_year = dt.datetime.today().year
+
+    # queryset of plans that the user has accepted
+    accepted_plans = MovementPlan.objects.filter(
+        ship_fac=dmm.fac
+    ).filter(
+        result=MovementPlan.Result.accepted
+    )
+
+    # our list of lists
+    list_of_plans = []
+    # column headers
+    column_headers = [
+        'Sending Facility', 
+        'Receiving Facility', 
+        'Date Requested', 
+        'Item Description', 
+        'Item IMMS No', 
+        'Item Mfr Cat No', 
+        'Shipping Qty', 
+        'Item Wt Avg Cost', 
+    ]
+    list_of_plans.append(column_headers)
+
+    # iterate through the query set and append desired fields to new list
+    for plan in accepted_plans:
+        plan_x = []
+        
+        plan_x.append(plan.item.fac)
+        plan_x.append(plan.ship_fac)
+        plan_x.append(plan.created_at)
+        plan_x.append(plan.item.description)
+        plan_x.append(plan.item.imms)
+        plan_x.append(plan.item.mfr_cat_no)
+        plan_x.append(plan.accepted_qty)
+        plan_x.append(plan.item.wt_avg_cost)
+
+        list_of_plans.append(plan_x)
+
+    return ExcelResponse(list_of_plans, output_filename=f'Reduction App Accepted Items {t_month} {t_day} {t_year}')
+    
+@login_required
+def completed_export_excel(request):
+    # facility of requesting dmm
+    dmm = Facility.objects.filter(dmm=request.user)[0]
+
+    # get the date for the output filename
+    t_day = dt.datetime.today().day
+    t_month = dt.datetime.today().month
+    t_year = dt.datetime.today().year
+
+    # queryset of plans that the user has accepted
+    completed_plans = MovementPlan.objects.filter(
+        dmm=request.user
+    ).filter(
+        result=MovementPlan.Result.accepted
+    )
+
+    # our list of lists
+    list_of_plans = []
+    # column headers
+    column_headers = [
+        'Sending Facility', 
+        'Receiving Facility', 
+        'Date Requested', 
+        'Item Description', 
+        'Item IMMS No', 
+        'Item Mfr Cat No', 
+        'Shipping Qty', 
+        'Item Wt Avg Cost',
+        'Reduction Method',
+    ]
+    list_of_plans.append(column_headers)
+
+    # iterate through the query set and append desired fields to new list
+    for plan in completed_plans:
+        plan_x = []
+        
+        plan_x.append(plan.item.fac)
+        plan_x.append(plan.ship_fac)
+        plan_x.append(plan.created_at)
+        plan_x.append(plan.item.description)
+        plan_x.append(plan.item.imms)
+        plan_x.append(plan.item.mfr_cat_no)
+        plan_x.append(plan.accepted_qty)
+        plan_x.append(plan.item.wt_avg_cost)
+        plan_x.append(plan.decision)
+
+        list_of_plans.append(plan_x)
+
+    return ExcelResponse(list_of_plans, output_filename=f'Reduction App Reduced Items {t_month} {t_day} {t_year}')
