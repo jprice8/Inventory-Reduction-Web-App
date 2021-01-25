@@ -10,7 +10,7 @@
     <!--No Move List-->
     <div class="col-8">
       <h1 class="mt-4 ml-2">Review Target Items <i class="fas fa-clipboard-check"></i></h1>
-      <p class="ml-4">Click on "Set Movement Plan" to continue or click Target Item Toggle to remove item from the list.</p>
+      <p class="ml-4">Click on "Set Movement Plan" to continue or click the Target Item check to remove item from the list.</p>
     </div>
     <div class="col-sm">
       <a class="btn btn-primary mt-5" href="{% url 'count-usage-list' %}"><i class="fas fa-arrow-left"></i> Back to No Move List</a>
@@ -56,7 +56,7 @@
           <div class="row">
             <div class="col-sm">
               <div class="form-check form-switch mt-3">
-                <input class="form-check-input" checked type="checkbox" data-toggle="toggle" data-size="sm" data-on="Yes" data-off="No" data-id={{ item.id }}>
+                <input class="form-check-input" checked type="checkbox" data-id={{ item.id }}>
                 <label class="form-check-label ml-2" for="flexSwitchCheckDefault">Target Item</label>
               </div>
             </div>
