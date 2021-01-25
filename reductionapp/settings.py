@@ -94,7 +94,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'reductionapp',
-        'USER': 'jacksonprice',
+        'USER': sec_vars.DB_OWNER,
         'PASSWORD': sec_vars.DB_PW,
         'HOST': '127.0.0.1',
         'PORT': '5432',

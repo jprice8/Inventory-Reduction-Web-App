@@ -138,11 +138,8 @@ final.luom_conv = final.luom_conv.astype('int')
 
 # calculate ext cost column
 final['ext_cost'] = final['count_qty'] * final['default_uom_price']
-
-# add reduction listing default number (1)
-final['listing'] = 1
-
 final['reduction_qty'] = 0
+final['isTarget'] = False
 
 # upload count usage table to database
 final.to_sql(
