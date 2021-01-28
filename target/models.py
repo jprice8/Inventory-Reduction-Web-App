@@ -22,7 +22,7 @@ class CountUsageList(models.Model):
     uom_price = models.FloatField(null=False)
     default_uom = models.CharField(max_length=10, null=False)
     luom_no_of_units = models.IntegerField(null=False)
-    wt_avg_cost = models.FloatField(null=False)
+    luom_cost = models.FloatField(null=False)
     ext_cost = models.FloatField(null=False)
     reduction_qty = models.IntegerField(null=False, default=0)
     isTarget = models.BooleanField(null=False, default=False)
@@ -85,6 +85,14 @@ class MovementPlan(models.Model):
     )
 
     def __str__(self):
-        return f'movement plan by {self.dmm}, for {self.item}, created on {self.created_at}'
+        return f'movement plan by {self.dmm}, to facility: {self.ship_fac}, for item: {self.item.mfr_cat_no}, created on {self.created_at}, status: {self.result}'
+
+    def calc_accepted_ext(self):
+        # multiply accepted qty by the items luom cost.
+        return self.accepted_qty * self.item.luom_cost
+
+    def calc_proposed_ext(self):
+        # multiply ship qty by the items luom cost.
+        return self.ship_qty * self.item.luom_cost
 
     

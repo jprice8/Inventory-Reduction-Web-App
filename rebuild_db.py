@@ -92,12 +92,12 @@ items = itemmaster.iloc[:, :40]
 items = items.rename(columns={'MMISItemNo': 'imms', 'TenetFacilityNo': 'fac'})
 
 # calculate weighted average cost for each item
-items['wt_avg_cost'] = items['DefaultUOMPrice'] / items['DefaultUOMConv']
+items['luom_cost'] = items['DefaultUOMPrice'] / items['DefaultUOMConv']
 
 # Clean up the item master fields
 cleaned_items = items[['fac', 'TenetFacilityName', 'imms', 'Mfr', 'MfrCat', 'ItemDesc', 
                        'MMISItemCreateDate', 'Vend', 'VendCat', 'DefaultUOM', 'DefaultUOMConv', 
-                       'DefaultUOMPrice', 'UOM1', 'CONV1', 'wt_avg_cost']]
+                       'DefaultUOMPrice', 'UOM1', 'CONV1', 'luom_cost']]
 
 cleaned_items = cleaned_items.rename(columns={'TenetFacilityName': 'facility_name', 
     'Mfr': 'mfr', 'MfrCat': 'mfr_cat_no', 'ItemDesc': 'description', 
@@ -154,7 +154,7 @@ final.uom_conv = final.uom_conv.astype('int')
 final.luom_no_of_units = final.luom_no_of_units.astype('int')
 
 # calculate ext cost column
-final['ext_cost'] = final['count_qty'] * final['wt_avg_cost']
+final['ext_cost'] = final['count_qty'] * final['luom_cost']
 # add default measures
 final['reduction_qty'] = 0
 final['isTarget'] = False

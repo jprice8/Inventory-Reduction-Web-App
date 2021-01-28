@@ -5,12 +5,15 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.urls import reverse
 from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
 
 import json
 
 from .models import CountUsageList, MovementPlan
 from .forms import MovementPlanForm
 from inventory.models import Facility
+
+from reductionapp.settings import EMAIL_HOST_USER
 
 @login_required
 def count_usage_list(request):
@@ -92,6 +95,15 @@ def move_targets(request, pk):
             if request_qty > available_qty:
                 return HttpResponse(f"<h2>You are trying to reduce {request_qty} units which is more than your recorded inventory quantity of {available_qty}. Please go back and try again.</h2>")
             else:
+
+                # Send email notification to receiving dmm
+                # subject = 'You have received a movement request on The Reduction App'
+                # receiving_dmm = request.POST['ship_fac']
+                # message = f'Facility {receiving_dmm}, you have received a movement request from DMM: {request.user}. Please go to reductiontoolkit.com to handle the request.'
+                # email_from = EMAIL_HOST_USER
+                # recipient_list = [request.user.email,]
+                # send_mail(subject, message, email_from, recipient_list)
+
                 form.save()
                 return HttpResponseRedirect(reverse('review-targets',))
         else:

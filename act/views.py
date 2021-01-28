@@ -48,7 +48,7 @@ def act_page(request):
     # get completed ext for items reduced
     completed_ext = 0
     for plan in completed_plans:
-        completed_ext += plan.accepted_qty * plan.item.wt_avg_cost
+        completed_ext += plan.accepted_qty * plan.item.luom_cost
 
     # get all plans dmm has accepted
     accepted_plans = MovementPlan.objects.filter(
@@ -60,7 +60,7 @@ def act_page(request):
     # get accepted ext for items moving to dmm facility
     accepted_ext = 0
     for plan in accepted_plans:
-        accepted_ext += plan.accepted_qty * plan.item.wt_avg_cost
+        accepted_ext += plan.accepted_qty * plan.item.luom_cost
 
     # all movement plans with the user's facility listed as desired destination
     my_plans = MovementPlan.objects.filter(
@@ -192,13 +192,16 @@ def accepted_export_excel(request):
         'Item IMMS No', 
         'Item Mfr Cat No', 
         'Shipping Qty', 
-        'Item Wt Avg Cost', 
+        'LUOM Cost',
+        'EXT Cost',
     ]
     list_of_plans.append(column_headers)
 
     # iterate through the query set and append desired fields to new list
     for plan in accepted_plans:
         plan_x = []
+
+        ext = plan.accepted_qty * plan.item.luom_cost
         
         plan_x.append(plan.item.fac)
         plan_x.append(plan.ship_fac)
@@ -207,7 +210,8 @@ def accepted_export_excel(request):
         plan_x.append(plan.item.imms)
         plan_x.append(plan.item.mfr_cat_no)
         plan_x.append(plan.accepted_qty)
-        plan_x.append(plan.item.wt_avg_cost)
+        plan_x.append(plan.item.luom_cost)
+        plan_x.append(ext)
 
         list_of_plans.append(plan_x)
 
@@ -241,7 +245,8 @@ def completed_export_excel(request):
         'Item IMMS No', 
         'Item Mfr Cat No', 
         'Shipping Qty', 
-        'Item Wt Avg Cost',
+        'LUOM Cost',
+        'EXT Cost'
         'Reduction Method',
     ]
     list_of_plans.append(column_headers)
@@ -249,6 +254,8 @@ def completed_export_excel(request):
     # iterate through the query set and append desired fields to new list
     for plan in completed_plans:
         plan_x = []
+
+        ext = plan.item.luom_cost * plan.accepted_qty
         
         plan_x.append(plan.item.fac)
         plan_x.append(plan.ship_fac)
@@ -257,7 +264,8 @@ def completed_export_excel(request):
         plan_x.append(plan.item.imms)
         plan_x.append(plan.item.mfr_cat_no)
         plan_x.append(plan.accepted_qty)
-        plan_x.append(plan.item.wt_avg_cost)
+        plan_x.append(plan.item.luom_cost)
+        plan_x.append(ext)
         plan_x.append(plan.decision)
 
         list_of_plans.append(plan_x)

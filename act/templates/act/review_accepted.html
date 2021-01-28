@@ -18,6 +18,7 @@
         <th>IMMS No</th>
         <th>Accepted Qty</th>
         <th>Unit Cost</th>
+        <th>Ext Cost</th>
       </tr>
     </thead>
 
@@ -31,7 +32,8 @@
         <td>{{ plan.item.mfr_cat_no }}</td>
         <td>{{ plan.item.imms }}</td>
         <td>{{ plan.accepted_qty }}</td>
-        <td>${{ plan.item.wt_avg_cost|floatformat:0|intcomma }}</td>
+        <td>${{ plan.item.luom_cost|floatformat:0|intcomma }}</td>
+        <td>${{ plan.calc_accepted_ext|floatformat:0|intcomma }}</td>
       </tr>
     {% endfor %}
     </tbody>
