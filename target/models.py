@@ -23,6 +23,8 @@ class CountUsageList(models.Model):
     default_uom = models.CharField(max_length=10, null=False)
     luom_no_of_units = models.IntegerField(null=False)
     luom_cost = models.FloatField(null=False)
+    expense_account_no = models.CharField(max_length=100, null=False, default="null")
+    expense_account_desc = models.CharField(max_length=100, null=False, default="null")
     ext_cost = models.FloatField(null=False)
     reduction_qty = models.IntegerField(null=False, default=0)
     isTarget = models.BooleanField(null=False, default=False)

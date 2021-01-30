@@ -188,6 +188,8 @@ def accepted_export_excel(request):
         'Sending Facility', 
         'Receiving Facility', 
         'Date Requested', 
+        'Expense Account Desc', 
+        'Expense Account No', 
         'Item Description', 
         'Item IMMS No', 
         'Item Mfr Cat No', 
@@ -206,6 +208,8 @@ def accepted_export_excel(request):
         plan_x.append(plan.item.fac)
         plan_x.append(plan.ship_fac)
         plan_x.append(plan.created_at)
+        plan_x.append(plan.item.expense_account_desc)
+        plan_x.append(plan.item.expense_account_no)
         plan_x.append(plan.item.description)
         plan_x.append(plan.item.imms)
         plan_x.append(plan.item.mfr_cat_no)
@@ -241,6 +245,8 @@ def completed_export_excel(request):
         'Sending Facility', 
         'Receiving Facility', 
         'Date Requested', 
+        'Expense Account Desc', 
+        'Expense Account No', 
         'Item Description', 
         'Item IMMS No', 
         'Item Mfr Cat No', 
@@ -260,6 +266,8 @@ def completed_export_excel(request):
         plan_x.append(plan.item.fac)
         plan_x.append(plan.ship_fac)
         plan_x.append(plan.created_at)
+        plan_x.append(plan.item.expense_account_desc)
+        plan_x.append(plan.item.expense_account_no)
         plan_x.append(plan.item.description)
         plan_x.append(plan.item.imms)
         plan_x.append(plan.item.mfr_cat_no)

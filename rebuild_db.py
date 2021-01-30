@@ -87,9 +87,8 @@ invcount_joined.issue_qty = invcount_joined.issue_qty.astype('int')
 # load in item master
 itemmaster = pd.read_sql_table('item_master', source_engine)
 
-# only need the first 40 columns
-items = itemmaster.iloc[:, :40]
-items = items.rename(columns={'MMISItemNo': 'imms', 'TenetFacilityNo': 'fac'})
+# rename high use columns for ease
+items = itemmaster.rename(columns={'MMISItemNo': 'imms', 'TenetFacilityNo': 'fac'})
 
 # calculate weighted average cost for each item
 items['luom_cost'] = items['DefaultUOMPrice'] / items['DefaultUOMConv']
@@ -97,14 +96,26 @@ items['luom_cost'] = items['DefaultUOMPrice'] / items['DefaultUOMConv']
 # Clean up the item master fields
 cleaned_items = items[['fac', 'TenetFacilityName', 'imms', 'Mfr', 'MfrCat', 'ItemDesc', 
                        'MMISItemCreateDate', 'Vend', 'VendCat', 'DefaultUOM', 'DefaultUOMConv', 
-                       'DefaultUOMPrice', 'UOM1', 'CONV1', 'luom_cost']]
+                       'DefaultUOMPrice', 'UOM1', 'CONV1', 'luom_cost', 'ExpenseAccountNo', 'ExpenseAccountDesc']]
 
-cleaned_items = cleaned_items.rename(columns={'TenetFacilityName': 'facility_name', 
-    'Mfr': 'mfr', 'MfrCat': 'mfr_cat_no', 'ItemDesc': 'description', 
-    'MMISItemCreateDate': 'imms_create_date', 'Vend': 'vendor', 
-    'VendCat': 'vend_cat_no', 'DefaultUOM': 'default_uom',
-    'DefaultUOMConv': 'uom_conv', 'DefaultUOMPrice': 'uom_price', 
-    'UOM1': 'luom', 'CONV1': 'luom_no_of_units'})
+cleaned_items = cleaned_items.rename(
+    columns={
+    'TenetFacilityName': 'facility_name', 
+    'Mfr': 'mfr', 
+    'MfrCat': 'mfr_cat_no', 
+    'ItemDesc': 'description', 
+    'MMISItemCreateDate': 'imms_create_date', 
+    'Vend': 'vendor', 
+    'VendCat': 'vend_cat_no', 
+    'DefaultUOM': 'default_uom',
+    'DefaultUOMConv': 'uom_conv', 
+    'DefaultUOMPrice': 'uom_price', 
+    'UOM1': 'luom', 
+    'CONV1': 'luom_no_of_units',
+    'ExpenseAccountNo': 'expense_account_no',
+    'ExpenseAccountDesc': 'expense_account_desc',
+    }
+)
 
 cleaned_items.fac = cleaned_items.fac.astype('str')
 cleaned_items.imms = cleaned_items.imms.astype('str')
