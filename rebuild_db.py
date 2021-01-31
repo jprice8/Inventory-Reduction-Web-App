@@ -3,7 +3,8 @@ from sqlalchemy import create_engine
 import numpy as np
 import datetime as dt
 
-from sec_vars import DB_PW, DB_OWNER
+DB_OWNER = os.getenv('DATABASE_USERNAME')
+DB_PW = os.getenv('DATABASE_PASSWORD')
 
 # create sql engine variables
 source_engine = create_engine(f"postgresql://{DB_OWNER}:{DB_PW}@localhost:5432/turnoverdash")

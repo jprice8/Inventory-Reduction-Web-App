@@ -15,8 +15,6 @@ import os
 import json
 import logging.config
 
-import sec_vars
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 INVENTORY_TEMPLATE_DIR = os.path.join(BASE_DIR, "inventory", "templates")
@@ -97,8 +95,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.{}'.format(
             os.getenv('DATABASE_ENGINE', 'sqlite3')
         ),
-        'NAME': os.getenv('DATABASE_USERNAME', 'reductionapp'),
-        'USER': os.getenv('DATABASE_USER', 'jacksonprice'),
+        'NAME': os.getenv('DATABASE_NAME', 'reductionapp'),
+        'USER': os.getenv('DATABASE_USERNAME', 'jacksonprice'),
         'PASSWORD': os.getenv('DATABASE_PASSWORD', 'Space1234'),
         'HOST': os.getenv('DATABASE_HOST', '127.0.0.1'),
         'PORT': os.getenv('DATABASE_PORT', '5432'),
@@ -162,8 +160,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = sec_vars.EMAIL_HOST_UN
-EMAIL_HOST_PASSWORD = sec_vars.EMAIL_HOST_PW
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'test')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'test')
 
 # django storages module moving static assets to digital ocean spaces
 AWS_ACCESS_KEY_ID = os.getenv('STATIC_ACCESS_KEY_ID')
