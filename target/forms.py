@@ -12,11 +12,11 @@ class MovementPlanForm(forms.ModelForm):
         fields = ['ship_qty', 'decision', 'ship_fac']
         labels = {
             'ship_qty': _('Quantity'),
-            'ship_fac': _('Destination Facility'),
+            'ship_fac': _('System Destination Facility'),
         }
         help_texts = {
             'ship_qty': _("how many units would you like to remove from your facility?"),
-            'ship_fac': _("which facility would you like to send to? If not shipping, select not shipping"),
+            'ship_fac': _("which facility would you like to send to? If not shipping within the system, select not shipping"),
         }
         widgets = {
             'decision': forms.RadioSelect(),

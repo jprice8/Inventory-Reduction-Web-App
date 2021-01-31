@@ -6,10 +6,11 @@ from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
+from django.db.models import Sum
 
 import json
 
-from .models import CountUsageList, MovementPlan
+from .models import CountUsageList, MovementPlan, TenetPO
 from .forms import MovementPlanForm
 from inventory.models import Facility
 
@@ -86,6 +87,19 @@ def move_targets(request, pk):
     # Get matching count usage items from within system that match the mfr_cat_no
     matched_items = CountUsageList.objects.filter(mfr_cat_no=item_from_id.mfr_cat_no)
 
+    # Get matching tenet pos from all of Tenet that match the mfr cat no
+    matched_pos = TenetPO.objects.filter(
+        mfr_cat_no=item_from_id.mfr_cat_no
+    ).exclude(
+       market='SAN ANTONIO' 
+    ).values(
+        'facility_name'
+    ).annotate(
+        po2020=Sum('luom_qty')
+    ).order_by(
+        '-po2020'
+    )
+
     if request.method == 'POST':
         form = MovementPlanForm(request.POST)
         form.instance.dmm = request.user
@@ -115,6 +129,7 @@ def move_targets(request, pk):
     context = {
         'target_item': item_from_id,
         'matched_items': matched_items,
+        'matched_pos': matched_pos,
         'd_facility': d_facility,
         'form': form,
     }

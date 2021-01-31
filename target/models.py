@@ -49,18 +49,19 @@ class MovementPlan(models.Model):
     accepted_qty = models.IntegerField(null=False, default=0)
 
     class MovementOptions(models.TextChoices):
-        ship = 'ship', _('Ship to another facility within the system'),
+        tenet = 'tenet', _('Ship to a facility outside of the system'),
+        system = 'system', _('Ship to a facility within the system'),
         sell = 'sell', _('Sell to a third party vendor'),
         trash = 'trash', _('Trash the item and write off the books'),
 
     decision = models.CharField(
         max_length=50, 
         choices=MovementOptions.choices,
-        default=MovementOptions.ship,
+        default=MovementOptions.tenet,
     )
 
     class ShipFacilities(models.TextChoices):
-        NAN = '000', _('Not Shipping')
+        NAN = '000', _('Not Shipping Within the System')
         BMC = '939', _('Baptist Medical Center')
         MTB = '971', _('Mission Trail Baptist Hospital')
         SLB = '952', _('Saint Lukes Baptist Hospital')

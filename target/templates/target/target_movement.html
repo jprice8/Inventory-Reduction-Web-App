@@ -2,14 +2,15 @@
 {% load static %}
 {% load humanize %}
 {% load crispy_forms_tags %}
+
 {% block content %}
 <div class="container">
-  {% if matched_items %}
   <div class="row">
     <div class="col-sm">
-      <h3 class="mt-2 border-bottom">System Movement and Information</h3>
+      <h3 class="mt-2 border-bottom">Movement and Information</h3>
     </div>
   </div>
+
   <div class="row">
     <div class="col-sm">
       <p class="m-2">{{ target_item.description }}</p>
@@ -19,22 +20,38 @@
       <p class="m-2">IMMS No: {{ target_item.imms }}</p>
     </div>
     <div class="col-sm">
+      <p class="m-2">Default UOM: {{ target_item.default_uom }}</p>
+      <p class="m-2">UOM Conv. Factor: {{ target_item.uom_conv }}</p>
+      <p class="m-2">LUOM: {{ target_item.uom }}</p>
       <p class="m-2">My Quantity at Last Count: {{ target_item.count_qty }}</p>
     </div>
   </div>
-    {% for item in matched_items %}
+
+  <h4 class="mt-4 border-bottom">Tenet Facilities Showing Purchase Order History</h4>
+  {% if matched_pos %}
+  {% for match in matched_pos %}
+    <div class="card shadow m-2" style="width: auto;">
+      <div class="card-body">
+        <h5>For Facility: <mark>{{ match.facility_name }}</mark></h5>
+        <p>Purchase Order Quantity (LUOM) in 2020: {{ match.po2020}}</p>
+      </div>
+    </div>
+  {% endfor %}
+  {% else %}
+    <h5 class="m-4">Sorry, could not find purchase order history within Tenet for this item.</h5>
+  {% endif %}
+
+  <h4 class="mt-5 border-bottom">BHS Facilities Inventory Count and Intake</h4>
+  {% for item in matched_items %}
     <div class="card shadow m-4" style="width: fit-content;">
       <div class="card-body">
-        <h4 class="card-title">For Facility: <mark>{{ item.fac }}</mark></h4>
+        <h5 class="card-title">For Facility: <mark>{{ item.fac }}</mark></h5>
         <p class="card-text">Recorded count quantity on {{ item.period|date:"M Y" }}: {{ item.count_qty|intcomma }}</p>
         <p class="card-text">Purchase Order Quantity in 2020: {{ item.luom_po_qty|intcomma }}</p>
         <p class="card-text">Issue Quantity in 2020: {{ item.issue_qty|intcomma }}</p>
       </div>
     </div>
-    {% endfor %}
-  {% else %}
-    <h2>Could not find any movement for this item within the health system.</h2>
-  {% endif %}
+  {% endfor %}
   
   <div class="content-section">
     <form method="POST">
