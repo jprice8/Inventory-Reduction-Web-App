@@ -83,6 +83,7 @@ def move_targets(request, pk):
     d_facility = Facility.objects.filter(dmm=request.user)[0]
     item_from_id = get_object_or_404(CountUsageList, pk=pk)
 
+    # Get matching count usage items from within system that match the mfr_cat_no
     matched_items = CountUsageList.objects.filter(mfr_cat_no=item_from_id.mfr_cat_no)
 
     if request.method == 'POST':

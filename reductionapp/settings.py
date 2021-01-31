@@ -145,6 +145,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "inventory", "static"),
     os.path.join(BASE_DIR, "target", "static"),
@@ -167,16 +169,14 @@ EMAIL_HOST_PASSWORD = sec_vars.EMAIL_HOST_PW
 AWS_ACCESS_KEY_ID = os.getenv('STATIC_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('STATIC_SECRET_KEY')
 
+AWS_S3_REGION_NAME = 'nyc3'
 AWS_STORAGE_BUCKET_NAME = os.getenv('STATIC_BUCKET_NAME')
-AWS_S3_ENDPOINT_URL = os.getenv('STATIC_ENDPOINT_URL')
-AWS_S3_CUSTOM_DOMAIN = os.getenv('STATIC_CUSTOM_ENDPOINT_URL')
+AWS_S3_ENDPOINT_URL = f'https://{AWS_S3_REGION_NAME}.digitaloceanspaces.com'
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
 AWS_LOCATION = 'static'
 AWS_DEFAULT_ACL = 'public-read'
-
-STATICFILES_STORAGE = 'storages.backends.s3boto.S3Boto3Storage'
 
 STATIC_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_LOCATION)
 STATIC_ROOT = 'static/'
