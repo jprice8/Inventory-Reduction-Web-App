@@ -279,3 +279,19 @@ def completed_export_excel(request):
         list_of_plans.append(plan_x)
 
     return ExcelResponse(list_of_plans, output_filename=f'Reduction App Reduced Items {t_month} {t_day} {t_year}')
+
+@login_required
+def view_requests(request):
+
+    # get all outstanding plans for review
+    outstanding_plans = MovementPlan.objects.filter(
+        result=MovementPlan.Result.outstanding
+    ).order_by(
+        '-ship_fac'
+    )
+
+    context = {
+        'outstanding_plans': outstanding_plans,
+    }
+
+    return render(request, 'act/review_requests.html', context)
