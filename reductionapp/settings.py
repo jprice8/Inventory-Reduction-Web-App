@@ -143,7 +143,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# for media files
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "inventory", "static"),
@@ -163,30 +165,27 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'test')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'test')
 
-# django storages module moving static assets to digital ocean spaces
-AWS_ACCESS_KEY_ID = os.getenv('STATIC_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.getenv('STATIC_SECRET_KEY')
-
-AWS_S3_REGION_NAME = 'nyc3'
-AWS_STORAGE_BUCKET_NAME = os.getenv('STATIC_BUCKET_NAME')
-AWS_S3_ENDPOINT_URL = f'https://{AWS_S3_REGION_NAME}.digitaloceanspaces.com'
+# aws S3 settings
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+AWS_DEFAULT_ACL = 'public-read'
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
+# s3 static settings
 AWS_LOCATION = 'static'
-AWS_DEFAULT_ACL = 'public-read'
-
-STATIC_URL = '{}/{}/'.format(AWS_S3_ENDPOINT_URL, AWS_LOCATION)
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
 STATIC_ROOT = 'static/'
+# for collect static
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
 
 # logging config
-
 # clear prev config
 LOGGING_CONFIG = None
-
 # get loglevel from env
 LOGLEVEL = os.getenv('DJANGO_LOGLEVEL', 'info').upper()
-
 logging.config.dictConfig({
     'version': 1,
     'disable_existing_loggers': False,
