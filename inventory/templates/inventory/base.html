@@ -7,8 +7,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 
@@ -21,15 +19,18 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
+    <!-- Favicon from S3 (via cloudfront) -->
+    <link rel="shortcut icon" type="image/png" href="https://d3epl9dvc9angi.cloudfront.net/favicon.png" />
+
     {% block extra_head %}{% endblock %}
 
-    <title>Reduction App</title>
+    <title>Reduction Toolkit</title>
 </head>
 <body>
     <header>
             <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
                 <div class="container">
-                <a class="navbar-brand" href="{% url 'index' %}">The Reduction App</a>
+                <a class="navbar-brand" href="{% url 'index' %}">Reduction Toolkit</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
