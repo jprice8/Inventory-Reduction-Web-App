@@ -2,6 +2,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 import numpy as np
 import datetime as dt
+import os
 
 DB_OWNER = os.getenv('DATABASE_USERNAME')
 DB_PW = os.getenv('DATABASE_PASSWORD')
