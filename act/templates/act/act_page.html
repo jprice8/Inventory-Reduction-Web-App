@@ -120,7 +120,7 @@ $('.btn-danger').click(function() {
 
 // A function for accept decision
 function dmmRespond(decision, itemId) {
-  const URL = `http://127.0.0.1:8000/act/${itemId}/resulthandler/`;
+  const URL = `https://reductiontoolkit.com/act/${itemId}/resulthandler/`;
   $.ajax({
       url: URL,
       method: 'POST',
@@ -140,7 +140,7 @@ function dmmRespond(decision, itemId) {
 
 // A function for accept qty
 function dmmAcceptQty(qty, itemId) {
-  const URL = `http://127.0.0.1:8000/act/${itemId}/acceptqtyhandler/`;
+  const URL = `https://reductiontoolkit.com/act/${itemId}/acceptqtyhandler/`;
   $.ajax({
       url: URL,
       method: 'POST',

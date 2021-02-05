@@ -6,7 +6,7 @@ $("input[type='checkbox']").change(function() {
   const selectedId = $(this).attr('data-id');
 
   if (selectedCheckbox.is(":checked")) {
-    const urlTrue = `http://127.0.0.1:8000/target/${selectedId}/settrue/`;
+    const urlTrue = `https://reductiontoolkit.com/target/${selectedId}/settrue/`;
     $.ajax({
       url: urlTrue,
       method: 'POST',
@@ -22,7 +22,7 @@ $("input[type='checkbox']").change(function() {
 
     // If target item is unchecked...
   } else {
-    const urlFalse = `http://127.0.0.1:8000/target/${selectedId}/setfalse/`;
+    const urlFalse = `https://reductiontoolkit.com/target/${selectedId}/setfalse/`;
     $.ajax({
       url: urlFalse,
       method: 'POST',
