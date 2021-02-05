@@ -102,20 +102,11 @@ class MovementPlan(models.Model):
 class TenetPO(models.Model):
     group = models.CharField(max_length=100, null=False)
     market = models.CharField(max_length=100, null=False)
-    fac = models.CharField(max_length=100, null=False)
     facility_name = models.CharField(max_length=100, null=False)
-    po_date = models.DateField(null=False)
+    fac = models.CharField(max_length=100, null=False)
     imms = models.CharField(max_length=50, null=False)
-    description = models.CharField(max_length=255, null=False)
-    qty = models.IntegerField(null=False)
-    default_price = models.FloatField(null=False)
-    ext_default_price = models.FloatField(null=False)
-    default_uom = models.CharField(max_length=100, null=False)
-    uom_conv_factor = models.IntegerField(null=False)
-    luom_price = models.FloatField(null=False)
-    luom = models.CharField(max_length=50, null=False)
-    mfr = models.CharField(max_length=100, null=False)
     mfr_cat_no = models.CharField(max_length=100, null=False)
+    luom = models.CharField(max_length=50, null=False)
     luom_qty = models.IntegerField(null=False)
 
     def __str__(self):
