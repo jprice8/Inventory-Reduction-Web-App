@@ -11,6 +11,7 @@
     <div class="row m-4">
       <!--No Move List-->
       <div class="col-sm-8">
+        <div hidden id="debug" data-id={{ DEBUG }}></div>
         <h1 class="mt-4 ml-2">Target Non-moving Items <i class="fas fa-crosshairs"></i></h1>
         <p class="ml-4">These items are showing zero purchase orders and zero issues for FY2020. Limited to top 100 items.</p>
       </div>
@@ -84,8 +85,17 @@
     const selectedCheckbox = $(this).closest('input');
     const selectedId = $(this).attr('data-id');
 
+    let host = '';
+    const DEBUG = $("#debug").attr('data-id');
+
+    if (DEBUG === "False") {
+      host = 'https://reductiontoolkit.com';
+    } else {
+      host = 'http://127.0.0.1:8000';
+    }
+
     if (selectedCheckbox.is(":checked")) {
-      const urlTrue = `https://reductiontoolkit.com/target/${selectedId}/settrue/`;
+      const urlTrue = `${host}/target/${selectedId}/settrue/`;
       $.ajax({
         url: urlTrue,
         method: 'POST',
@@ -101,7 +111,7 @@
 
       // If target item is unchecked...
     } else {
-      const urlFalse = `https://reductiontoolkit.com/target/${selectedId}/setfalse/`;
+      const urlFalse = `${host}/target/${selectedId}/setfalse/`;
       $.ajax({
         url: urlFalse,
         method: 'POST',

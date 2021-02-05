@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.db.models import Sum
 
-import json
+import json, os
 
 from .models import CountUsageList, MovementPlan, TenetPO
 from .forms import MovementPlanForm
@@ -19,6 +19,7 @@ from reductionapp.settings import EMAIL_HOST_USER
 @login_required
 def count_usage_list(request):
     dmm = Facility.objects.filter(dmm=request.user)[0]
+    debug = os.environ.get("DJANGO_DEBUG", False)
 
     context = {
         'no_move_list': CountUsageList.objects.filter(
@@ -31,7 +32,8 @@ def count_usage_list(request):
             count_qty__gt=0
         ).filter(
             isTarget=False
-        )[:100]
+        )[:100],
+        'DEBUG': debug,
     }
 
     return render(request, 'target/target_list.html', context)
@@ -40,6 +42,7 @@ def count_usage_list(request):
 @login_required
 def review_target_items(request):
     dmm = Facility.objects.filter(dmm=request.user)[0]
+    debug = os.environ.get("DJANGO_DEBUG", False)
 
     # get all plans for displaying result status
     all_plans = MovementPlan.objects.all()
@@ -75,6 +78,7 @@ def review_target_items(request):
         'outstanding_ids': outstanding_ids,
         'not_outstanding_ids': not_outstanding_ids,
         'all_plans': all_plans,
+        'DEBUG': debug,
     }
 
     return render(request, 'target/review_targets.html', context)
