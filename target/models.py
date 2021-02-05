@@ -110,4 +110,4 @@ class TenetPO(models.Model):
     luom_qty = models.IntegerField(null=False)
 
     def __str__(self):
-        return f'po from {facility_name} on {po_date} for item: {description}'
+        return f'po from {self.facility_name}, for cat no: {self.mfr_cat_no}, qty: {self.luom_qty}'
