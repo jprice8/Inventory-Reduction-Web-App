@@ -18,8 +18,14 @@ from reductionapp.settings import EMAIL_HOST_USER
 
 @login_required
 def count_usage_list(request):
-    dmm = Facility.objects.filter(dmm=request.user)[0]
     debug = os.environ.get("DJANGO_DEBUG", False)
+    matching_facility = Facility.objects.filter(dmm=request.user)
+
+    if matching_facility.exists():
+        dmm = Facility.objects.filter(dmm=request.user)[0]
+    else:
+        return render(request, 'inventory/non_dmm_redir.html')
+
 
     context = {
         'no_move_list': CountUsageList.objects.filter(
@@ -41,8 +47,8 @@ def count_usage_list(request):
 # View for reviewing target items and setting movement plans
 @login_required
 def review_target_items(request):
-    dmm = Facility.objects.filter(dmm=request.user)[0]
     debug = os.environ.get("DJANGO_DEBUG", False)
+    dmm = Facility.objects.filter(dmm=request.user)[0]
 
     # get all plans for displaying result status
     all_plans = MovementPlan.objects.all()

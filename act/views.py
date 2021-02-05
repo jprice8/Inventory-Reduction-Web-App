@@ -10,11 +10,18 @@ from target.models import CountUsageList, MovementPlan
 from excel_response import ExcelResponse
 
 import datetime as dt
+import os
 
 @login_required
 def act_page(request):
-    # facility of requesting dmm
-    dmm = Facility.objects.filter(dmm=request.user)[0]
+    debug = os.environ.get("DJANGO_DEBUG", False)
+    matching_facility = Facility.objects.filter(dmm=request.user)
+    
+    if matching_facility.exists():
+        # facility of requesting dmm
+        dmm = Facility.objects.filter(dmm=request.user)[0]
+    else:
+        return render(request, 'inventory/non_dmm_redir.html')
 
     # total ext cost of no move at dmm's facility
     total_no_move = CountUsageList.objects.filter(
@@ -76,6 +83,7 @@ def act_page(request):
         'completed_ext': completed_ext,
         'accepted_ext': accepted_ext,
         'plans': my_plans,
+        'DEBUG': debug,
     }
 
     return render(request, 'act/act_page.html', context)
@@ -286,6 +294,8 @@ def view_requests(request):
     # get all outstanding plans for review
     outstanding_plans = MovementPlan.objects.filter(
         result=MovementPlan.Result.outstanding
+    ).exclude(
+        ship_fac='000'
     ).order_by(
         '-ship_fac'
     )

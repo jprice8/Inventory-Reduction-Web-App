@@ -13,11 +13,24 @@ def index(request):
 # Inventory views
 @login_required
 def inventory_list(request):
+    matching_facility = Facility.objects.filter(dmm=request.user)
 
-    dmm = Facility.objects.filter(dmm=request.user)[0]
-    
+    if matching_facility.exists():
+        dmm = Facility.objects.filter(dmm=request.user)[0]
+    else:
+        return render(request, 'inventory/non_dmm_redir.html')
+
     context = {
         'count_usage_list': CountUsageList.objects.filter(fac=dmm.fac)[:500],
         'dmm': dmm,
     }
+
     return render(request, 'inventory/inventory_list.html', context)
+
+# View docs
+def view_docs(request):
+    return render(request, 'inventory/docs.html')
+
+# Redirect non-dmms
+def non_dmm_redirect(request):
+    return render(request, 'inventory/non_dmm_redir.html')

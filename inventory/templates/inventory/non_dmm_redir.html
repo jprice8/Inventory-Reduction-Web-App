@@ -1,0 +1,18 @@
+{% extends 'inventory/base.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-sm-1">
+      <i class="m-4 fas fa-tools fa-5x"></i>
+    </div>
+    <div class="col-sm">
+      <h3 class="m-4">You are attempting to access data that is only accessible by a recognized Director of Materials Management.</h3>
+    </div>
+  </div>
+  <div class="m-4">
+    <p>Please refer to the documentation by clicking <a href="{% url 'view-docs' %}">Here</a> to further understand this message.</p>
+    <p>If you believe you are getting this message on error, please contact jdprice@baptisthealthsystem.com.</p>
+  </div>
+</div>  
+{% endblock %}

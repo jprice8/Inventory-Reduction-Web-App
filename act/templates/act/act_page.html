@@ -8,6 +8,7 @@
     <!-- Top row. Name and summary stats.-->
     <div class="row">
       <div class="card shadow col-sm mt-4" align="center">
+        <div hidden id="debug" data-id={{ DEBUG }}></div>
         <h2 class="pt-2">Welcome, {{ user.get_username }}</h2>
         <h5>DMM at {{ facility.facility_name }}</h5>
         <i class="far fa-hospital fa-5x"></i>
@@ -81,79 +82,88 @@
 
 {% block extra_js %}
 <script>
-const csrftoken = getCookie('csrftoken');
+  const csrftoken = getCookie('csrftoken');
 
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      // Does this cookie string begin with the name we want?
-        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+      }
     }
+    return cookieValue;
   }
-  return cookieValue;
-}
 
-// Accept button pressed...
-$('.btn-success').click(function() {
-  const selectedId = $(this).attr('data-id');
+  let host = '';
+  const DEBUG = $('#debug').attr('data-id');
 
-  // get accepted qty and post to django
-  const acceptedQty = $(`#accept-qty-input-${selectedId}`).val();
-  
-  dmmAcceptQty(acceptedQty, selectedId);
+  if (DEBUG === 'False') {
+    host = 'https://reductiontoolkit.com';
+  } else {
+    host = 'http://127.0.0.1:8000';
+  }
 
-  dmmRespond('accepted', selectedId);
-});
+  // Accept button pressed...
+  $('.btn-success').click(function() {
+    const selectedId = $(this).attr('data-id');
 
-// Reject button pressed...
-$('.btn-danger').click(function() {
-  const selectedId = $(this).attr('data-id');
+    // get accepted qty and post to django
+    const acceptedQty = $(`#accept-qty-input-${selectedId}`).val();
+    
+    dmmAcceptQty(acceptedQty, selectedId, host);
 
-  dmmRespond('rejected', selectedId);
-});
-
-// A function for accept decision
-function dmmRespond(decision, itemId) {
-  const URL = `https://reductiontoolkit.com/act/${itemId}/resulthandler/`;
-  $.ajax({
-      url: URL,
-      method: 'POST',
-      headers: {'X-CSRFToken': csrftoken},
-      data: {'action': decision}
-  })
-  .done(function(response) {
-      console.log(response);
-  })
-  .fail(function(error) {
-      console.log(error);
+    dmmRespond('accepted', selectedId, host);
   });
 
-  // refresh page to show list item disappears
-  window.location.reload();
-}
+  // Reject button pressed...
+  $('.btn-danger').click(function() {
+    const selectedId = $(this).attr('data-id');
 
-// A function for accept qty
-function dmmAcceptQty(qty, itemId) {
-  const URL = `https://reductiontoolkit.com/act/${itemId}/acceptqtyhandler/`;
-  $.ajax({
-      url: URL,
-      method: 'POST',
-      headers: {'X-CSRFToken': csrftoken},
-      data: {'accept_qty': qty}
-  })
-  .done(function(response) {
-      console.log(response);
-  })
-  .fail(function(error) {
-      console.log(error);
+    dmmRespond('rejected', selectedId, host);
   });
-}
+
+  // A function for accept decision
+  function dmmRespond(decision, itemId, host) {
+    const URL = `${host}/act/${itemId}/resulthandler/`;
+    $.ajax({
+        url: URL,
+        method: 'POST',
+        headers: {'X-CSRFToken': csrftoken},
+        data: {'action': decision}
+    })
+    .done(function(response) {
+        console.log(response);
+    })
+    .fail(function(error) {
+        console.log(error);
+    });
+
+    // refresh page to show list item disappears
+    window.location.reload();
+  }
+
+  // A function for accept qty
+  function dmmAcceptQty(qty, itemId, host) {
+    const URL = `${host}/act/${itemId}/acceptqtyhandler/`;
+    $.ajax({
+        url: URL,
+        method: 'POST',
+        headers: {'X-CSRFToken': csrftoken},
+        data: {'accept_qty': qty}
+    })
+    .done(function(response) {
+        console.log(response);
+    })
+    .fail(function(error) {
+        console.log(error);
+    });
+  }
 
 </script>
 {% endblock %}
