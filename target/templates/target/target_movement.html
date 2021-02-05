@@ -33,7 +33,8 @@
     <div class="card shadow m-2" style="width: auto;">
       <div class="card-body">
         <h5>For Facility: <mark>{{ match.facility_name }}</mark></h5>
-        <p>Purchase Order Quantity (LUOM) in 2020: {{ match.po2020}}</p>
+        <p>In Market: {{ match.market }}</p>
+        <p>Purchase Order Quantity (LUOM) in 2020: {{ match.luom_qty}}</p>
       </div>
     </div>
   {% endfor %}

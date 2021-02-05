@@ -92,12 +92,8 @@ def move_targets(request, pk):
         mfr_cat_no=item_from_id.mfr_cat_no
     ).exclude(
        market='SAN ANTONIO' 
-    ).values(
-        'facility_name'
-    ).annotate(
-        po2020=Sum('luom_qty')
     ).order_by(
-        '-po2020'
+        '-luom_qty'
     )
 
     if request.method == 'POST':
