@@ -85,7 +85,11 @@ def move_targets(request, pk):
     item_from_id = get_object_or_404(CountUsageList, pk=pk)
 
     # Get matching count usage items from within system that match the mfr_cat_no
-    matched_items = CountUsageList.objects.filter(mfr_cat_no=item_from_id.mfr_cat_no)
+    matched_items = CountUsageList.objects.filter(
+        mfr_cat_no=item_from_id.mfr_cat_no
+    ).order_by(
+        '-luom_po_qty'
+    )
 
     # Get matching tenet pos from all of Tenet that match the mfr cat no
     matched_pos = TenetPO.objects.filter(

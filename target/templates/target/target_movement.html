@@ -32,9 +32,9 @@
   {% for match in matched_pos %}
     <div class="card shadow m-2" style="width: auto;">
       <div class="card-body">
-        <h5>For Facility: <mark>{{ match.facility_name }}</mark></h5>
-        <p>In Market: {{ match.market }}</p>
-        <p>Purchase Order Quantity (LUOM) in 2020: {{ match.luom_qty}}</p>
+        <h5 class="card-title">For Facility: <mark>{{ match.facility_name }}</mark></h5>
+        <p class="card-text">In Market: {{ match.market }}</p>
+        <p class="card-text">Purchase Order Quantity (LUOM) in 2020: {{ match.luom_qty }}</p>
       </div>
     </div>
   {% endfor %}
