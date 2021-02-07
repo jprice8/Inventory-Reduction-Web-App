@@ -1,7 +1,198 @@
-{% extends 'inventory/base.html' %}
+{% extends 'inventory/base.html' %} {% block content %}
+<div class="wrapper" style="display: flex; width: 100%">
+  <!-- Sidebar -->
+  <nav
+    id="sidebar"
+    style="
+      width: 250px;
+      position: fixed;
+      height: 100%;
+      z-index: 999;
+      background: #f2f2f2;
+    "
+  >
+    <div class="sidebar-header">
+      <h3 class="mt-4 text-center">Documentation</h3>
+    </div>
 
-{% block content %}
+    <ul class="list-unstyled components">
+      <p class="text-center">Jump to Section</p>
+      <li style="text-align: center" class="mb-3">
+        <a href="#auth" class="text-center">Login</a>
+      </li>
+      <li style="text-align: center" class="mb-3">
+        <a href="#view" class="text-center">View</a>
+      </li>
+      <li style="text-align: center" class="mb-3">
+        <a href="#target" class="text-center">Target</a>
+      </li>
+      <li style="text-align: center" class="mb-3">
+        <a href="#move" class="text-center">Move</a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Page Content -->
   <div class="container">
-    <h1 class="mt-4">Docs go here</h1>
+    <h1 class="m-5">
+      <b>Docs <i class="fas fa-book"></i></b>
+    </h1>
+    <div id="border" class="m-5 border-bottom"></div>
+    <p
+      class="m-5 fw-light"
+      style="
+        font-weight: 300;
+        font-size: 1.5rem;
+        line-height: 1.5rems;
+        letter-spacing: 0.015rem;
+      "
+    >
+      Guides and reference material to help you get started, optimize, and
+      troubleshoot your use of the Reduction Toolkit Platform.
+    </p>
+
+    <div id="content" class="m-5">
+      <h2 id="auth">Steps to Using The Reduction Toolkit</h2>
+      <h3 class="mt-4">Step One: Start by Logging In</h3>
+
+      <p class="mt-4" id="view">
+        To use the Reduction Toolkit you must first login using your username
+        and password. If you are a Director of Materials Management (DMM) with
+        BHS, you will be given a username and password that will enable you to
+        act on behalf of your facility. If you are not a BHS DMM, you can still
+        sign up, however you will not have access to the View, Move, and Act
+        pages. As a non-BHS DMM you currently only have access to the
+        "Outstanding Requests" page but we are working to expand those
+        functions.
+      </p>
+
+      <!-- Step Two: View Page -->
+      <h3 class="mt-4">Step Two: Move to the View Page</h3>
+
+      <p class="mt-4">
+        After logging in, move to the View page by either clicking the "Get
+        Started" button or by clicking the "View" tab on the nav bar at the top
+        of your screen. Once you have been taken to the View page, you will see
+        your facilities top 500 items from your last submitted inventory count
+        sorted by extended cost (price * quantity). For facilities: BMC, NBH,
+        RHH, and MTB, these items are located in either your Surgery Department
+        or your Cath Lab. For facilities: NCB and SLB, these items are solely
+        located in Surgery due to complications with your Cath Lab inventory
+        counts. The View page will best be used as a reference for high extended
+        cost items at your facility. You can see important information such as
+        the items specific inventory count at the last submitted count (Noted by
+        the Period column).
+      </p>
+
+      <img
+        src="https://d3epl9dvc9angi.cloudfront.net/View_screengrab.png"
+        alt="view page screen grab"
+        width="100%"
+        class="mt-2 shadow"
+      />
+
+      <p class="mt-4" id="target">
+        On the View page above, you can see the data table that is housing your
+        inventory. The table will start off by showing the top 10 items sorted
+        by extended cost. You can extend the amount of items the table is
+        showing by adjusting the drop down button at the top titled "Show ___
+        entries". You can also sort the table by any of the columns. You can
+        sort the columns by clicking on the column header and change the sort
+        from ASCENDING to DESCENDING by clicking on the column header again. The
+        data table also features a robust search function that allows you to
+        instantly search your entire table for a desired entry. You can enter
+        numbers or characters alike and the search will attempt to find a row
+        that fulfills the search.
+      </p>
+
+      <!-- Step Three: Target Items -->
+      <div>
+        <h3 class="mt-4">Step Three: Target Items for Reduction</h3>
+
+        <p class="mt-4">
+          Once you're familiar with the type of inventory that is being tracked,
+          continue to the next tab on the Navigation Bar titled "Target". The
+          Target page will list the top 100 items that are showing zero purchase
+          orders and zero issues during FY 2020. A good way to think about The
+          Reduction Toolkit is to picture a giant filter.
+        </p>
+
+        <p>
+          The diagram below depicts the filtering process that is used by The
+          Reduction Toolkit. We are currently at the point of targeting the top
+          100 items with no intake.
+        </p>
+
+        <img
+          src="https://d3epl9dvc9angi.cloudfront.net/Rapid_diagram.png"
+          alt="Filter Diagram"
+          class="mt-2 center"
+          style="display: block; margin-left: auto; margin-right: auto"
+        />
+
+        <p class="mt-2">
+          You, as a DMM, should go through the list of no-intake items and check
+          to see if the item is either:
+        </p>
+
+        <ul>
+          <li>Not moving</li>
+          <li>Excessively held and available for reduction</li>
+        </ul>
+
+        <p>
+          If the item qualifies for either, then you should check the box at the
+          bottom of the individual item labeled "Target Item". This will flag
+          the item for you and add it to your list of targeted items.
+        </p>
+
+        <p>
+          For our example let's say that you decide to target the item at the
+          top of our list below, labeled "RELOAD, STAPLE ARTICULATING REINFORCED
+          TRI 60MM"
+        </p>
+
+        <img
+          src="https://d3epl9dvc9angi.cloudfront.net/Intake_list_screengrab.png"
+          alt="Non-intake Items List Screen Grab"
+          class="mt-2 shadow"
+          style="width: 100%"
+        />
+
+        <p class="mt-4">
+          Now that we have targeted our item for potential reduction, it's time
+          to set a plan in place to actually execute the reduction. The first
+          step in this process is to click the button near the top of the
+          screen, but below the Navigation Bar, titled "Review Target Items".
+        </p>
+
+        <!-- Step Four: Move Items -->
+        <div>
+          <h3 class="mt-4" id="move">Step Four: Set Movement Plans</h3>
+
+          <p class="mt-4">
+            Arguably the most important step, this is where the actual value for
+            this application is derived. We should now be looking at a screen
+            that has a giant label at the top titled "Review Target Items". We
+            also should be able to see our item, the reload stapler, that we
+            just targeted in the previous screen. See below:
+          </p>
+
+          <img
+            src="https://d3epl9dvc9angi.cloudfront.net/Targets_screengrab.png"
+            alt="Target List Screen Grab"
+            class="mt-2 shadow"
+            style="width: 100%;"
+          />
+
+          <p class="mt-4">
+            For each item that we have targeted, there will initially be a red
+            button at the bottom of the item labeled "Set Movement Plan". Click
+            this button to set a movement plan.
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
+</div>
 {% endblock %}
