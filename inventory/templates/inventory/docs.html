@@ -1,444 +1,484 @@
-{% extends 'inventory/base.html' %} {% block content %}
-<div class="wrapper" style="display: flex; width: 100%">
-  <!-- Sidebar -->
-  <nav
-    id="sidebar"
-    style="
-      width: 250px;
-      position: fixed;
-      height: 100%;
-      z-index: 999;
-      background: #f2f2f2;
-    "
-  >
-    <div class="sidebar-header">
-      <h3 class="mt-4 text-center">Documentation</h3>
-    </div>
+{% extends 'inventory/base.html' %} 
 
-    <ul class="list-unstyled components">
-      <p class="text-center">Jump to Section</p>
-      <li style="text-align: center" class="mb-3">
-        <a href="#auth" class="text-center">Login</a>
-      </li>
-      <li style="text-align: center" class="mb-3">
-        <a href="#view" class="text-center">View</a>
-      </li>
-      <li style="text-align: center" class="mb-3">
-        <a href="#target" class="text-center">Target</a>
-      </li>
-      <li style="text-align: center" class="mb-3">
-        <a href="#move" class="text-center">Move</a>
-      </li>
-      <li style="text-align: center" class="mb-3">
-        <a href="#respond" class="text-center">Respond</a>
-      </li>
-    </ul>
-  </nav>
+{% block extra_head %}
+  <style>
+    #wrapper {
+      width: 100%;
+    }
+
+    @media(min-width: 868px) {
+      #page-content-wrapper {
+        padding-left: 250px;
+      }
+      #sidebar-wrapper {
+        width: 250px;
+        position: fixed;
+        height: 100%;
+        z-index: 999;
+        background: #f2f2f2;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div id="wrapper">
+  <!-- Sidebar -->
+  <div id="sidebar-wrapper">
+    <nav id="sidebar">
+      <div class="sidebar-header">
+        <h3 class="mt-4 text-center">Documentation</h3>
+      </div>
+
+      <ul class="list-unstyled components">
+        <p class="text-center">Jump to Section</p>
+        <li style="text-align: center" class="mb-3">
+          <a href="#auth" class="text-center">Login</a>
+        </li>
+        <li style="text-align: center" class="mb-3">
+          <a href="#view" class="text-center">View</a>
+        </li>
+        <li style="text-align: center" class="mb-3">
+          <a href="#target" class="text-center">Target</a>
+        </li>
+        <li style="text-align: center" class="mb-3">
+          <a href="#move" class="text-center">Move</a>
+        </li>
+        <li style="text-align: center" class="mb-3">
+          <a href="#respond" class="text-center">Respond</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 
   <!-- Page Content -->
-  <div class="container">
-    <h1 class="m-5">
-      <b>Docs <i class="fas fa-book"></i></b>
-    </h1>
-    <div id="border" class="m-5 border-bottom"></div>
-    <p
-      class="m-5 fw-light"
-      style="
-        font-weight: 300;
-        font-size: 1.5rem;
-        line-height: 1.5rems;
-        letter-spacing: 0.015rem;
-      "
-    >
-      Guides and reference material to help you get started, optimize, and
-      troubleshoot your use of the Reduction Toolkit Platform.
-    </p>
-
-    <div id="content" class="m-5">
-      <h2 id="auth">Steps to Using The Reduction Toolkit</h2>
-      <h3 class="mt-4">Step One: Start by Logging In</h3>
-
-      <p class="mt-4" id="view">
-        To use the Reduction Toolkit you must first login using your username
-        and password. If you are a Director of Materials Management (DMM) with
-        BHS, you will be given a username and password that will enable you to
-        act on behalf of your facility. If you are not a BHS DMM, you can still
-        sign up, however you will not have access to the View, Move, and Act
-        pages. As a non-BHS DMM you currently only have access to the
-        "Outstanding Requests" page but we are working to expand those
-        functions.
-      </p>
-
-      <!-- Step Two: View Page -->
-      <h3 class="mt-4">Step Two: Move to the View Page</h3>
-
-      <p class="mt-4">
-        After logging in, move to the View page by either clicking the "Get
-        Started" button or by clicking the "View" tab on the nav bar at the top
-        of your screen. Once you have been taken to the View page, you will see
-        your facilities top 500 items from your last submitted inventory count
-        sorted by extended cost (price * quantity). For facilities: BMC, NBH,
-        RHH, and MTB, these items are located in either your Surgery Department
-        or your Cath Lab. For facilities: NCB and SLB, these items are solely
-        located in Surgery due to complications with your Cath Lab inventory
-        counts. The View page will best be used as a reference for high extended
-        cost items at your facility. You can see important information such as
-        the items specific inventory count at the last submitted count (Noted by
-        the Period column).
-      </p>
-
-      <img
-        src="https://d3epl9dvc9angi.cloudfront.net/View_screengrab.png"
-        alt="view page screen grab"
-        width="100%"
-        class="mt-2 shadow"
-      />
-
-      <p class="mt-4" id="target">
-        On the View page above, you can see the data table that is housing your
-        inventory. The table will start off by showing the top 10 items sorted
-        by extended cost. You can extend the amount of items the table is
-        showing by adjusting the drop down button at the top titled "Show ___
-        entries". You can also sort the table by any of the columns. You can
-        sort the columns by clicking on the column header and change the sort
-        from ASCENDING to DESCENDING by clicking on the column header again. The
-        data table also features a robust search function that allows you to
-        instantly search your entire table for a desired entry. You can enter
-        numbers or characters alike and the search will attempt to find a row
-        that fulfills the search.
-      </p>
-
-      <!-- Step Three: Target Items -->
-      <div>
-        <h3 class="mt-4">Step Three: Target Items for Reduction</h3>
-
-        <p class="mt-4">
-          Once you're familiar with the type of inventory that is being tracked,
-          continue to the next tab on the Navigation Bar titled "Target". The
-          Target page will list the top 100 items that are showing zero purchase
-          orders and zero issues during FY 2020. A good way to think about The
-          Reduction Toolkit is to picture a giant filter.
-        </p>
-
-        <p>
-          The diagram below depicts the filtering process that is used by The
-          Reduction Toolkit. We are currently at the point of targeting the top
-          100 items with no intake.
-        </p>
-
-        <img
-          src="https://d3epl9dvc9angi.cloudfront.net/Rapid_diagram.png"
-          alt="Filter Diagram"
-          class="mt-2 center"
-          style="display: block; margin-left: auto; margin-right: auto"
-        />
-
-        <p class="mt-2">
-          You, as a DMM, should go through the list of no-intake items and check
-          to see if the item is either:
-        </p>
-
-        <ul>
-          <li>Not moving</li>
-          <li>Excessively held and available for reduction</li>
-        </ul>
-
-        <p>
-          If the item qualifies for either, then you can check the box at the
-          bottom of the individual item labeled "Target Item". This will flag
-          the item for you and add it to your list of targeted items.
-        </p>
-
-        <p>
-          For our example let's say that you decide to target the item at the
-          top of our list below, labeled "RELOAD, STAPLE ARTICULATING REINFORCED
-          TRI 60MM"
-        </p>
-
-        <img
-          src="https://d3epl9dvc9angi.cloudfront.net/Intake_list_screengrab.png"
-          alt="Non-intake Items List Screen Grab"
-          class="mt-2 shadow"
-          style="width: 100%"
-        />
-
-        <p class="mt-4" id="move">
-          Now that we have targeted our item for potential reduction, it's time
-          to set a plan in place to actually execute the reduction. The first
-          step in this process is to click the button near the top of the
-          screen, but below the Navigation Bar, titled "Review Target Items".
-        </p>
-
-        <!-- Step Four: Move Items -->
-        <div>
-          <h3 class="mt-4">Step Four: Set Movement Plans</h3>
-
-          <p class="mt-4">
-            Arguably the most important step, this is where the actual value for
-            this application is derived. You should now be looking at a screen
-            that has a giant label at the top titled "Review Target Items". You
-            also should be able to see our item, the reload stapler, that you
-            just targeted in the previous screen. See below:
+  <div id="page-content-wrapper">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <h1 class="m-5">
+            <b>Docs <i class="fas fa-book"></i></b>
+          </h1>
+          <div id="border" class="m-5 border-bottom"></div>
+          <p
+            class="m-5 fw-light"
+            style="
+              font-weight: 300;
+              font-size: 1.5rem;
+              line-height: 1.5rems;
+              letter-spacing: 0.015rem;
+            "
+          >
+            Guides and reference material to help you get started, optimize, and
+            troubleshoot your use of the Reduction Toolkit Platform.
           </p>
 
-          <img
-            src="https://d3epl9dvc9angi.cloudfront.net/Targets_screengrab.png"
-            alt="Target List Screen Grab"
-            class="mt-2 shadow"
-            style="width: 100%"
-          />
+          <div id="content" class="m-5">
+            <h2 id="auth">Steps to Using The Reduction Toolkit</h2>
+            <h3 class="mt-4">Step One: Start by Logging In</h3>
 
-          <p class="mt-4">
-            For each item that you have targeted, there will initially be a red
-            button at the bottom of the item labeled "Set Movement Plan". Click
-            this button to set a movement plan.
-          </p>
+            <p class="mt-4" id="view">
+              To use the Reduction Toolkit you must first login using your
+              username and password. If you are a Director of Materials
+              Management (DMM) with BHS, you will be given a username and
+              password that will enable you to act on behalf of your facility.
+              If you are not a BHS DMM, you can still sign up, however you will
+              not have access to the View, Move, and Act pages. As a non-BHS DMM
+              you currently only have access to the "Outstanding Requests" page
+              but we are working to expand those functions.
+            </p>
 
-          <h5>Set Movement Plan Page</h5>
-          <p>
-            You are now taken to the set movement plan page where you can look
-            at provided data to make informed decisions on how to reduce
-            inventory. The first piece of provided data is the item information
-            at the top of the screen. Here you can see the item description, the
-            manufacture catalog number, the IMMS number, and the unit of measure
-            information. This can be helpful in understanding how this item is
-            being ordered as well as provide context for the quantity you have
-            at your facility. Speaking of quantity at your facility, that is
-            also provided to you below the unit of measure information.
-          </p>
-
-          <img
-            src="https://d3epl9dvc9angi.cloudfront.net/Set_movement_screengrab1.png"
-            alt="Set Movement Plan Item Info"
-            class="mt-2 shadow"
-            style="width: 100%"
-          />
-
-          <p class="mt-4">
-            Below the item information, you will see a list of facilities within
-            Baptist Health System. If a facility is showing up on the list it
-            could be for three reasons:
-          </p>
-
-          <ol>
-            <li>
-              The item was submitted on the facilities' last inventory count.
-              (Note: The count quantity can be zero and still show up as seen
-              with 939 above)
-            </li>
-            <li>
-              The facility showed purchase orders (PO's) during FY 2020. (PO
-              history pulled from Novus Reach)
-            </li>
-            <li>
-              The facility showed records of having the item issued to them
-              during FY 2020. (Issue history pulled from I9000 report in IMMS
-              warehouse)
-            </li>
-          </ol>
-
-          <p>
-            All three of these figures are in lowest unit of measure and the
-            list is sorted by issue quantity. If you see a facility showing PO
-            or Issue History, that should be your first choice for reduction
-            method. If you do not see any facilities within the system showing
-            PO or Issue history then continue to the next section where you will
-            see a list of facilities within Tenet.
-          </p>
-
-          <img
-            src="https://d3epl9dvc9angi.cloudfront.net/Set_movement_screengrab2.png"
-            alt="Set Movement Plan Tenet Facility Movement"
-            class="mt-2 shadow"
-            style="width: 100%"
-          />
-
-          <p class="mt-4">
-            Your second choice for reduction method should be through a facility
-            within Tenet. The list of facilities you see above have shown
-            purchase order history for our targeted item. The purchase order
-            data is in lowest unit of measure, is through FY 2020, and was
-            pulled from Novus Reach.
-          </p>
-
-          <p>
-            In this example you will see that there is alot of intake within
-            Tenet, however, you already saw that there was intake at a facility
-            within BHS so you will plan on using this method of reduction.
-            Continue to the form at the bottom of the screen labeled "Movement
-            Plan". You are finally going to submit your request to move this
-            item.
-          </p>
-
-          <img
-            src="https://d3epl9dvc9angi.cloudfront.net/Movement_form_screengrab.png"
-            alt="Set Movement Plan Tenet Facility Movement"
-            class="mt-2 shadow"
-            style="width: 100%"
-          />
-
-          <p class="mt-4">
-            You will see three input fields within the form above:
-          </p>
-
-          <ol>
-            <li>Quantity</li>
-            <li>Decision</li>
-            <li>System Destination Facility</li>
-          </ol>
-
-          <p><b>The first field labeled "Quantity"</b></p>
-
-          <p>
-            For our example, you can look at the top of this page and see how
-            many units you have available to reduce. You can see that there are
-            25 units at your facility so you can input any integer between 1-25
-            in the first field. That means if you still needed to retain some
-            inventory for safety stock you still have the ability to do that.
-            Back to our example though, let's say that this item was physician
-            preference but that physician left and now it has become obsolete.
-            Therefore let's enter 25 for that first field labeled quantity.
-          </p>
-
-          <p><b>The second field labeled "Decision"</b></p>
-
-          <p>
-            You have four options to choose from in which you will be declaring
-            your method of reduction for this item. They are sorted from best
-            outcome on down. Ideally you can ship this item within the system,
-            but if not you can try to ship it outside of our system but still
-            within Tenet. If neither of those are possible then you can request
-            a quote from a third party vendor and if all else fails and there is
-            no other option you can trash the item. Fortunately for you, you can
-            move this item within the system so let's keep the first button
-            selected and move to the final field.
-          </p>
-
-          <p><b>The third field labeled "System Destination Facility"</b></p>
-
-          <p>
-            Since you decided to ship this item within the facility you can
-            click the dropdown and select the BHS facility you will be shipping
-            to. However, if you had decided to continue with any of the three
-            options you would then select "Not Shipping within the System".
-            <mark>
-              If you are shipping to a Tenet facility outside of the system,
-              selling to a third party vendor, or trashing the item, then select
-              "Not Shipping Within the System".
-            </mark>
-            If you are requesting to ship to a Tenet facility outside of the
-            system, then you are responsible for reaching out to the DMM of that
-            facility. We will reconcile all requests to Tenet facilities, third
-            party vendors and items being trashed during the BiWeekly Market
-            Phone Call.
-          </p>
-
-          <p>
-            Our form is now completed and you can press the navy submit button
-            below the form to submit your request.
-          </p>
-
-          <p id="respond">
-            The rest of this documentation is focused on items that can be
-            shipped to facilities within BHS. Those will all be managed within
-            the application and you will see how they will be tracked in the
-            following steps.
-          </p>
-
-          <!-- Step Five: Responding to Requests and Follow Up -->
-          <div>
-            <h3 class="mt-4">
-              Step Five: Responding to Requests and Follow Up
-            </h3>
+            <!-- Step Two: View Page -->
+            <h3 class="mt-4">Step Two: Move to the View Page</h3>
 
             <p class="mt-4">
-              After you have submitted your request, you will now see that your
-              "Set Movement Plan" button has changed colors from red to orange.
+              After logging in, move to the View page by either clicking the
+              "Get Started" button or by clicking the "View" tab on the nav bar
+              at the top of your screen. Once you have been taken to the View
+              page, you will see your facilities top 500 items from your last
+              submitted inventory count sorted by extended cost (price *
+              quantity). For facilities: BMC, NBH, RHH, and MTB, these items are
+              located in either your Surgery Department or your Cath Lab. For
+              facilities: NCB and SLB, these items are solely located in Surgery
+              due to complications with your Cath Lab inventory counts. The View
+              page will best be used as a reference for high extended cost items
+              at your facility. You can see important information such as the
+              items specific inventory count at the last submitted count (Noted
+              by the Period column).
             </p>
 
             <img
-              src="https://d3epl9dvc9angi.cloudfront.net/Submitted_screengrab.png"
-              alt="Set Movement Plan Tenet Facility Movement"
+              src="https://d3epl9dvc9angi.cloudfront.net/View_screengrab.png"
+              alt="view page screen grab"
+              width="100%"
               class="mt-2 shadow"
-              style="width: 100%"
             />
 
-            <p class="mt-4">
-              When the button is orange, it indicates that the movement plan for
-              that item is currently outstanding. The term outstanding is used
-              to define a movement plan that has not received a resolution and
-              is awaiting a response. You will also be able to see the current
-              status of the item's movement plan in the indicator next to the
-              button labeled "Current Status". Here we can see that it is
-              outstanding and will change as necessary to inform the user of a
-              response.
+            <p class="mt-4" id="target">
+              On the View page above, you can see the data table that is housing
+              your inventory. The table will start off by showing the top 10
+              items sorted by extended cost. You can extend the amount of items
+              the table is showing by adjusting the drop down button at the top
+              titled "Show ___ entries". You can also sort the table by any of
+              the columns. You can sort the columns by clicking on the column
+              header and change the sort from ASCENDING to DESCENDING by
+              clicking on the column header again. The data table also features
+              a robust search function that allows you to instantly search your
+              entire table for a desired entry. You can enter numbers or
+              characters alike and the search will attempt to find a row that
+              fulfills the search.
             </p>
 
-            <h5>Move Page</h5>
+            <!-- Step Three: Target Items -->
+            <div>
+              <h3 class="mt-4">Step Three: Target Items for Reduction</h3>
 
-            <p>
-              If you click on the "Move" tab in the navigation bar you will be
-              taken to your facilities profile page. This page is where you will
-              be able to respond to requests and keep track of what items you
-              have shipped and accepted.
-            </p>
+              <p class="mt-4">
+                Once you're familiar with the type of inventory that is being
+                tracked, continue to the next tab on the Navigation Bar titled
+                "Target". The Target page will list the top 100 items that are
+                showing zero purchase orders and zero issues during FY 2020. A
+                good way to think about The Reduction Toolkit is to picture a
+                giant filter.
+              </p>
 
-            <p>
-              In our example, DMM A submitted a request for DMM B to take on
-              their excess inventory. If you were to look at DMM B's profile
-              page after the request was submitted it would like like the
-              following:
-            </p>
+              <p>
+                The diagram below depicts the filtering process that is used by
+                The Reduction Toolkit. We are currently at the point of
+                targeting the top 100 items with no intake.
+              </p>
 
-            <img
-              src="https://d3epl9dvc9angi.cloudfront.net/Request_screengrab.png"
-              alt="Set Movement Plan Tenet Facility Movement"
-              class="mt-2 shadow"
-              style="width: 100%"
-            />
+              <img
+                src="https://d3epl9dvc9angi.cloudfront.net/Rapid_diagram.png"
+                alt="Filter Diagram"
+                class="mt-2 center"
+                style="display: block; margin-left: auto; margin-right: auto"
+              />
 
-            <p class="mt-4">
-              DMM B can see the request that has been sent to them which
-              includes the requested send amount (25 in our example), item
-              information such as the catalog number and unit cost. DMM B has
-              two options to respond to this request, they can either accept it
-              or reject it. If they choose to accept the request, then they will
-              have the option to enter how many of the requested units they can
-              actually take on. In our example, DMM A is requesting to send 25
-              units but DMM B can enter 10 inside the box labeled "Accept Qty"
-              if they would only like to take on 10 units instead of the full
-              25.
-            </p>
+              <p class="mt-2">
+                You, as a DMM, should go through the list of no-intake items and
+                check to see if the item is either:
+              </p>
 
-            <p>
-              After DMM B makes their decision and responds, the change will be
-              updated across the application. For example, in the top right hand
-              side of each DMM profile there will be a list group of metrics
-              that will help keep track of the inventory they have targeted,
-              reduced, and accepted. In our example, DMM B just accepted the
-              request for 10 units so that will be reflected in the bottom
-              metric labeled "You have accepted _____ of inventory". The DMM can
-              click on this metric label to be taken to a table that will
-              display all items accepted using the application. They also have
-              the ability to export this list out into an Excel spreadsheet
-              using the bottom at the bottom of the table labeled "Export to
-              Excel".
-            </p>
+              <ul>
+                <li>Not moving</li>
+                <li>Excessively held and available for reduction</li>
+              </ul>
 
-            <p>
-              For DMM A, their metrics will also be updated. However, that item
-              will be updated in their metric labeled "You have removed ___ of
-              your target inventory" since they requested to have that item
-              removed. They will also have the ability to export that table out
-              to excel in the same manner.
-            </p>
+              <p>
+                If the item qualifies for either, then you can check the box at
+                the bottom of the individual item labeled "Target Item". This
+                will flag the item for you and add it to your list of targeted
+                items.
+              </p>
 
-            <h5>Conclusion</h5>
+              <p>
+                For our example let's say that you decide to target the item at
+                the top of our list below, labeled "RELOAD, STAPLE ARTICULATING
+                REINFORCED TRI 60MM"
+              </p>
 
-            <p>
-              That concludes the tutorial for the Reduction Toolkit. We will continue to update the documentation as features are built into the application but if you have any initial questions please feel free to
-              email Jdprice@baptisthealthsystem.com with any questions or concerns that you may have.
-            </p>
+              <img
+                src="https://d3epl9dvc9angi.cloudfront.net/Intake_list_screengrab.png"
+                alt="Non-intake Items List Screen Grab"
+                class="mt-2 shadow"
+                style="width: 100%"
+              />
+
+              <p class="mt-4" id="move">
+                Now that we have targeted our item for potential reduction, it's
+                time to set a plan in place to actually execute the reduction.
+                The first step in this process is to click the button near the
+                top of the screen, but below the Navigation Bar, titled "Review
+                Target Items".
+              </p>
+
+              <!-- Step Four: Move Items -->
+              <div>
+                <h3 class="mt-4">Step Four: Set Movement Plans</h3>
+
+                <p class="mt-4">
+                  Arguably the most important step, this is where the actual
+                  value for this application is derived. You should now be
+                  looking at a screen that has a giant label at the top titled
+                  "Review Target Items". You also should be able to see our
+                  item, the reload stapler, that you just targeted in the
+                  previous screen. See below:
+                </p>
+
+                <img
+                  src="https://d3epl9dvc9angi.cloudfront.net/Targets_screengrab.png"
+                  alt="Target List Screen Grab"
+                  class="mt-2 shadow"
+                  style="width: 100%"
+                />
+
+                <p class="mt-4">
+                  For each item that you have targeted, there will initially be
+                  a red button at the bottom of the item labeled "Set Movement
+                  Plan". Click this button to set a movement plan.
+                </p>
+
+                <h5>Set Movement Plan Page</h5>
+                <p>
+                  You are now taken to the set movement plan page where you can
+                  look at provided data to make informed decisions on how to
+                  reduce inventory. The first piece of provided data is the item
+                  information at the top of the screen. Here you can see the
+                  item description, the manufacture catalog number, the IMMS
+                  number, and the unit of measure information. This can be
+                  helpful in understanding how this item is being ordered as
+                  well as provide context for the quantity you have at your
+                  facility. Speaking of quantity at your facility, that is also
+                  provided to you below the unit of measure information.
+                </p>
+
+                <img
+                  src="https://d3epl9dvc9angi.cloudfront.net/Set_movement_screengrab1.png"
+                  alt="Set Movement Plan Item Info"
+                  class="mt-2 shadow"
+                  style="width: 100%"
+                />
+
+                <p class="mt-4">
+                  Below the item information, you will see a list of facilities
+                  within Baptist Health System. If a facility is showing up on
+                  the list it could be for three reasons:
+                </p>
+
+                <ol>
+                  <li>
+                    The item was submitted on the facilities' last inventory
+                    count. (Note: The count quantity can be zero and still show
+                    up as seen with 939 above)
+                  </li>
+                  <li>
+                    The facility showed purchase orders (PO's) during FY 2020.
+                    (PO history pulled from Novus Reach)
+                  </li>
+                  <li>
+                    The facility showed records of having the item issued to
+                    them during FY 2020. (Issue history pulled from I9000 report
+                    in IMMS warehouse)
+                  </li>
+                </ol>
+
+                <p>
+                  All three of these figures are in lowest unit of measure and
+                  the list is sorted by issue quantity. If you see a facility
+                  showing PO or Issue History, that should be your first choice
+                  for reduction method. If you do not see any facilities within
+                  the system showing PO or Issue history then continue to the
+                  next section where you will see a list of facilities within
+                  Tenet.
+                </p>
+
+                <img
+                  src="https://d3epl9dvc9angi.cloudfront.net/Set_movement_screengrab2.png"
+                  alt="Set Movement Plan Tenet Facility Movement"
+                  class="mt-2 shadow"
+                  style="width: 100%"
+                />
+
+                <p class="mt-4">
+                  Your second choice for reduction method should be through a
+                  facility within Tenet. The list of facilities you see above
+                  have shown purchase order history for our targeted item. The
+                  purchase order data is in lowest unit of measure, is through
+                  FY 2020, and was pulled from Novus Reach.
+                </p>
+
+                <p>
+                  In this example you will see that there is alot of intake
+                  within Tenet, however, you already saw that there was intake
+                  at a facility within BHS so you will plan on using this method
+                  of reduction. Continue to the form at the bottom of the screen
+                  labeled "Movement Plan". You are finally going to submit your
+                  request to move this item.
+                </p>
+
+                <img
+                  src="https://d3epl9dvc9angi.cloudfront.net/Movement_form_screengrab.png"
+                  alt="Set Movement Plan Tenet Facility Movement"
+                  class="mt-2 shadow"
+                  style="width: 100%"
+                />
+
+                <p class="mt-4">
+                  You will see three input fields within the form above:
+                </p>
+
+                <ol>
+                  <li>Quantity</li>
+                  <li>Decision</li>
+                  <li>System Destination Facility</li>
+                </ol>
+
+                <p><b>The first field labeled "Quantity"</b></p>
+
+                <p>
+                  For our example, you can look at the top of this page and see
+                  how many units you have available to reduce. You can see that
+                  there are 25 units at your facility so you can input any
+                  integer between 1-25 in the first field. That means if you
+                  still needed to retain some inventory for safety stock you
+                  still have the ability to do that. Back to our example though,
+                  let's say that this item was physician preference but that
+                  physician left and now it has become obsolete. Therefore let's
+                  enter 25 for that first field labeled quantity.
+                </p>
+
+                <p><b>The second field labeled "Decision"</b></p>
+
+                <p>
+                  You have four options to choose from in which you will be
+                  declaring your method of reduction for this item. They are
+                  sorted from best outcome on down. Ideally you can ship this
+                  item within the system, but if not you can try to ship it
+                  outside of our system but still within Tenet. If neither of
+                  those are possible then you can request a quote from a third
+                  party vendor and if all else fails and there is no other
+                  option you can trash the item. Fortunately for you, you can
+                  move this item within the system so let's keep the first
+                  button selected and move to the final field.
+                </p>
+
+                <p>
+                  <b>The third field labeled "System Destination Facility"</b>
+                </p>
+
+                <p>
+                  Since you decided to ship this item within the facility you
+                  can click the dropdown and select the BHS facility you will be
+                  shipping to. However, if you had decided to continue with any
+                  of the three options you would then select "Not Shipping
+                  within the System".
+                  <mark>
+                    If you are shipping to a Tenet facility outside of the
+                    system, selling to a third party vendor, or trashing the
+                    item, then select "Not Shipping Within the System".
+                  </mark>
+                  If you are requesting to ship to a Tenet facility outside of
+                  the system, then you are responsible for reaching out to the
+                  DMM of that facility. We will reconcile all requests to Tenet
+                  facilities, third party vendors and items being trashed during
+                  the BiWeekly Market Phone Call.
+                </p>
+
+                <p>
+                  Our form is now completed and you can press the navy submit
+                  button below the form to submit your request.
+                </p>
+
+                <p id="respond">
+                  The rest of this documentation is focused on items that can be
+                  shipped to facilities within BHS. Those will all be managed
+                  within the application and you will see how they will be
+                  tracked in the following steps.
+                </p>
+
+                <!-- Step Five: Responding to Requests and Follow Up -->
+                <div>
+                  <h3 class="mt-4">
+                    Step Five: Responding to Requests and Follow Up
+                  </h3>
+
+                  <p class="mt-4">
+                    After you have submitted your request, you will now see that
+                    your "Set Movement Plan" button has changed colors from red
+                    to orange.
+                  </p>
+
+                  <img
+                    src="https://d3epl9dvc9angi.cloudfront.net/Submitted_screengrab.png"
+                    alt="Set Movement Plan Tenet Facility Movement"
+                    class="mt-2 shadow"
+                    style="width: 100%"
+                  />
+
+                  <p class="mt-4">
+                    When the button is orange, it indicates that the movement
+                    plan for that item is currently outstanding. The term
+                    outstanding is used to define a movement plan that has not
+                    received a resolution and is awaiting a response. You will
+                    also be able to see the current status of the item's
+                    movement plan in the indicator next to the button labeled
+                    "Current Status". Here we can see that it is outstanding and
+                    will change as necessary to inform the user of a response.
+                  </p>
+
+                  <h5>Move Page</h5>
+
+                  <p>
+                    If you click on the "Move" tab in the navigation bar you
+                    will be taken to your facilities profile page. This page is
+                    where you will be able to respond to requests and keep track
+                    of what items you have shipped and accepted.
+                  </p>
+
+                  <p>
+                    In our example, DMM A submitted a request for DMM B to take
+                    on their excess inventory. If you were to look at DMM B's
+                    profile page after the request was submitted it would like
+                    like the following:
+                  </p>
+
+                  <img
+                    src="https://d3epl9dvc9angi.cloudfront.net/Request_screengrab.png"
+                    alt="Set Movement Plan Tenet Facility Movement"
+                    class="mt-2 shadow"
+                    style="width: 100%"
+                  />
+
+                  <p class="mt-4">
+                    DMM B can see the request that has been sent to them which
+                    includes the requested send amount (25 in our example), item
+                    information such as the catalog number and unit cost. DMM B
+                    has two options to respond to this request, they can either
+                    accept it or reject it. If they choose to accept the
+                    request, then they will have the option to enter how many of
+                    the requested units they can actually take on. In our
+                    example, DMM A is requesting to send 25 units but DMM B can
+                    enter 10 inside the box labeled "Accept Qty" if they would
+                    only like to take on 10 units instead of the full 25.
+                  </p>
+
+                  <p>
+                    After DMM B makes their decision and responds, the change
+                    will be updated across the application. For example, in the
+                    top right hand side of each DMM profile there will be a list
+                    group of metrics that will help keep track of the inventory
+                    they have targeted, reduced, and accepted. In our example,
+                    DMM B just accepted the request for 10 units so that will be
+                    reflected in the bottom metric labeled "You have accepted
+                    _____ of inventory". The DMM can click on this metric label
+                    to be taken to a table that will display all items accepted
+                    using the application. They also have the ability to export
+                    this list out into an Excel spreadsheet using the bottom at
+                    the bottom of the table labeled "Export to Excel".
+                  </p>
+
+                  <p>
+                    For DMM A, their metrics will also be updated. However, that
+                    item will be updated in their metric labeled "You have
+                    removed ___ of your target inventory" since they requested
+                    to have that item removed. They will also have the ability
+                    to export that table out to excel in the same manner.
+                  </p>
+
+                  <h5>Conclusion</h5>
+
+                  <p>
+                    That concludes the tutorial for the Reduction Toolkit. We
+                    will continue to update the documentation as features are
+                    built into the application but if you have any initial
+                    questions please feel free to email
+                    Jdprice@baptisthealthsystem.com with any questions or
+                    concerns that you may have.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
