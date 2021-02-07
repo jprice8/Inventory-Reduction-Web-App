@@ -49,15 +49,15 @@ class MovementPlan(models.Model):
     accepted_qty = models.IntegerField(null=False, default=0)
 
     class MovementOptions(models.TextChoices):
-        tenet = 'tenet', _('Ship to a facility outside of the system'),
         system = 'system', _('Ship to a facility within the system'),
+        tenet = 'tenet', _('Ship to a facility outside of the system'),
         sell = 'sell', _('Sell to a third party vendor'),
-        trash = 'trash', _('Trash the item and write off the books'),
+        trash = 'trash', _('Trash the item'),
 
     decision = models.CharField(
         max_length=50, 
         choices=MovementOptions.choices,
-        default=MovementOptions.tenet,
+        default=MovementOptions.system,
     )
 
     class ShipFacilities(models.TextChoices):

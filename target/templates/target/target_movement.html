@@ -7,7 +7,7 @@
 <div class="container">
   <div class="row">
     <div class="col-sm">
-      <h3 class="mt-4 border-bottom">Movement and Information</h3>
+      <h3 class="mt-4 border-bottom">Set Movement Plan for Item:</h3>
     </div>
   </div>
 
@@ -27,7 +27,19 @@
     </div>
   </div>
 
-  <h4 class="mt-4 border-bottom">Tenet Facilities Showing Purchase Order History</h4>
+  <h4 class="mt-4 border-bottom">BHS Facilities Showing Inventory History or Intake History</h4>
+  {% for item in matched_items %}
+    <div class="card shadow m-2" style="width: fit-content;">
+      <div class="card-body">
+        <h5 class="card-title">For Facility: <mark>{{ item.fac }}</mark></h5>
+        <p class="card-text">Recorded count quantity on {{ item.period|date:"M Y" }}: {{ item.count_qty|intcomma }}</p>
+        <p class="card-text">Purchase Order Quantity in 2020: {{ item.luom_po_qty|intcomma }}</p>
+        <p class="card-text">Issue Quantity in 2020: {{ item.issue_qty|intcomma }}</p>
+      </div>
+    </div>
+  {% endfor %}
+
+  <h4 class="mt-5 border-bottom">Tenet Facilities Showing Purchase Order History</h4>
   {% if matched_pos %}
   {% for match in matched_pos %}
     <div class="card shadow m-2" style="width: auto;">
@@ -39,22 +51,10 @@
     </div>
   {% endfor %}
   {% else %}
-    <h5 class="m-4">Sorry, could not find purchase order history within Tenet for this item.</h5>
+    <h5 class="m-5">Sorry, could not find purchase order history within Tenet for this item.</h5>
   {% endif %}
-
-  <h4 class="mt-5 border-bottom">BHS Facilities Inventory Count and Intake</h4>
-  {% for item in matched_items %}
-    <div class="card shadow m-4" style="width: fit-content;">
-      <div class="card-body">
-        <h5 class="card-title">For Facility: <mark>{{ item.fac }}</mark></h5>
-        <p class="card-text">Recorded count quantity on {{ item.period|date:"M Y" }}: {{ item.count_qty|intcomma }}</p>
-        <p class="card-text">Purchase Order Quantity in 2020: {{ item.luom_po_qty|intcomma }}</p>
-        <p class="card-text">Issue Quantity in 2020: {{ item.issue_qty|intcomma }}</p>
-      </div>
-    </div>
-  {% endfor %}
   
-  <div class="content-section">
+  <div class="content-section mt-5">
     <form method="POST">
       {% csrf_token %}
       <fieldset class="form-group">
