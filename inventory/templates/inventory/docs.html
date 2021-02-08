@@ -1,27 +1,23 @@
-{% extends 'inventory/base.html' %} 
+{% extends 'inventory/base.html' %} {% block extra_head %}
+<style>
+  #wrapper {
+    width: 100%;
+  }
 
-{% block extra_head %}
-  <style>
-    #wrapper {
-      width: 100%;
+  @media (min-width: 868px) {
+    #page-content-wrapper {
+      padding-left: 250px;
     }
-
-    @media(min-width: 868px) {
-      #page-content-wrapper {
-        padding-left: 250px;
-      }
-      #sidebar-wrapper {
-        width: 250px;
-        position: fixed;
-        height: 100%;
-        z-index: 999;
-        background: #f2f2f2;
-      }
+    #sidebar-wrapper {
+      width: 250px;
+      position: fixed;
+      height: 100%;
+      z-index: 999;
+      background: #f2f2f2;
     }
-  </style>
-{% endblock %}
-
-{% block content %}
+  }
+</style>
+{% endblock %} {% block content %}
 <div id="wrapper">
   <!-- Sidebar -->
   <div id="sidebar-wrapper">
@@ -107,8 +103,13 @@
               by the Period column).
             </p>
 
+            <p>
+              NOTE: Portions of screengrabs in the documentation have been
+              redacted to protect sensitive company information.
+            </p>
+
             <img
-              src="https://d3epl9dvc9angi.cloudfront.net/View_screengrab.png"
+              src="https://d3epl9dvc9angi.cloudfront.net/view_redacted.png"
               alt="view page screen grab"
               width="100%"
               class="mt-2 shadow"
@@ -179,7 +180,7 @@
               </p>
 
               <img
-                src="https://d3epl9dvc9angi.cloudfront.net/Intake_list_screengrab.png"
+                src="https://d3epl9dvc9angi.cloudfront.net/intake_list_redacted.png"
                 alt="Non-intake Items List Screen Grab"
                 class="mt-2 shadow"
                 style="width: 100%"
@@ -207,7 +208,7 @@
                 </p>
 
                 <img
-                  src="https://d3epl9dvc9angi.cloudfront.net/Targets_screengrab.png"
+                  src="https://d3epl9dvc9angi.cloudfront.net/targets_redacted.png"
                   alt="Target List Screen Grab"
                   class="mt-2 shadow"
                   style="width: 100%"
@@ -390,7 +391,7 @@
                   </p>
 
                   <img
-                    src="https://d3epl9dvc9angi.cloudfront.net/Submitted_screengrab.png"
+                    src="https://d3epl9dvc9angi.cloudfront.net/submitted_redacted.png"
                     alt="Set Movement Plan Tenet Facility Movement"
                     class="mt-2 shadow"
                     style="width: 100%"
@@ -424,7 +425,7 @@
                   </p>
 
                   <img
-                    src="https://d3epl9dvc9angi.cloudfront.net/Request_screengrab.png"
+                    src="https://d3epl9dvc9angi.cloudfront.net/request_redacted.png"
                     alt="Set Movement Plan Tenet Facility Movement"
                     class="mt-2 shadow"
                     style="width: 100%"
@@ -454,7 +455,7 @@
                     _____ of inventory". The DMM can click on this metric label
                     to be taken to a table that will display all items accepted
                     using the application. They also have the ability to export
-                    this list out into an Excel spreadsheet using the bottom at
+                    this list out into an Excel spreadsheet using the button at
                     the bottom of the table labeled "Export to Excel".
                   </p>
 
