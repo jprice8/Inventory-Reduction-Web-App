@@ -52,7 +52,7 @@ class MovementPlan(models.Model):
         system = 'system', _('Ship to a facility within the system'),
         tenet = 'tenet', _('Ship to a facility outside of the system'),
         sell = 'sell', _('Sell to a third party vendor'),
-        trash = 'trash', _('Trash the item'),
+        discard = 'discard', _('Discard the item'),
 
     decision = models.CharField(
         max_length=50, 
@@ -61,7 +61,8 @@ class MovementPlan(models.Model):
     )
 
     class ShipFacilities(models.TextChoices):
-        NAN = '000', _('Not Shipping Within the System')
+        TEN = 'TEN', _('Shipping to Tenet Facility')
+        DIS = 'DIS', _('Selling or Discarding')
         BMC = '939', _('Baptist Medical Center')
         MTB = '971', _('Mission Trail Baptist Hospital')
         SLB = '952', _('Saint Lukes Baptist Hospital')

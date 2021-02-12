@@ -16,7 +16,7 @@ class MovementPlanForm(forms.ModelForm):
         }
         help_texts = {
             'ship_qty': _("how many units would you like to remove from your facility?"),
-            'ship_fac': _("which facility would you like to send to? If not shipping within the system, select not shipping"),
+            'ship_fac': _("which facility would you like to send to? If shipping to a Tenet facility, select Shipping to Tenet Facility. If selling or discarding, select Selling or Discarding"),
         }
         widgets = {
             'decision': forms.RadioSelect(),
