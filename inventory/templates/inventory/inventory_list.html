@@ -1,69 +1,14 @@
-{% extends 'inventory/base.html' %}
+{% extends 'inventory/base_side.html' %}
 
 {% load humanize %}
 
 {% block content %}
-
-    {% if count_usage_list %}
-    <main role="main" class="container-fluid" style="margin-top: 100px;">
-        <h1 class="mt-5 ml-2">View myInventory <i class="fas fa-boxes"></i></h1>
-        <p class="ml-4">myInventory is pulling your facilities top 500 items based off of Extended Cost. These items are sourced from either your Surgery or Cath Lab inventory counts that you submitted.</p>
-        <table class="table table-hover" id="tablez">
-            <thead>
-                <tr>
-                    <th scope="col">Period</th>
-                    <th scope="col">Facility</th>
-                    <th scope="col">IMMS #</th>
-                    <th scope="col">Count Qty</th>
-                    <th scope="col">Issue Qty</th>
-                    <th scope="col">PO Qty</th>
-                    <th scope="col">Manufacturer</th>
-                    <th scope="col">Mfr. Cat. No.</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">UoM</th>
-                    <th scope="col">UoM Conv</th>
-                    <th scope="col">Extended Cost</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for item in count_usage_list %}
-                    <tr>
-                        <td>{{ item.period|date:"d M Y" }}</td>
-                        <td>{{ item.facility_name }}</td>
-                        <td>{{ item.imms }}</td>
-                        <td>{{ item.count_qty|intcomma }}</td>
-                        <td>{{ item.issue_qty|intcomma }}</td>
-                        <td>{{ item.luom_po_qty|intcomma }}</td>
-                        <td>{{ item.mfr }}</td>
-                        <td>{{ item.mfr_cat_no }}</td>
-                        <td>{{ item.description }}</td>
-                        <td>${{ item.luom_cost|floatformat:0|intcomma }}</td>
-                        <td>{{ item.uom }}</td>
-                        <td>{{ item.uom_conv }}</td>
-                        <td>${{ item.ext_cost|floatformat:0|intcomma }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-    </main>
-    {% else %}
-    <main role="main" class="container">
-        <h1 class="mt-4">View myInventory</h1>
-        <h4 class="mt-5">Could not find items... Are you sure you have the correct access privileges?</h4>
-    </main>
-    {% endif %}
-{% endblock %}
-
-{% block extra_js %}
-    <!-- Data tables CDN script -->
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js" defer></script>
-    <script>
-        // Data tables to target table
-        $(document).ready(function () {
-            $('#tablez').DataTable();
-        });
-    </script>
+  <div class="container-fluid">
+      <h1>Hello hello </h1>
+      <h1>Hello hello </h1>
+      <h1>Hello hello </h1>
+      <h1>Hello hello </h1>
+      <h1>Hello hello </h1>
+      <h1>Hello hello </h1>
+  </div>
 {% endblock %}

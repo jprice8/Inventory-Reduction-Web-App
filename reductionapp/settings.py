@@ -152,7 +152,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "act", "static"),
 ]
 
-LOGIN_REDIRECT_URL = 'index'
+LOGIN_REDIRECT_URL = 'act-page'
 LOGIN_URL = 'login'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

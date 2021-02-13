@@ -1,0 +1,155 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+  <!-- Bootswatch css file -->
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
+  <!-- Favicon from S3 (via cloudfront) -->
+  <link rel="shortcut icon" type="image/png" href="https://d3epl9dvc9angi.cloudfront.net/favicon.png" />
+
+  {% block extra_head %}{% endblock %}
+
+  <title>Reduction Toolkit</title>
+
+  <style>
+    body {
+      margin:0;
+      padding: 0;
+    }
+
+    header {
+      position: fixed;
+      background: #22242A;
+      padding: 20px;
+      width: 100%;
+      height: 70px;
+    }
+
+    .left_area h3 {
+      color: #fff;
+      margin: 0;
+      text-transform: uppercase;
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .left_area span {
+      color: #1DC4E7;
+    }
+
+    .logout_btn {
+      padding: 5px;
+      background: #19B3D3;
+      text-decoration: none;
+      float: right;
+      margin-top: -30px;
+      margin-right: 40px;
+      border-radius: 2px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      transition: 0.5s;
+      transition-property: background;
+    }
+
+    .logout_btn:hover {
+      background: #0D9DBB;
+    }
+
+    .sidebar {
+      background: #2F323A;
+      margin-top: 70px;
+      padding-top: 30px;
+      position: fixed;
+      left: 0;
+      width: 250px;
+      height: 100%;
+      transition: 0.5s;
+      transition-property: left;
+    }
+
+    .sidebar a {
+      color: #fff;
+      display: block;
+      width: 100%;
+      line-height: 60px;
+      text-decoration: none;
+      padding-left: 40px;
+      box-sizing: border-box;
+      transition: 0.5s;
+      transition-property: background;
+    }
+
+    .sidebar a:hover {
+      background: #19B3D3;
+    }
+
+    .sidebar i {
+      padding-right: 20px;
+    }
+
+    .content {
+      margin-left: 250px;
+      padding-top: 80px;
+    }
+
+  </style>
+</head>
+<body>
+  
+  <!-- header area start -->
+  <header>
+    <div class="left_area">
+      <h3>Reduction <span>Toolkit</span></h3>
+    </div>
+    <div class="right_area">
+    {% if user.is_authenticated %}
+    <a class="logout_btn" href="{% url 'logout' %}">Logout</a>
+    {% else %}
+    <a class="logout_btn" href="{% url 'login' %}">Login</a>
+    <a class="logout_btn" href="{% url 'register' %}">Register</a>
+    {% endif %}
+    </div>
+  </header>
+  <!-- header area end -->
+
+  {% if user.is_authenticated %}
+  <!-- sidebar start -->
+  <div class="sidebar">
+    <a href="{% url 'act-page' %}"><i class="fas fa-check"></i><span>Action Items</span></a>
+    <a href="{% url 'count-usage-list' %}"><i class="fas fa-clock"></i><span>Target No Intake</span></a>
+    <a href="{% url 'inventory-list' %}"><i class="fas fa-money-bill"></i><span>Target High Ext</span></a>
+    <a href="{% url 'review-targets' %}"><i class="fas fa-crosshairs"></i><span>Review Targets</span></a>
+    <a href="{% url 'view-docs' %}"><i class="fas fa-book"></i><span>Documentation</span></a>
+  </div>
+  <!-- sidebar end -->
+  {% endif %}
+
+  <!-- page content -->
+  <div class="content">
+    {% block content %}
+    {% endblock %}
+  </div>
+    
+  <!-- Option 2: jQuery, Popper.js, and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+
+  <script>
+  </script>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
