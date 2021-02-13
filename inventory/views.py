@@ -21,7 +21,11 @@ def inventory_list(request):
         return render(request, 'inventory/non_dmm_redir.html')
 
     context = {
-        'count_usage_list': CountUsageList.objects.filter(fac=dmm.fac)[:500],
+        'count_usage_list': CountUsageList.objects.filter(
+            fac=dmm.fac
+        ).filter(
+            isTarget=False
+        )[:100],
         'dmm': dmm,
     }
 

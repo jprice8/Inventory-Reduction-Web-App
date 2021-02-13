@@ -129,11 +129,11 @@
   {% if user.is_authenticated %}
   <!-- sidebar start -->
   <div class="sidebar">
-    <a href="{% url 'act-page' %}"><i class="fas fa-check"></i><span>Action Profile</span></a>
-    <a href="{% url 'count-usage-list' %}"><i class="fas fa-clock"></i><span>Target No Intake</span></a>
+    <a href="{% url 'act-page' %}"><i class="fas fa-check mr-1"></i><span>Action Profile</span></a>
+    <a href="{% url 'no-intake-list' %}"><i class="fas fa-clock mr-1"></i><span>Target No Intake</span></a>
     <a href="{% url 'inventory-list' %}"><i class="fas fa-money-bill"></i><span>Target High Ext</span></a>
-    <a href="{% url 'review-targets' %}"><i class="fas fa-crosshairs"></i><span>Review Targets</span></a>
-    <a href="{% url 'view-docs' %}"><i class="fas fa-book"></i><span>Documentation</span></a>
+    <a href="{% url 'review-targets' %}"><i class="fas fa-clipboard-check mr-2"></i><span>Review Targets</span></a>
+    <a href="{% url 'view-docs' %}"><i class="fas fa-book mr-1"></i><span>Documentation</span></a>
   </div>
   <!-- sidebar end -->
   {% endif %}

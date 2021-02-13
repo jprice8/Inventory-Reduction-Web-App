@@ -17,7 +17,7 @@ from inventory.models import Facility
 from reductionapp.settings import EMAIL_HOST_USER
 
 @login_required
-def count_usage_list(request):
+def no_intake_list(request):
     debug = os.environ.get("DJANGO_DEBUG", False)
     matching_facility = Facility.objects.filter(dmm=request.user)
 
@@ -42,7 +42,7 @@ def count_usage_list(request):
         'DEBUG': debug,
     }
 
-    return render(request, 'target/target_list.html', context)
+    return render(request, 'target/no_intake_list.html', context)
 
 # View for reviewing target items and setting movement plans
 @login_required
@@ -72,10 +72,6 @@ def review_target_items(request):
     context = {
         'target_list': CountUsageList.objects.filter(
             fac=dmm.fac
-        ).filter(
-            issue_qty=0
-        ).filter(
-            luom_po_qty=0
         ).filter(
             count_qty__gt=0
         ).filter(

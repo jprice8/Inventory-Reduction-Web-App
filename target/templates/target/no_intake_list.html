@@ -6,16 +6,16 @@
 {% block content %}
 <main role="main" class="container">
   <!--Modal for selecting reduction qty-->
-
-  
     <div class="row m-4">
       <!--No Move List-->
-      <div class="col-sm-8">
+      <div class="col-sm-10">
         <div hidden id="debug" data-id={{ DEBUG }}></div>
-        <h1 class="mt-4 ml-2">Target Non-moving Items <i class="fas fa-crosshairs"></i></h1>
+        <h1 class="mt-4 ml-2">Target No Intake Items <i class="fas fa-clock"></i></h1>
         <p class="ml-4">These items are showing zero purchase orders and zero issues for FY2020. Limited to top 100 items.</p>
       </div>
     </div>
+
+    <!-- List of no intake items -->
     {% if no_move_list %}
       <ul id="nomovelist">
           {% for item in no_move_list %}
@@ -66,10 +66,10 @@
 {% else %}
 
   <h4 class="mt-5">
-    Could not find items... Are you sure you have the correct access privileges?
+    Could not find items... This is a system error. Please contact jdprice@baptisthealthsystem.com.
   </h4>
 
-{% endif %} 
+{% endif %}
 
 {% endblock %}
 
