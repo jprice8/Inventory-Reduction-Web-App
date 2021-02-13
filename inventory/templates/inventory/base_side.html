@@ -34,6 +34,7 @@
       padding: 20px;
       width: 100%;
       height: 70px;
+      z-index: 1;
     }
 
     .left_area h3 {
@@ -65,6 +66,7 @@
 
     .logout_btn:hover {
       background: #0D9DBB;
+      text-decoration: none;
     }
 
     .sidebar {
@@ -127,7 +129,7 @@
   {% if user.is_authenticated %}
   <!-- sidebar start -->
   <div class="sidebar">
-    <a href="{% url 'act-page' %}"><i class="fas fa-check"></i><span>Action Items</span></a>
+    <a href="{% url 'act-page' %}"><i class="fas fa-check"></i><span>Action Profile</span></a>
     <a href="{% url 'count-usage-list' %}"><i class="fas fa-clock"></i><span>Target No Intake</span></a>
     <a href="{% url 'inventory-list' %}"><i class="fas fa-money-bill"></i><span>Target High Ext</span></a>
     <a href="{% url 'review-targets' %}"><i class="fas fa-crosshairs"></i><span>Review Targets</span></a>

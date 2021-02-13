@@ -70,8 +70,15 @@ def act_page(request):
         accepted_ext += plan.accepted_qty * plan.item.luom_cost
 
     # all movement plans with the user's facility listed as desired destination
-    my_plans = MovementPlan.objects.filter(
+    incoming_plans = MovementPlan.objects.filter(
         ship_fac=dmm.fac
+    ).filter(
+        result=MovementPlan.Result.outstanding
+    )
+
+    # all movement plans with the user listed as the requesting DMM
+    outgoing_plans = MovementPlan.objects.filter(
+        dmm=request.user
     ).filter(
         result=MovementPlan.Result.outstanding
     )
@@ -82,7 +89,8 @@ def act_page(request):
         'target_ext': total_target['ext_cost__sum'],
         'completed_ext': completed_ext,
         'accepted_ext': accepted_ext,
-        'plans': my_plans,
+        'incoming_plans': incoming_plans,
+        'outgoing_plans': outgoing_plans,
         'DEBUG': debug,
     }
 

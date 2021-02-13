@@ -2,82 +2,136 @@
 
 {% load humanize %}
 
+{% block extra_head %}
+<style>
+  html, body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-  <main role="main" class="container">
+<main role="main" class="container-fluid m-5">
 
-    <!-- Top row. Name and summary stats.-->
-    <div class="row">
-      <div class="card shadow col-sm mt-4" align="center">
-        <div hidden id="debug" data-id={{ DEBUG }}></div>
-        <h2 class="pt-2">Welcome, {{ user.get_username }}</h2>
-        <h5>DMM at {{ facility.facility_name }}</h5>
-        <i class="far fa-hospital fa-5x"></i>
+  <!-- Top row. Name and summary stats.-->
+  <div class="row">
+    <div class="card shadow col-sm-4" align="center">
+      <div hidden id="debug" data-id={{ DEBUG }}></div>
+      <h2 class="pt-2">Welcome, {{ user.get_username }}</h2>
+      <h5>DMM at {{ facility.facility_name }}</h5>
+      <i class="far fa-hospital fa-5x"></i>
+    </div>
+    <div class="col-sm-6">
+      <div class="card shadow"> 
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><i class="far fa-times-circle"></i> Your facility shows <mark>${{ no_move_ext|floatformat:0|intcomma }}</mark> of inventory with no recorded intake.</li>
+          <!-- If no target ext then 0 else show figure -->
+          {% if target_ext %}
+          <li class="list-group-item"><i class="fas fa-bullseye"></i> You have targeted <mark>${{ target_ext|floatformat:0|intcomma }}</mark> of that inventory.</li>
+          {% else %}
+          <li class="list-group-item"><i class="fas fa-bullseye"></i> You have targeted <mark>$0</mark> of that inventory.</li>
+          {% endif %}
+          <li class="list-group-item"><a href="{% url 'review-completed' %}"><i class="far fa-check-circle"></i> You have removed <mark>${{ completed_ext|floatformat:0|intcomma }}</mark> of your targeted inventory.</a></li>
+          <li class="list-group-item"><a href="{% url 'review-accepted' %}"><i class="fas fa-truck"></i> You have accepted <mark>${{ accepted_ext|floatformat:0|intcomma }}</mark> of inventory.</a></li>
+        </ul>
       </div>
-        <div class="col-sm">
-          <div class="card shadow mt-4"> 
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item"><i class="far fa-times-circle"></i> Your facility shows <mark>${{ no_move_ext|floatformat:0|intcomma }}</mark> of inventory with no recorded intake.</li>
-              <!-- If no target ext then 0 else show figure -->
-              {% if target_ext %}
-              <li class="list-group-item"><i class="fas fa-bullseye"></i> You have targeted <mark>${{ target_ext|floatformat:0|intcomma }}</mark> of that inventory.</li>
-              {% else %}
-              <li class="list-group-item"><i class="fas fa-bullseye"></i> You have targeted <mark>$0</mark> of that inventory.</li>
-              {% endif %}
-              <li class="list-group-item"><a href="{% url 'review-completed' %}"><i class="far fa-check-circle"></i> You have removed <mark>${{ completed_ext|floatformat:0|intcomma }}</mark> of your targeted inventory.</a></li>
-              <li class="list-group-item"><a href="{% url 'review-accepted' %}"><i class="fas fa-truck"></i> You have accepted <mark>${{ accepted_ext|floatformat:0|intcomma }}</mark> of inventory.</a></li>
-            </ul>
+    </div>
+  </div>
+
+  <!-- Second row. Items requested for movement.-->
+  <div class="row mt-5">
+      <div class="col-sm-10">
+          <h4 class="mt-2">Pending Incoming Requests to your Facility: </h4>
+          <div class="mt-3">
+            {% if incoming_plans %}
+            <table class="table table-hover">
+              <thead>
+                <tr scope="col">
+                  <th>Requesting DMM</th>
+                  <th>Item Description</th>
+                  <th>Mfr Cat No</th>
+                  <th>Send Qty</th>
+                  <th>Accept Qty</th>
+                  <th>Unit Cost</th>
+                  <th>Ext Cost</th>
+                  <th></th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for plan in incoming_plans %}
+                <tr>
+                  <td>{{ plan.dmm }}</td>
+                  <td>{{ plan.item.description }}</td>
+                  <td>{{ plan.item.mfr_cat_no }}</td>
+                  <td>{{ plan.ship_qty }}</td>
+                  <td><input type="number" id="accept-qty-input-{{ plan.id }}" name="accept-qty-input" min="1" max={{ plan.ship_qty }} step="1" value="1" /></td>
+                  <td>${{ plan.item.luom_cost|floatformat:0|intcomma }}</td>
+                  <td>${{ plan.calc_proposed_ext|floatformat:0|intcomma }}</td>
+                  <td>
+                    <div class="btn-group" role="group" aria-label="Action">
+                      <button data-id={{ plan.id }} type="button" class="btn btn-success">Accept</button>
+                      <button data-id={{ plan.id }} type="button" class="btn btn-danger">Reject</button>
+                  </div>
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+
+            {% else %}
+            <h3>No pending requests at this time!</h3>
+            {% endif %}
           </div>
-        </div>
       </div>
+  </div>
 
-      <!-- Second row. Items requested for movement.-->
-      <div class="row">
-          <div class="mt-4 col-sm">
-              <h4 class="mt-2">Pending Requests to your Facility: </h4>
-              <div class="mt-3">
-                {% if plans %}
-                <table class="table table-hover">
-                  <thead>
-                    <tr scope="col">
-                      <th>Requesting DMM</th>
-                      <th>Item Description</th>
-                      <th>Mfr Cat No</th>
-                      <th>Send Qty</th>
-                      <th>Accept Qty</th>
-                      <th>Unit Cost</th>
-                      <th>Ext Cost</th>
-                      <th></th>
-                    </tr>
-                  </thead>
+  <!-- Third row. Pending Outgoing Requests. -->
+  <div class="row mt-4">
+    <div class="col-sm-10">
+      <h4>All Outgoing Request from your Facility:</h4>
+      <div class="mt-3">
+      {% if outgoing_plans %}
+      <table class="table table-hover">
+        <thead>
+          <tr scope="col">
+            <th>Requesting DMM</th>
+            <th>Item Description</th>
+            <th>Mfr Cat No</th>
+            <th>Requested Qty</th>
+            <th>Current Status</th>
+            <th>Unit Cost</th>
+            <th>Ext Cost</th>
+            <th></th>
+          </tr>
+        </thead>
 
-                  <tbody>
-                    {% for plan in plans %}
-                    <tr>
-                      <td>{{ plan.dmm }}</td>
-                      <td>{{ plan.item.description }}</td>
-                      <td>{{ plan.item.mfr_cat_no }}</td>
-                      <td>{{ plan.ship_qty }}</td>
-                      <td><input type="number" id="accept-qty-input-{{ plan.id }}" name="accept-qty-input" min="1" max={{ plan.ship_qty }} step="1" value="1" /></td>
-                      <td>${{ plan.item.luom_cost|floatformat:0|intcomma }}</td>
-                      <td>${{ plan.calc_proposed_ext|floatformat:0|intcomma }}</td>
-                      <td>
-                        <div class="btn-group" role="group" aria-label="Action">
-                          <button data-id={{ plan.id }} type="button" class="btn btn-success">Accept</button>
-                          <button data-id={{ plan.id }} type="button" class="btn btn-danger">Reject</button>
-                      </div>
-                      </td>
-                    </tr>
-                  {% endfor %}
-                  </tbody>
-                </table>
+        <tbody>
+          {% for plan in outgoing_plans %}
+          <tr>
+            <td>{{ plan.dmm }}</td>
+            <td>{{ plan.item.description }}</td>
+            <td>{{ plan.item.mfr_cat_no }}</td>
+            <td>{{ plan.ship_qty }}</td>
+            <td><mark>{{ plan.result }}</mark></td>
+            <td>${{ plan.item.luom_cost|floatformat:0|intcomma }}</td>
+            <td>${{ plan.calc_proposed_ext|floatformat:0|intcomma }}</td>
+            <td>
+              <button class="btn btn-outline-dark">Finalize</button>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
 
-                {% else %}
-                <h3>No pending requests at this time!</h3>
-                {% endif %}
-              </div>
-          </div>
+      {% else %}
+      <h3>No pending requests at this time!</h3>
+      {% endif %}
       </div>
-  </main>
+    </div>
+  </div>
+</main>
 {% endblock %}
 
 {% block extra_js %}
