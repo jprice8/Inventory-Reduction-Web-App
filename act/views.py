@@ -40,10 +40,6 @@ def act_page(request):
     total_target = CountUsageList.objects.filter(
         fac=dmm.fac
     ).filter(
-        issue_qty=0
-    ).filter(
-        luom_po_qty=0
-    ).filter(
         isTarget=True
     ).aggregate(Sum('ext_cost'))
 
@@ -62,8 +58,6 @@ def act_page(request):
     # get all plans dmm has accepted
     accepted_plans = MovementPlan.objects.filter(
         ship_fac=dmm.fac
-    ).filter(
-        isFinalized=True
     )
 
     # get accepted ext for items moving to dmm facility
@@ -249,6 +243,28 @@ def review_completed(request):
     }
 
     return render(request, 'act/review_completed.html', context)
+
+@login_required
+def review_targets(request):
+    matching_facility = Facility.objects.filter(dmm=request.user)
+    if matching_facility.exists():
+        # facility of requesting dmm
+        dmm = Facility.objects.filter(dmm=request.user)[0]
+    else:
+        return render(request, 'inventory/non_dmm_redir.html')
+
+    # get all target items
+    targeted_items = CountUsageList.objects.filter(
+        fac=dmm.fac
+    ).filter(
+        isTarget=True
+    )
+
+    context = {
+        'targeted_items': targeted_items,
+    }
+
+    return render(request, 'act/review_targeted.html', context)
 
 @login_required
 def accepted_export_excel(request):

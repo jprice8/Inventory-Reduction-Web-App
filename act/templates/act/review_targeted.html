@@ -1,0 +1,60 @@
+{% extends 'inventory/base_side.html' %}
+
+{% load humanize %}
+
+{% block content %}
+<section class="container" style="margin-left: 20px;">
+  <h2 class="mt-4">Review Targeted Items<i class="fas fa-crosshairs"></i></h2>
+
+  <table class="table table-hover">
+    <thead>
+      <tr scope="col">
+        <th>Period</th>
+        <th>IMMS</th>
+        <th>Remaining Qty</th>
+        <th>Issue Qty</th>
+        <th>PO Qty</th>
+        <th>Mfr</th>
+        <th>Mfr Cat No</th>
+        <th>Description</th>
+        <th>IMMS System Creation Date</th>
+        <th>Exp Acct No</th>
+        <th>PUOM</th>
+        <th>UOM Conv Factor</th>
+        <th>LUOM</th>
+        <th>LUOM Price</th>
+        <th>Ext Cost</th>
+        <th>Is Hidden</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for item in targeted_items %}
+      <tr>
+        <td>{{ item.period | date}}</td>
+        <td>{{ item.imms }}</td>
+        <td>{{ item.count_qty }}</td>
+        <td>{{ item.issue_qty }}</td>
+        <td>{{ item.luom_po_qty }}</td>
+        <td>{{ item.mfr }}</td>
+        <td>{{ item.mfr_cat_no }}</td>
+        <td>{{ item.description }}</td>
+        <td>{{ item.imms_create_date | date }}</td>
+        <td>{{ item.expense_account_no }}</td>
+        <td>{{ item.default_uom }}</td>
+        <td>{{ item.uom_conv }}</td>
+        <td>{{ item.uom }}</td>
+        <td>${{ item.luom_cost|floatformat:0|intcomma }}</td>
+        <td>${{ item.ext_cost|floatformat:0|intcomma }}</td>
+        <td>{{ item.isHidden }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% if not targeted_items %}
+  <h4 class="m-5">You have not accepted any movement plans yet.</h4>
+  {% endif %}
+  
+</section>
+
+{% endblock %}

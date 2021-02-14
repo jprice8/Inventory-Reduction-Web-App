@@ -26,8 +26,8 @@ class CountUsageList(models.Model):
     expense_account_no = models.CharField(max_length=100, null=False, default="null")
     expense_account_desc = models.CharField(max_length=100, null=False, default="null")
     ext_cost = models.FloatField(null=False)
-    reduction_qty = models.IntegerField(null=False, default=0)
     isTarget = models.BooleanField(null=False, default=False)
+    isHidden = models.BooleanField(null=False, default=False)
 
     class Meta:
         ordering = ('-ext_cost', )
@@ -51,7 +51,7 @@ class MovementPlan(models.Model):
 
     class MovementOptions(models.TextChoices):
         system = 'system', _('Ship to a facility within the system'),
-        tenet = 'tenet', _('Ship to a facility outside of the system'),
+        tenet = 'tenet', _('Ship to a Tenet facility'),
         sell = 'sell', _('Sell to a third party vendor'),
         discard = 'discard', _('Discard the item'),
 
@@ -63,7 +63,7 @@ class MovementPlan(models.Model):
 
     class ShipFacilities(models.TextChoices):
         TEN = 'TEN', _('Shipping to Tenet Facility')
-        DIS = 'DIS', _('Selling or Discarding')
+        NON = 'NON', _('Selling or Discarding')
         BMC = '939', _('Baptist Medical Center')
         MTB = '971', _('Mission Trail Baptist Hospital')
         SLB = '952', _('Saint Lukes Baptist Hospital')

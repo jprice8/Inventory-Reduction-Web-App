@@ -60,35 +60,26 @@ def review_target_items(request):
         agg_plans=Count('id')
     )
     
-    # get a list of item ids with movement plans that are outstanding
-    plans_outstanding = MovementPlan.objects.filter(
-        result=MovementPlan.Result.outstanding
-    )
-    outstanding_ids = []
-    for i in plans_outstanding:
-        outstanding_ids.append(i.item_id)
+    # get all item ids from plans
+    plan_ids = []
+    for i in all_plans:
+        plan_ids.append(i.item_id)
 
-    # get a list of item ids with movement plans that are not outstanding
-    plans_not_outstanding = MovementPlan.objects.exclude(
-        result=MovementPlan.Result.outstanding
-    )
-    not_outstanding_ids = []
-    for i in plans_not_outstanding:
-        not_outstanding_ids.append(i.item_id)
+    target_items_list = CountUsageList.objects.filter(
+        fac=dmm.fac
+    ).filter(
+        count_qty__gt=0
+    ).filter(
+        isTarget=True
+    ).filter(
+        isHidden=False
+    )[:100]
 
     context = {
-        'target_list': CountUsageList.objects.filter(
-            fac=dmm.fac
-        ).filter(
-            count_qty__gt=0
-        ).filter(
-            isTarget=True
-        )[:100],
-        'outstanding_ids': outstanding_ids,
-        'not_outstanding_ids': not_outstanding_ids,
-        'all_plans': all_plans,
+        'target_list': target_items_list,
         'DEBUG': debug,
         'agg_plans': agg_plans_per_item,
+        'plan_ids': plan_ids,
     }
 
     return render(request, 'target/review_targets.html', context)
@@ -193,7 +184,8 @@ def target_item_false(request, pk):
 def hide_target(request, pk):
     if request.method == 'POST':
         item_from_id = get_object_or_404(CountUsageList, pk=pk)
-        print(item_from_id)
+        item_from_id.isHidden = True
+        item_from_id.save(update_fields=['isHidden'])
 
     response_data = {
         'django_response': f'item {item_from_id} is now hidden'

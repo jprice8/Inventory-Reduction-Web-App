@@ -169,7 +169,6 @@ final.luom_no_of_units = final.luom_no_of_units.astype('int')
 # calculate ext cost column
 final['ext_cost'] = final['count_qty'] * final['luom_cost']
 # add default measures
-final['reduction_qty'] = 0
 final['isTarget'] = False
 
 # upload count usage table to database

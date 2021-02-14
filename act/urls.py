@@ -15,6 +15,7 @@ urlpatterns = [
     path('review/accepted/export/', views.accepted_export_excel, name='export-accepted'),
     path('review/completed/', views.review_completed, name='review-completed'),
     path('review/completed/export/', views.completed_export_excel, name='export-completed'),
+    path('review/targets/', views.review_targets, name='review-targeted'),
 
     # generic class views for editing movement plans
     path('<int:pk>/itemplans/edit/', views.MovementPlanUpdate.as_view(), name='edit-plan'),
