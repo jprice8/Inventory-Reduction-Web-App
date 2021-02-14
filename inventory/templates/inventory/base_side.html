@@ -101,8 +101,8 @@
       padding-right: 20px;
     }
 
+/* if authenticated then margin left is 250... if not then margin left is 0 */
     .content {
-      margin-left: 250px;
       padding-top: 80px;
     }
 
@@ -136,10 +136,13 @@
     <a href="{% url 'view-docs' %}"><i class="fas fa-book mr-1"></i><span>Documentation</span></a>
   </div>
   <!-- sidebar end -->
+  
+  <div class="content" style="margin-left: 250px;">
+  {% else %}
+  <div class="content">
   {% endif %}
 
   <!-- page content -->
-  <div class="content">
     {% block content %}
     {% endblock %}
   </div>
