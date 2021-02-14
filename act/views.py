@@ -76,13 +76,17 @@ def act_page(request):
         ship_fac=dmm.fac
     ).filter(
         result=MovementPlan.Result.outstanding
+    ).order_by(
+        'created_at', 'ship_fac' 
     )
 
     # all movement plans with the user listed as the requesting DMM
     outgoing_plans = MovementPlan.objects.filter(
         dmm=request.user
+    ).exclude(
+        isFinalized=True
     ).order_by(
-        '-item'
+        '-item', '-ship_qty'
     )
 
     context = {
@@ -97,6 +101,8 @@ def act_page(request):
     }
 
     return render(request, 'act/act_page.html', context)
+
+#### API Views ####
 
 # Dmm accept or reject request to move units to their facility
 @login_required
@@ -133,7 +139,6 @@ def result_handler(request, pk):
 @ensure_csrf_cookie
 def accept_qty_handler(request, pk):
     dmm_accept_qty = request.POST['accept_qty']
-    print(dmm_accept_qty)
 
     if request.method == 'POST':
         plan_from_id = get_object_or_404(MovementPlan, pk=pk)
@@ -147,6 +152,69 @@ def accept_qty_handler(request, pk):
     }
 
     return JsonResponse(response_data)
+
+# Dmm has completed the reduction and is ready to finalize the movement plan
+@login_required
+@ensure_csrf_cookie
+def finalize_plan_handler(request, pk):
+    # When finalize is pressed we need to:
+    # 1. Make sure that status is not outstanding for all non-system.
+    # 2. Update accepted qty to match ship qty for all non-system.
+    # 3. Decrement accepted qty from inventory qty.
+    # 4. Recalculate ext cost for the item.
+    # 4. Flip isFinalized boolean.
+
+    # get the plan
+    plan = get_object_or_404(MovementPlan, pk=pk)
+
+    # bifurcate into system vs non-system
+    if request.method == 'POST':
+        if plan.decision == MovementPlan.MovementOptions.system:
+            # check the result. If accepted, win. If rejected, delete. Else, pass.
+            if plan.result == MovementPlan.Result.accepted:
+                # update count qty
+                new_qty = plan.item.count_qty - plan.accepted_qty
+                plan.item.count_qty = new_qty
+
+                # update ext cost
+                new_ext = new_qty * plan.item.luom_cost
+                plan.item.ext_cost = new_ext
+                plan.item.save(update_fields=['count_qty', 'ext_cost'])
+
+                # set isFinalized to True
+                plan.isFinalized = True
+                plan.save(update_fields=['isFinalized'])
+
+            elif plan.result == MovementPlan.Result.rejected:
+                # delete
+                plan.delete()
+            else:
+                pass
+        else:
+            # for non-system:
+            # change status to accepted.
+            plan.result = MovementPlan.Result.accepted
+            # update accepted qty from ship qty
+            plan.accepted_qty = plan.ship_qty
+            # set isFinalized to True
+            plan.isFinalized = True
+            plan.save(update_fields=['result', 'accepted_qty', 'isFinalized'])
+
+            # update count qty
+            new_qty = plan.item.count_qty - plan.accepted_qty
+            plan.item.count_qty = new_qty
+            # update ext cost
+            new_ext = new_qty * plan.item.luom_cost
+            plan.item.ext_cost = new_ext
+            plan.item.save(update_fields=['count_qty', 'ext_cost'])
+            
+    response_data = {
+        'django_response': f'plan had isFinalized of...'
+    }
+
+    return JsonResponse(response_data)
+
+#### Metric Views ####
 
 @login_required
 def review_accepted(request):
@@ -298,6 +366,7 @@ def completed_export_excel(request):
 
     return ExcelResponse(list_of_plans, output_filename=f'Reduction App Reduced Items {t_month} {t_day} {t_year}')
 
+#### Generic CBV's ####
 
 class MovementPlanUpdate(UpdateView):
     model = MovementPlan

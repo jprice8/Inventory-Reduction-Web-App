@@ -50,6 +50,7 @@
               <thead>
                 <tr scope="col">
                   <th>Requesting DMM</th>
+                  <th>Date Requested</th>
                   <th>Item Description</th>
                   <th>Mfr Cat No</th>
                   <th>Send Qty</th>
@@ -64,6 +65,7 @@
                 {% for plan in incoming_plans %}
                 <tr>
                   <td>{{ plan.dmm }}</td>
+                  <td>{{ plan.created_at }}</td>
                   <td>{{ plan.item.description }}</td>
                   <td>{{ plan.item.mfr_cat_no }}</td>
                   <td>{{ plan.ship_qty }}</td>
@@ -131,7 +133,7 @@
               </div>
             </td>
             <td>
-              <button class="btn btn-outline-dark">Finalize</button>
+              <button data-id={{ plan.id }} id="finalize-btn" class="btn btn-outline-dark">Finalize</button>
             </td>
           </tr>
         {% endfor %}
@@ -231,6 +233,33 @@
     .fail(function(error) {
         console.log(error);
     });
+  }
+
+  // on clicking finalize button do...
+  $('.btn-outline-dark').click(function() {
+    const selectedId = $(this).attr('data-id');
+
+    finalizePlan(selectedId, host);
+  });
+
+  // function for AJAX request to finalize button
+  function finalizePlan(itemId, host) {
+    const URL = `${host}/act/${itemId}/finalizeplanhandler/`;
+    $.ajax({
+      url: URL,
+      method: 'POST',
+      headers: {'X-CSRFToken': csrftoken},
+      data: {'isFinalize': 'True'}
+    })
+    .done(function(response) {
+      console.log(response);
+    })
+    .fail(function(error) {
+      console.log(error);
+    });
+
+    // refresh page to update UI (item off of outgoing requests and updated metrics)
+    window.location.reload();
   }
 
 </script>

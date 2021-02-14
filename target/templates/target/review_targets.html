@@ -28,7 +28,7 @@
               <h5 class="card-title">{{ item.description }}</h5>
             </div>
             <div class="col-sm-1">
-              <a href="#"><i class="fas fa-trash"></i></a>
+              <a data-id={{ item.id }} class="hide-btn"><i class="fas fa-times fa-2x"></i></a>
             </div>
           </div>
           <div class="row">
@@ -98,19 +98,19 @@
 <script>
   const csrftoken = getCookie('csrftoken');
 
+  let host = '';
+  const DEBUG = $("#debug").attr('data-id');
+
+  if (DEBUG === "False") {
+    host = 'https://reductiontoolkit.com';
+  } else {
+    host = 'http://127.0.0.1:8000';
+  }
+
   $("input[type='checkbox']").change(function() {
     // If target item is checked...
     const selectedCheckbox = $(this).closest('input');
     const selectedId = $(this).attr('data-id');
-
-    let host = '';
-    const DEBUG = $("#debug").attr('data-id');
-
-    if (DEBUG === "False") {
-      host = 'https://reductiontoolkit.com';
-    } else {
-      host = 'http://127.0.0.1:8000';
-    }
 
     if (selectedCheckbox.is(":checked")) {
       const urlTrue = `${host}/target/${selectedId}/settrue/`;
@@ -143,6 +143,29 @@
         console.log(error);
       });
     }
+  });
+
+  // AJAX request fro hiding targeted items when the DMM is finished with them.
+  $('.hide-btn').click(function(e) {
+    e.preventDefault();
+    const selectedId = $(this).attr('data-id');
+    const URL = `${host}/target/${selectedId}/ishidden/`;
+
+    $.ajax({
+      url: URL,
+      method: 'POST',
+      headers: {'X-CSRFToken': csrftoken},
+      data: {'isHidden': 'True'}
+    })
+    .done(function(response) {
+      console.log(response);
+    })
+    .fail(function(error) {
+      console.log(error);
+    });
+
+    // refresh UI to show changes
+    window.location.reload;
   });
 
   function getCookie(name) {

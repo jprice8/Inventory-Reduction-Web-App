@@ -46,26 +46,30 @@
     }
 
     .left_area span {
-      color: #1DC4E7;
+      color: #0099ff;
     }
 
     .logout_btn {
       padding: 5px;
-      background: #19B3D3;
+      font-size: small;
+      background: #0099ff;
       text-decoration: none;
       float: right;
-      margin-top: -30px;
+      margin-top: -25px;
       margin-right: 40px;
       border-radius: 2px;
-      font-size: 15px;
-      font-weight: 600;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
       color: #fff;
       transition: 0.5s;
       transition-property: background;
     }
 
+    .logout_btn span {
+      padding: 12px 24px;
+    }
+
     .logout_btn:hover {
-      background: #0D9DBB;
+      background: #4682B4;
       text-decoration: none;
     }
 
@@ -94,7 +98,7 @@
     }
 
     .sidebar a:hover {
-      background: #19B3D3;
+      background: #0099ff;
     }
 
     .sidebar i {
@@ -117,10 +121,10 @@
     </div>
     <div class="right_area">
     {% if user.is_authenticated %}
-    <a class="logout_btn" href="{% url 'logout' %}">Logout</a>
+    <a class="logout_btn" href="{% url 'logout' %}"><span>Logout</span></a>
     {% else %}
-    <a class="logout_btn" href="{% url 'login' %}">Login</a>
-    <a class="logout_btn" href="{% url 'register' %}">Register</a>
+    <a class="logout_btn" href="{% url 'login' %}"><span>Login</span></a>
+    <a class="logout_btn" href="{% url 'register' %}"><span>Register</span></a>
     {% endif %}
     </div>
   </header>

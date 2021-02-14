@@ -93,6 +93,8 @@ def review_target_items(request):
 
     return render(request, 'target/review_targets.html', context)
 
+#### Set Movement Plan Form ####
+
 @login_required
 def move_targets(request, pk):
     d_facility = Facility.objects.filter(dmm=request.user)[0]
@@ -151,6 +153,8 @@ def move_targets(request, pk):
 
     return render(request, 'target/target_movement.html', context)
 
+#### API views ####
+
 # Toggle true and false for isTarget on no move items
 @login_required
 @ensure_csrf_cookie
@@ -180,6 +184,19 @@ def target_item_false(request, pk):
 
     response_data = {
         'django_response': f'item was isTarget of... {bool_before} and is now set to... {bool_after}'
+    }
+
+    return JsonResponse(response_data)
+
+@login_required
+@ensure_csrf_cookie
+def hide_target(request, pk):
+    if request.method == 'POST':
+        item_from_id = get_object_or_404(CountUsageList, pk=pk)
+        print(item_from_id)
+
+    response_data = {
+        'django_response': f'item {item_from_id} is now hidden'
     }
 
     return JsonResponse(response_data)
