@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.db.models import Sum
 from django.http import JsonResponse
+from django.views.generic.edit import UpdateView, DeleteView, CreateView
+from django.urls import reverse_lazy, reverse
 
 from inventory.models import Facility
 from target.models import CountUsageList, MovementPlan
@@ -79,8 +81,8 @@ def act_page(request):
     # all movement plans with the user listed as the requesting DMM
     outgoing_plans = MovementPlan.objects.filter(
         dmm=request.user
-    ).filter(
-        result=MovementPlan.Result.outstanding
+    ).order_by(
+        '-item'
     )
 
     context = {
@@ -295,3 +297,18 @@ def completed_export_excel(request):
         list_of_plans.append(plan_x)
 
     return ExcelResponse(list_of_plans, output_filename=f'Reduction App Reduced Items {t_month} {t_day} {t_year}')
+
+
+class MovementPlanUpdate(UpdateView):
+    model = MovementPlan
+    fields = ['ship_qty', 'decision', 'ship_fac']
+    template_name = 'act/edit_plan_form.html'
+
+    def get_success_url(self):
+        return reverse('act-page')
+
+
+class MovementPlanDelete(DeleteView):
+    model = MovementPlan
+    success_url = reverse_lazy('act-page')
+    template_name = 'act/movementplan_confirm_delete.html'

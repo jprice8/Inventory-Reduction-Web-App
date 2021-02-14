@@ -1,0 +1,47 @@
+{% extends 'inventory/base_side.html' %}
+{% load humanize %}
+
+{% block content %}
+<div class="container">
+  <div id="header">
+    <h2 class="mt-4">See plans for: {{ item_from_id.description }}</h2>
+    <p>The following are all movement plans that the user has set for the respective item.</p>
+  </div>
+  <div id="content">
+    <div id="content-table">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Destination</th>
+            <th scope="col">Date Requested</th>
+            <th scope="col">Movement Method</th>
+            <th scope="col">Qty Requested</th>
+            <th scope="col">Qty Accepted</th>
+            <th scope="col">LUOM Price</th>
+            <th scope="col">Accepted Ext Cost</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for plan in plans_for_item %}
+          <tr>
+            <td>{{ plan.ship_fac }}</td>
+            <td>{{ plan.created_at }}</td>
+            <td>{{ plan.decision }}</td>
+            <td>{{ plan.ship_qty }}</td>
+            <td>{{ plan.accepted_qty }}</td>
+            <td>${{ plan.item.luom_cost|floatformat:2|intcomma }}</td>
+            <td>${{ plan.calc_accepted_ext|floatformat:2|intcomma }}</td>
+            <td><mark>{{ plan.result }}</mark></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% if not plans_for_item %}
+      <h3 class="m-5">No Movement Plans have been submitted for this item yet</h3>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

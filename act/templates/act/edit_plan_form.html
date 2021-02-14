@@ -1,0 +1,14 @@
+{% extends 'inventory/base_side.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div id="update-form" class="m-5">
+  <form method="POST">
+    <legend class="border-bottom mb-4">Update Movement Plan</legend>
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input class="btn btn-primary mt-2" type="submit" value="Update" />
+  </form>
+</div>
+{% endblock %}

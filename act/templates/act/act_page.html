@@ -12,23 +12,24 @@
 {% endblock %}
 
 {% block content %}
-<main role="main" class="container-fluid m-5">
-
+<main role="main" class="container-fluid">
+<div class="ml-5 mt-4">
   <!-- Top row. Name and summary stats.-->
   <div class="row">
-    <div class="card shadow col-sm-4" align="center">
+    <div class="col-md-2"></div>
+    <div class="card shadow col-md-4" align="center">
       <div hidden id="debug" data-id={{ DEBUG }}></div>
       <h2 class="pt-2">Welcome, {{ user.get_username }}</h2>
       <h5>DMM at {{ facility.facility_name }}</h5>
       <i class="far fa-hospital fa-5x"></i>
     </div>
-    <div class="col-sm-6">
+    <div class="col-md-4">
       <div class="card shadow"> 
         <ul class="list-group list-group-flush">
-          <li class="list-group-item"><i class="far fa-times-circle"></i> Your facility shows <mark>${{ no_move_ext|floatformat:0|intcomma }}</mark> of inventory with no recorded intake.</li>
+          <li class="list-group-item"><i class="far fa-times-circle"></i> Your facility shows <mark>${{ no_move_ext|floatformat:0|intcomma }}</mark> of inventory with no intake.</li>
           <!-- If no target ext then 0 else show figure -->
           {% if target_ext %}
-          <li class="list-group-item"><i class="fas fa-bullseye"></i> You have targeted <mark>${{ target_ext|floatformat:0|intcomma }}</mark> of that inventory.</li>
+          <li class="list-group-item"><i class="fas fa-bullseye"></i> You have targeted <mark>${{ target_ext|floatformat:0|intcomma }}</mark> of inventory.</li>
           {% else %}
           <li class="list-group-item"><i class="fas fa-bullseye"></i> You have targeted <mark>$0</mark> of that inventory.</li>
           {% endif %}
@@ -42,7 +43,8 @@
   <!-- Second row. Items requested for movement.-->
   <div class="row mt-5">
       <div class="col-sm-11">
-          <h4 class="mt-2">Pending Incoming Requests to your Facility: </h4>
+          <h4 class="mt-2">My Incoming Requests: </h4>
+          <p class="text-muted">Items seeking to come into your facility</p>
           <div class="mt-3">
             {% if incoming_plans %}
             <table class="table table-hover">
@@ -53,8 +55,8 @@
                   <th>Mfr Cat No</th>
                   <th>Send Qty</th>
                   <th>Accept Qty</th>
-                  <th>Unit Cost</th>
-                  <th>Ext Cost</th>
+                  <th>LUOM Price</th>
+                  <th>Proposed Ext</th>
                   <th></th>
                 </tr>
               </thead>
@@ -90,19 +92,24 @@
   <!-- Third row. Pending Outgoing Requests. -->
   <div class="row mt-4">
     <div class="col-sm-11">
-      <h4>All Outgoing Request from your Facility:</h4>
+      <h4>My Outgoing Requests:</h4>
+      <p class="text-muted">Items seeking to leave your facility</p>
       <div class="mt-3">
       {% if outgoing_plans %}
       <table class="table table-hover">
         <thead>
           <tr scope="col">
-            <th>Requesting DMM</th>
+            <th>Method</th>
+            <th>Destination</th>
             <th>Item Description</th>
             <th>Mfr Cat No</th>
+            <th>IMMS</th>
+            <th>Status</th>
             <th>Requested Qty</th>
-            <th>Current Status</th>
-            <th>Unit Cost</th>
-            <th>Ext Cost</th>
+            <th>Accepted Qty</th>
+            <th>LUOM Price</th>
+            <th>Confirmed Ext</th>
+            <th></th>
             <th></th>
           </tr>
         </thead>
@@ -110,13 +117,23 @@
         <tbody>
           {% for plan in outgoing_plans %}
           <tr>
-            <td>{{ plan.dmm }}</td>
+            <td>{{ plan.decision }}</td>
+            <td>{{ plan.ship_fac }}</td>
             <td>{{ plan.item.description }}</td>
             <td>{{ plan.item.mfr_cat_no }}</td>
-            <td>{{ plan.ship_qty }}</td>
+            <td>{{ plan.item.imms }}</td>
             <td><mark>{{ plan.result }}</mark></td>
+            <td>{{ plan.ship_qty }}</td>
+            <td>{{ plan.accepted_qty }}</td>
             <td>${{ plan.item.luom_cost|floatformat:0|intcomma }}</td>
-            <td>${{ plan.calc_proposed_ext|floatformat:0|intcomma }}</td>
+            <!-- Need if statement for non system items -->
+            <td>${{ plan.calc_accepted_ext|floatformat:0|intcomma }}</td>
+            <td>
+              <div class="btn-group" role="group" aria-label="edit delete plan">
+                <a class="btn btn-outline-warning" href="{% url 'edit-plan' plan.id %}"><i class="fas fa-edit"></i></a>
+                <a class="btn btn-outline-danger" href="{% url 'delete-plan' plan.id %}"><i class="fas fa-trash"></i></a>
+              </div>
+            </td>
             <td>
               <button class="btn btn-outline-dark">Finalize</button>
             </td>
@@ -131,6 +148,7 @@
       </div>
     </div>
   </div>
+</div>
 </main>
 {% endblock %}
 

@@ -3,10 +3,10 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
-from django.db.models import Sum
+from django.db.models import Sum, Count
 
 import json, os
 
@@ -52,6 +52,13 @@ def review_target_items(request):
 
     # get all plans for displaying result status
     all_plans = MovementPlan.objects.all()
+
+    # get total number of plans set for an item
+    agg_plans_per_item = all_plans.values(
+        'item'
+    ).annotate(
+        agg_plans=Count('id')
+    )
     
     # get a list of item ids with movement plans that are outstanding
     plans_outstanding = MovementPlan.objects.filter(
@@ -81,6 +88,7 @@ def review_target_items(request):
         'not_outstanding_ids': not_outstanding_ids,
         'all_plans': all_plans,
         'DEBUG': debug,
+        'agg_plans': agg_plans_per_item,
     }
 
     return render(request, 'target/review_targets.html', context)
@@ -111,6 +119,7 @@ def move_targets(request, pk):
         form.instance.dmm = request.user
         form.instance.item = item_from_id
         if form.is_valid():
+            # error handle trying to submit higher qty
             request_qty = form.cleaned_data['ship_qty']
             available_qty = item_from_id.count_qty
             if request_qty > available_qty:
@@ -174,3 +183,20 @@ def target_item_false(request, pk):
     }
 
     return JsonResponse(response_data)
+
+# See all plans for a given item. Triggered from review target items page.
+@login_required
+def see_item_plans(request, pk):
+    # get item from id
+    item_from_id = CountUsageList.objects.get(pk=pk)
+    # get all plans for the id
+    plans_for_item = MovementPlan.objects.filter(
+        item=item_from_id
+    )
+
+    context = {
+        'plans_for_item': plans_for_item,
+        'item_from_id': item_from_id,
+    }
+
+    return render(request, 'target/see_item_plans.html', context)
