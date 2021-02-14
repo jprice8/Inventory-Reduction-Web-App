@@ -44,9 +44,10 @@ class CountUsageList(models.Model):
 class MovementPlan(models.Model):
     dmm = models.ForeignKey(User, on_delete=models.CASCADE)
     item = models.ForeignKey(CountUsageList, on_delete=models.CASCADE)
-    ship_qty = models.IntegerField(null=False)
+    ship_qty = models.IntegerField(null=False, verbose_name=_('Quantity'))
     created_at = models.DateTimeField(auto_now_add=True)
     accepted_qty = models.IntegerField(null=False, default=0)
+    isFinalized = models.BooleanField(null=False, default=False)
 
     class MovementOptions(models.TextChoices):
         system = 'system', _('Ship to a facility within the system'),

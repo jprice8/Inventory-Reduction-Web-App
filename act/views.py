@@ -50,8 +50,8 @@ def act_page(request):
     # total movement plan ext for action of not 0
     completed_plans = MovementPlan.objects.filter(
         dmm=request.user
-    ).exclude(
-        result=MovementPlan.Result.outstanding
+    ).filter(
+        isFinalized=True
     )
 
     # get completed ext for items reduced
@@ -63,7 +63,7 @@ def act_page(request):
     accepted_plans = MovementPlan.objects.filter(
         ship_fac=dmm.fac
     ).filter(
-        result=MovementPlan.Result.accepted
+        isFinalized=True
     )
 
     # get accepted ext for items moving to dmm facility
@@ -156,7 +156,7 @@ def review_accepted(request):
     accepted_plans = MovementPlan.objects.filter(
         ship_fac=dmm.fac
     ).filter(
-        result=MovementPlan.Result.accepted
+        isFinalized=True
     )
 
     context = {
@@ -173,7 +173,7 @@ def review_completed(request):
     completed_plans = MovementPlan.objects.filter(
         dmm=request.user
     ).filter(
-        result=MovementPlan.Result.accepted
+        isFinalized=True
     )
 
     context = {
@@ -301,7 +301,7 @@ def completed_export_excel(request):
 
 class MovementPlanUpdate(UpdateView):
     model = MovementPlan
-    fields = ['ship_qty', 'decision', 'ship_fac']
+    fields = ['ship_qty']
     template_name = 'act/edit_plan_form.html'
 
     def get_success_url(self):

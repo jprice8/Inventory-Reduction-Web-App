@@ -3,9 +3,10 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div id="update-form" class="m-5">
+<div id="update-form" class="container m-5">
   <form method="POST">
-    <legend class="border-bottom mb-4">Update Movement Plan</legend>
+    <legend class="border-bottom">Update Movement Plan</legend>
+    <p class="text-muted">If you need to edit the decision or destination, delete the movement plan and create another one.</p>
     {% csrf_token %}
     {{ form|crispy }}
     <input class="btn btn-primary mt-2" type="submit" value="Update" />
