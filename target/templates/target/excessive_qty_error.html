@@ -1,0 +1,28 @@
+{% extends 'inventory/base_side.html' %} 
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-sm-1">
+      <i class="m-4 fas fa-tools fa-5x"></i>
+    </div>
+    <div class="col-sm">
+      <h3 class="m-4">
+        You are seeing this error because you do not have the available quantity
+        to make this request.
+      </h3>
+    </div>
+  </div>
+  <div class="m-4">
+    <p>
+      Please go back to the previous page and try to submit a lower quantity.
+      Note that the application treats your cumulative request quantity as the total.
+      Meaning that if you have made two requests for 6 units each but you only have 10
+      units in stock, you will see this error.
+    </p>
+    <p>
+      If you believe you are getting this message on error, please contact
+      jdprice@baptisthealthsystem.com.
+    </p>
+  </div>
+</div>
+{% endblock %}

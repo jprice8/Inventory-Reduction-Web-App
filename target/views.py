@@ -107,28 +107,37 @@ def move_targets(request, pk):
         '-luom_qty'
     )
 
+    # Cumulative ship qty for all of the item's plans.
+    agg_qty_set = MovementPlan.objects.filter(
+        item=item_from_id
+    ).aggregate(Sum('ship_qty'))
+    cum_ship_qty = agg_qty_set['ship_qty__sum']
+
     if request.method == 'POST':
         form = MovementPlanForm(request.POST)
         form.instance.dmm = request.user
         form.instance.item = item_from_id
         if form.is_valid():
-            # error handle trying to submit higher qty
             request_qty = form.cleaned_data['ship_qty']
-            available_qty = item_from_id.count_qty
-            if request_qty > available_qty:
-                return HttpResponse(f"<h2>You are trying to reduce {request_qty} units which is more than your recorded inventory quantity of {available_qty}. Please go back and try again.</h2>")
+            # error handle submitting multiple plans with excessive qty
+            if not cum_ship_qty:
+                # error handle trying to submit higher qty
+                available_qty = item_from_id.count_qty
+                # if request is higher than available throw error page
+                if request_qty > available_qty:
+                    return render(request, 'target/excessive_qty_error.html')
+                else:
+                    form.save()
+                    return HttpResponseRedirect(reverse('review-targets',))
             else:
-
-                # Send email notification to receiving dmm
-                # subject = 'You have received a movement request on The Reduction App'
-                # receiving_dmm = request.POST['ship_fac']
-                # message = f'Facility {receiving_dmm}, you have received a movement request from DMM: {request.user}. Please go to reductiontoolkit.com to handle the request.'
-                # email_from = EMAIL_HOST_USER
-                # recipient_list = [request.user.email,]
-                # send_mail(subject, message, email_from, recipient_list)
-
-                form.save()
-                return HttpResponseRedirect(reverse('review-targets',))
+                # get the qty left from cumulative outstanding orders
+                qty_left = item_from_id.count_qty - cum_ship_qty
+                # if request is higher than qty left throw error page
+                if request_qty > qty_left:
+                    return render(request, 'target/excessive_qty_error.html')
+                else:
+                    form.save()
+                    return HttpResponseRedirect(reverse('review-targets',))
         else:
             print(form.errors)
     else:
