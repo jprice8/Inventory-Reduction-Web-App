@@ -31,9 +31,7 @@ def no_intake_list(request):
         'no_move_list': CountUsageList.objects.filter(
             fac=dmm.fac
         ).filter(
-            issue_qty=0
-        ).filter(
-            luom_po_qty=0
+            issue_qty=0, luom_po_qty=0
         ).filter(
             count_qty__gt=0
         ).filter(

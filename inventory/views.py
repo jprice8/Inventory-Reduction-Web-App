@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.contrib.auth.models import User
 
+import os
+
 from .models import Invcount, Facility
 from target.models import CountUsageList
 
@@ -13,6 +15,7 @@ def index(request):
 # Inventory views
 @login_required
 def inventory_list(request):
+    debug = os.environ.get("DJANGO_DEBUG", False)
     matching_facility = Facility.objects.filter(dmm=request.user)
 
     if matching_facility.exists():
@@ -25,8 +28,11 @@ def inventory_list(request):
             fac=dmm.fac
         ).filter(
             isTarget=False
+        ).exclude(
+            issue_qty=0, luom_po_qty=0
         )[:100],
         'dmm': dmm,
+        'DEBUG': debug,
     }
 
     return render(request, 'inventory/inventory_list.html', context)
