@@ -31,7 +31,7 @@
           {% if target_ext %}
           <li class="list-group-item"><a href="{% url 'review-targeted' %}"><i class="fas fa-bullseye"></i> You have targeted <mark>${{ target_ext|floatformat:0|intcomma }}</mark> of inventory.</a></li>
           {% else %}
-          <li class="list-group-item"><a href="{% url 'review-targeted' %}"><i class="fas fa-bullseye"></i> You have targeted <mark>$0</mark> of that inventory.</a></li>
+          <li class="list-group-item"><a href="{% url 'review-targeted' %}"><i class="fas fa-bullseye"></i> You have targeted <mark>$0</mark> of inventory.</a></li>
           {% endif %}
           <li class="list-group-item"><a href="{% url 'review-completed' %}"><i class="far fa-check-circle"></i> You have removed <mark>${{ completed_ext|floatformat:0|intcomma }}</mark> of inventory.</a></li>
           <li class="list-group-item"><a href="{% url 'review-accepted' %}"><i class="fas fa-truck"></i> You have accepted <mark>${{ accepted_ext|floatformat:0|intcomma }}</mark> of inventory.</a></li>
