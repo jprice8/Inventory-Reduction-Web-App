@@ -58,6 +58,8 @@ def act_page(request):
     # get all plans dmm has accepted
     accepted_plans = MovementPlan.objects.filter(
         ship_fac=dmm.fac
+    ).filter(
+        isFinalized=True
     )
 
     # get accepted ext for items moving to dmm facility

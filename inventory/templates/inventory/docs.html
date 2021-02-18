@@ -36,13 +36,16 @@
           <a href="#actionprofile" class="text-center">Action Profile</a>
         </li>
         <li style="text-align: center" class="mb-3">
-          <a href="#nointake" class="text-center">Target No Intake</a>
+          <a href="#targetitems" class="text-center">Target Items</a>
         </li>
         <li style="text-align: center" class="mb-3">
-          <a href="#" class="text-center">Target High Ext</a>
+          <a href="#reviewtargets" class="text-center">Review Targets</a>
         </li>
         <li style="text-align: center" class="mb-3">
-          <a href="#" class="text-center">Placeholder</a>
+          <a href="#movementplans" class="text-center">Movement Plans</a>
+        </li>
+        <li style="text-align: center" class="mb-3">
+          <a href="#bhsmovementplans" class="text-center">BHS Transfers</a>
         </li>
       </ul>
     </nav>
@@ -152,7 +155,7 @@
                 <li>Items that <b>did</b> receive intake in FY2020</li>
               </ul>
 
-              <p id="nointake">
+              <p id="targetitems">
                 Therefore you have two options when targeting items that you'd
                 like to reduce. You can target "No Intake Items" or you can
                 target "High Ext Items" (AKA items that are seeing intake but we
@@ -189,15 +192,15 @@
               </ul>
 
               <p>
-                Please note that if one of these items is in multiple locations
-                or "bins" in your facility, then the system will group them
-                together if their unit of measures (UOM) are the same. This
-                helps to handle items with the same IMMS number that are listed
-                multiple times on your count sheet.
+                Note that if an item is in multiple locations or "bins" in your
+                facility, then the system will group them together if their unit
+                of measures (UOM) are the same. This helps to handle items with
+                the same IMMS number that are listed multiple times on your
+                count sheet.
               </p>
 
               <img
-                src="https://d3epl9dvc9angi.cloudfront.net/NoIntakeDocs.png"
+                src="https://d3epl9dvc9angi.cloudfront.net/NoIntakeItemsDocs.png"
                 alt="view page screen grab"
                 width="100%"
                 class="mt-2 shadow"
@@ -217,7 +220,7 @@
                 and we can continue on in the process.
               </p>
 
-              <p>
+              <p id="reviewtargets">
                 After going through the list and selecting all of the items that
                 you'd would like to reduce from your facility, you can then
                 click on the tab labeled "Review Targets" in your navigation
@@ -227,14 +230,21 @@
 
             <!-- Step Four: Review Targets -->
             <div>
+              <h3 class="mt-4">Step Four: Review Targets</h3>
               <p>
                 After clicking on the "Review Targets" tab, you should now be
                 looking at a page with the title "Review Target Items" at the
                 top of screen. See below:
               </p>
 
-              <!-- ReviewTargetsDocs here -->
-              <p>
+              <img
+                src="https://d3epl9dvc9angi.cloudfront.net/ReviewTargetItemsDocs.png"
+                alt="view page screen grab"
+                width="100%"
+                class="mt-2 shadow"
+              />
+
+              <p class="mt-4">
                 You'll see the item that you targeted previously, as well as any
                 other items that you have targeted.
               </p>
@@ -251,9 +261,8 @@
                 Movement Plan" on the bottom of the item's card.
               </p>
 
-              <!-- SetMovementPlanDocs1 -->
               <p>
-                You will now be taken the page where you can submit your
+                You will now be taken to the page where you can submit your
                 movement plan. You'll see three sections of information on this
                 page:
               </p>
@@ -271,37 +280,48 @@
                 measure information.
               </p>
 
-              <!-- SMPDocs2 -->
-              <p>
-                The second section under the title "BHS Facilities Showing
-                Inventory History or Intake History" is pretty much self
-                explanatory. It is listing facilities within Baptist Health
-                System that have shown the selected item in their most recent
-                submitted inventory count. Note that even if the facility had
-                zero units in their inventory, they will still show up if
-                they've had the imms number in their count at some point, as we
-                can see with facility 939 (BMC). Also worth noting, all measures
-                mentioned above are shown in their lowest unit of measure. You
-                can confirm this by referencing the UOM info at the top of the
-                screen.
+              <img
+                src="https://d3epl9dvc9angi.cloudfront.net/SetMovementPlanDocs1.png"
+                alt="view page screen grab"
+                width="100%"
+                class="mt-2 shadow"
+              />
+
+              <p class="mt-4">
+                The second section is under the title "BHS Facilities Showing
+                Inventory History or Intake History". It's listing facilities
+                within Baptist Health System that have shown the selected item
+                in their most recent submitted inventory count. Note that even
+                if the facility had zero units in their inventory, they will
+                still show up if they've had the imms number in their count at
+                some point, as we can see with facility 939 (BMC). Also worth
+                noting, all measures mentioned above are shown in their lowest
+                unit of measure. You can confirm this by referencing the UOM
+                information given at the top of this page.
               </p>
 
-              <!-- SMPDocs3 -->
               <p>
                 The third section is under the label "Tenet Facilities Showing
-                Purchase Order History". This section will show you if any
-                facilities within Tenet have a made purchase order for the
-                selected item in FY2020. In our example, you can see that the
-                system is not able to find any matches for Tenet facilities and
-                is informing us of that. It is worth noting that all markets in
-                Tenet are represented except for the Detroit Market. We are
-                still working on integrating their Lawson system with IMMS.
+                Purchase Order History" (pictured below). This section will show
+                you if any facilities within Tenet have a made purchase order
+                for the selected item in FY2020. In our example, you can see
+                that the system is not able to find any matches for Tenet
+                facilities and is informing us of that. It is worth noting that
+                all markets in Tenet are represented except for the Detroit
+                Market. We are still working on integrating their Lawson system
+                with IMMS.
               </p>
 
-              <!-- SMPDocs4 -->
-              <p>
-                Finally, we arrive to the bottom of the page, the Movement Plan.
-                You should see a form with three fields:
+              <img
+                src="https://d3epl9dvc9angi.cloudfront.net/SetMovementPlanDocs2.png"
+                alt="view page screen grab"
+                width="100%"
+                class="mt-2 shadow"
+              />
+
+              <p class="mt-4">
+                Finally, we arrive to the bottom of the page, the Movement Plan
+                (pictured above). You should see a form with three fields:
               </p>
 
               <ol>
@@ -336,41 +356,29 @@
                 optimal outcome:
               </p>
 
-              <ul>
-                <li>Ship to a facility within the system</li>
-              </ul>
-
-              <p>
+              <p><b>Ship to a facility within the system</b></p>
+              <p class="ml-4">
                 Choose this option if there is a BHS facility that is showing
                 large intake of the selected item. This should be your first
                 priority if possible.
               </p>
 
-              <ul>
-                <li>Ship to a Tenet Facility</li>
-              </ul>
-
-              <p>
+              <p><b>Ship to a Tenet Facility</b></p>
+              <p class="ml-4">
                 Choose this option if there is a Tenet facility that is showing
                 large intake of the selected item. This should be your second
                 priority if possible.
               </p>
 
-              <ul>
-                <li>Sell to a third party vendor</li>
-              </ul>
-
-              <p>
+              <p><b>Sell to a Third Party Vendor</b></p>
+              <p class="ml-4">
                 Choose this option if there is not enough intake in any BHS
                 facilities or Tenet facilities. This should be your third
                 choice.
               </p>
 
-              <ul>
-                <li>Discard the item</li>
-              </ul>
-
-              <p>
+              <p><b>Discard the Item</b></p>
+              <p class="ml-4">
                 Choose this option if you have exhausted all other options. This
                 should be your last resort.
               </p>
@@ -396,15 +404,453 @@
               </p>
 
               <p>
-                Once you have filled out all the fields you can press the blue button labeled "Submit" to
-                submit the form. For our example, I will indicate that I want to sell 5 EA of this item.
-                Therefore, I will enter 5 in quantity, select the button labeled "Sell to a third party vendor"
-                and then select "Selling or Discarding" in the System Destination Facility dropdown. I'll then click Submit
-                to submit the form.
+                Once you have filled out all the fields you can press the blue
+                button labeled "Submit" to submit the form. For our example,
+                let's say that you want to sell 5 EA of this item. To do so, you
+                would enter 5 in the quantity field, select the radio button
+                labeled "Sell to a third party vendor" and the select "Selling
+                or Discarding" in the System Destination Facility dropdown. You
+                can then click the submit button to submit the form.
               </p>
 
-              <!-- SubmittedPlanDocs -->
-              
+              <img
+                src="https://d3epl9dvc9angi.cloudfront.net/FormSubmitDocs.png"
+                alt="view page screen grab"
+                width="100%"
+                class="mt-2 shadow"
+              />
+
+              <p class="mt-4">
+                Once you've submitted the form, you will taken back to the
+                review targets page. You'll now be able to see that there is a
+                "1" next to section of the card labeled "Plans Set".
+              </p>
+
+              <img
+                src="https://d3epl9dvc9angi.cloudfront.net/PostSubmitTargetDocs.png"
+                alt="view page screen grab"
+                width="100%"
+                class="mt-2 shadow"
+              />
+
+              <p id="movementplans" class="mt-4">
+                Remember that you can set multiple movement plans on a single
+                item. The "Plans Set" counter you can see on the card will help
+                you see how many plans you have submitted for a single item.
+                Even better, you can click on the gray "See All Plans" button on
+                the bottom of the item card to get a detailed breakout of each
+                movement plan you have submitted for that item.
+              </p>
+
+              <p>
+                In the next section, let's talk more about movement plans and
+                what we can do with them after creating them.
+              </p>
+            </div>
+
+            <!-- Step Five: Movement Plans -->
+            <div>
+              <h3 class="mt-4">Step Five: Movement Plans</h3>
+
+              <p>
+                Now that you've created your first movement plan, let's look
+                more at how we can manage them in the Action Profile page. Click
+                the tab labeled "Action Profile" in the navigation sidedrawer to
+                be taken to your profile.
+              </p>
+
+              <p>
+                The first thing you'll notice is that two parts of the profile
+                have changed:
+              </p>
+
+              <img
+                src="https://d3epl9dvc9angi.cloudfront.net/UpdatedActionProfileDocs.png"
+                alt="view page screen grab"
+                width="100%"
+                class="mt-2 shadow"
+              />
+
+              <p class="mt-4">
+                First, you'll see that in the upper righthand side of the page,
+                the metric labeled "You have targeted $_____ of inventory" has
+                updated to reflect the new item that you just targeted. The
+                metric is blue because it also serves as a link which you can
+                click on to get a detailed breakout of the items that you have
+                targeted.
+              </p>
+
+              <h5>Editing Movement Plans</h5>
+              <p>
+                Second, you'll notice that there is a new movement plan in your
+                table at the bottom of the screen labeled "My Outgoing
+                Requests". This is the movement plan you just submitted to
+                reduce by selling 5 EA units. If you need to change the amount
+                you'd like to reduce then you can do so by clicking the yellow
+                button with the pencil icon on the righthand side of the page.
+                If you need to change your decision to sell the item to
+                discarding or transfering it instead, you will need to delete
+                the item by clicking the red trashcan icon and submitting a new
+                plan.
+              </p>
+
+              <h5>Finalizing Movement Plans</h5>
+              <p>
+                You'll notice that the status associated with this plan is
+                currently "outstanding". Plans that are transfers to Tenet
+                facilities, selling or discarding, will be considered
+                "outstanding" until you finalize them by clicking the button
+                labeled "Finalize".
+                <mark
+                  >It is important to note that you should not finalize the
+                  movement plan until you have physically removed the item from
+                  your facility.</mark
+                >
+                In our example, this would look like reaching out to a third
+                party vendor, receiving a quote, receiving approval from your
+                CFO, and then physically shipping the item to the third party
+                vendor. Once that has been accomplished you will click the
+                Finalize button to indicate that you have completed the
+                reduction of the item.
+              </p>
+
+              <p>
+                After finalizing the movement plan, you will notice several
+                things happen:
+              </p>
+
+              <img
+                src="https://d3epl9dvc9angi.cloudfront.net/FinalizedActionProfileDocs.png"
+                alt="view page screen grab"
+                width="100%"
+                class="mt-2 shadow"
+              />
+
+              <p class="mt-4">
+                First of all, you can see that you no longer have that item
+                queued up in your "Outgoing Requests" table. Second, you will
+                see that the item was removed from your targeted metric in the
+                top righthand side of the page. The ext cost was removed and was
+                added to the metric labeled "You have removed $____ of
+                inventory". Notice that this metric also allows you to click on
+                it and be shown a breakout of the items that are making up your
+                completed movement plans. After clicking on the metric you will
+                also notice that you can export the table of completed plans out
+                to an Excel Spreadsheet. This should be helpful in notifiying
+                accounting of the changes that you have made.
+              </p>
+
+              <p>
+                That's not the only place the application is updating after
+                completing a movement plan. By clicking on the "Review Targets"
+                tab in the navigation sidedrawer you will see that the field
+                labeled "Remaining Quantity" in the item card has been reduced
+                by 5 EA units.
+              </p>
+
+              <img
+                src="https://d3epl9dvc9angi.cloudfront.net/UpdatedReviewTargetItemsDocs.png"
+                alt="view page screen grab"
+                width="100%"
+                class="mt-2 shadow"
+              />
+
+              <h5 class="mt-4">
+                Hiding a Targeted Item When You are Done With It
+              </h5>
+              <p>
+                The entire application has updated to reflect your changes. You
+                are free to set as many movement plans and reductions on
+                inventory as you'd like. When you are satisfied with the level
+                of inventory that the item is now set at, you can hide an item
+                from your "Review Targets" list by clicking the blue "X" in the
+                top righthand side of the item's card. This will help you keep
+                your targeted items list from getting cluttered with items that
+                you are through targeting. It will also help you work through
+                your "No Intake" and "High Ext" lists while keeping things nice
+                and organized.
+              </p>
+
+              <h5>Conclusion</h5>
+              <p id="bhsmovementplans">
+                That brings the current tutorial to a close. That is essentially
+                everything you would need to know for targeting an item, setting
+                a movement plan, and finalizing it once you have completed the
+                reduction. One last thing I would like to cover though is how
+                transfers work within the Baptist Health System. We've covered
+                reduction through transfers to Tenet facilities, selling, and
+                discarding items, but now I'd like to focus on transferring an
+                item from one facility within BHS to another. These movement
+                plans work slightly different than movement plans that are
+                directed towards Tenet facilities or selling/discarding. The
+                reason they are different is they allow one DMM to respond to a
+                movement plan set by another. Let's take a deeper look into how
+                that might work.
+              </p>
+            </div>
+            <div>
+              <h3>Step Six: Transferring Items within BHS</h3>
+
+              <p class="mt-4">
+                Let's look at another example, but this time let's target a
+                "High Ext" item instead of a "No Intake" item and also transfer
+                it within BHS instead of selling it to a third party vendor.
+              </p>
+
+              <p>
+                The process for targeting high ext items is relatively the same
+                as it is for targeting no intake items. You begin by clicking
+                the tab in the navigation sidedrawer labeled "Target High Ext".
+                This will take you to the following page:
+              </p>
+
+              <p>
+                Note that your item cards will have a slightly different format
+                than the provided screenshots as sensitive pricing information
+                has been redacted.
+              </p>
+
+              <img
+                src="https://d3epl9dvc9angi.cloudfront.net/TargetHighExtDocs.png"
+                alt="view page screen grab"
+                width="100%"
+                class="mt-2 shadow"
+              />
+
+              <p class="mt-4">
+                Here you'll see a list of item cards that are very similar to
+                the ones we saw in the "Target No Intake" list. That's because
+                they essentially function in the same way as each other, only
+                they show items based on different filters. While the No Intake
+                List had requirements of no purchase orders or issues in FY2020,
+                the High Intake List has the following requirements for items:
+              </p>
+
+              <ul>
+                <li>
+                  The item must be located in the facilities' Surgery or Cath
+                  Lab department
+                </li>
+                <li>
+                  The item must have shown at least one purchase order or one
+                  issue in FY2020
+                </li>
+              </ul>
+
+              <p>
+                The items that meet that criteria are then sorted from highest
+                extended cost to lowest and then filtered down to the top 100
+                items.
+              </p>
+
+              <p>
+                For our example, let's say that you want to reduce the item with
+                description, "CATHETER, ABLATION SF SMARTTOUCH CARTO BID TC
+                D-F". You'll target the item by checking the box labeled "Target
+                Item" at the bottom of the item card. After doing this, you will
+                click the tab in the navigation sidedrawer labeled "Review
+                Targets" to see the item you just targeted.
+              </p>
+
+              <h5>Set the Movement Plan</h5>
+              <p>
+                Once on the "Review Targets" page, click the blue button labeled
+                "Set Movement Plan" on the catheter item you just targeted. You
+                will then be taken to the set movement plan form.
+              </p>
+
+              <img
+                src="https://d3epl9dvc9angi.cloudfront.net/ReviewTargetItemsHighExtDocs.png"
+                alt="view page screen grab"
+                width="100%"
+                class="mt-2 shadow"
+              />
+
+              <p class="mt-4">
+                You will then be taken the movement plan form where you will
+                make your decision on how you want to reduce these catheters. If
+                we pretend that you are the DMM at facility 968, we can see that
+                there is quite a lot of movement at your facility for this item
+                so we might not want to actually reduce it. But for the sake of
+                the example lets say that you would like to reduce it and now
+                need to figure out what method you are going to use. You can see
+                that below facility 968, facility 939 was issued 4 EA of this
+                item in FY2020.
+              </p>
+
+              <p>
+                So you can see that there is a little movement within BHS,
+                however, you look below facility 939 and see that the Abrazo
+                Heart Hospital purchased over 600 EA of this item in FY2020.
+                Wow, that's a lot of catheters! Therefore it might be a good
+                idea to split this reduction plan into two. Because we have a
+                priority to cover our own facilities within BHS first, let's try
+                and send 4 EA to facility 939 and 5 EA to the heart hospital in
+                Phoenix, while keeping 2 EA for a safety stock at our own
+                facility. (4 + 5 + 2 = 11 <- our quantity)
+              </p>
+
+              <img
+                src="https://d3epl9dvc9angi.cloudfront.net/MovementPlanFormHighExtDocs.png"
+                alt="view page screen grab"
+                width="100%"
+                class="mt-2 shadow"
+              />
+
+              <p class="mt-4">
+                In order to make these two movement plans you'll need to submit
+                two forms. The first one should look like this:
+              </p>
+
+              <img
+                src="https://d3epl9dvc9angi.cloudfront.net/BMCMovementFormDocs.png"
+                alt="view page screen grab"
+                width="100%"
+                class="mt-2 shadow"
+              />
+
+              <p class="mt-4">
+                Here you are sending a request to the DMM at Baptist Medical
+                Center (facility 939) that you would like to send them 4 EA of
+                the catheters. Click submit to send the form and be taken back
+                to the review targets page.
+              </p>
+
+              <p>
+                If you fill out the second form the Abrazo Heart Hospital, it
+                should look like this:
+              </p>
+
+              <img
+                src="https://d3epl9dvc9angi.cloudfront.net/AbrazoMovementFormDocs.png"
+                alt="view page screen grab"
+                width="100%"
+                class="mt-2 shadow"
+              />
+
+              <p class="mt-4">
+                After submitting the second form, you will see that on your
+                "Review Targets" page the field labeled "Plans Set" will now
+                show "2" and if you click the gray "See All Plans" button you
+                will be able to see both plans that you just set.
+              </p>
+
+              <img
+                src="https://d3epl9dvc9angi.cloudfront.net/SeeAllPlansDocs.png"
+                alt="view page screen grab"
+                width="100%"
+                class="mt-2 shadow"
+              />
+
+              <p class="mt-4">
+                You can see that your two movement plans are recorded here and
+                are ready to move on to the next step. Click the tab labeled
+                "Action Profile" on the navigation sidedrawer to be taken back
+                to your profile.
+              </p>
+
+              <p>
+                Once on your Action Profile page, you will see the two new
+                movement plans under your table labeled "My Outgoing Requests".
+                See below:
+              </p>
+
+              <img
+                src="https://d3epl9dvc9angi.cloudfront.net/SeeAllPlansDocs.png"
+                alt="view page screen grab"
+                width="100%"
+                class="mt-2 shadow"
+              />
+
+              <h5 class="mt-4">Responding to BHS System Requests</h5>
+              <p>
+                The two requests are still waiting to be finalized. The movement
+                plan to the Abrazo Heart Hospital is waiting for you reach out
+                to the DMM there, confirm that they can take on this inventory,
+                and physically ship the items to that facility. Once this is
+                accomplished you will click the Finalize Button and the
+                application will update all of your numbers to reflect the
+                successful reduction.
+              </p>
+
+              <p>
+                As mentioned before, the movement plan to facility 939 will work
+                slightly different because it is a movement plan within the BHS
+                system. If you were to try and click that movement plan's
+                Finalize Button right now, it would not work because the
+                movement request still has a status of "outstanding".
+                <mark>
+                  You will not be able to finalize a BHS system movement plan
+                  until the DMM of that facility approves your request.
+                </mark>
+                If you were to look at the Action Profile of the DMM at facility
+                939, their table labeled "My Incoming Requests" would look like
+                this:
+              </p>
+
+              <img
+                src="https://d3epl9dvc9angi.cloudfront.net/MyIncomingRequestsDocs.png"
+                alt="view page screen grab"
+                width="100%"
+                class="mt-2 shadow"
+              />
+
+              <p class="mt-4">
+                You'll see that your request has populated their table and is
+                waiting for their respone. They have two options they can choose
+                from in order to respond, "Approve" or "Reject", and these are
+                chosen by picking their respective buttons on the righthand side
+                of the movement plan. If the DMM at facility 939 decides to
+                accept the movement plan, they will need to enter the number of
+                units into the field labeled "Accept Qty". Note that this figure
+                will be in lowest unit of measure already for you.
+              </p>
+
+              <p>
+                For our example, let's say that the DMM at facility 939 decides
+                that they can take on only 2 units instead of the full four.
+                They would then enter four in the "Accept Qty" field and would
+                then press the green "Accept" button. You may be expecting the
+                metric in the top righthand side of the page labeled "You have
+                accepted $___ of inventory" to update and reflect the inventory
+                that the DMM has just accepted, but that will not happen. This
+                movement plan still needs to be finalized by the sending DMM for
+                up to be recognized by the application. Let's do that next
+              </p>
+
+              <h5>Finalizing the Movement Plan</h5>
+              <p>
+                Back on the Action Profile for the sending DMM at facility 968,
+                you can see that the DMM at facility 939 accepted the movement
+                plan you sent them. See below:
+              </p>
+
+              <img
+                src="https://d3epl9dvc9angi.cloudfront.net/Accepted939RequestDocs.png"
+                alt="view page screen grab"
+                width="100%"
+                class="mt-2 shadow"
+              />
+
+              <p class="mt-4">
+                You'll see that the DMM at facility 939 accepted 2 EA catheters.
+                Awesome, the DMM has accepted your request and now you can
+                physically ship them the accepted inventory. After you have
+                physically shipped the inventory out of your facility to the
+                destination, then you can click the Finalize Button to have the
+                changes reflected throughout the application.
+              </p>
+
+              <h5>Conclusion</h5>
+              <p>
+                That brings us to the end of the tutorial and documentation.
+                Feel free to reference this documentation as you are using the
+                toolkit. Anytime you click the Documentation tab on the
+                navigation sidedrawer you will be taken back here. Hopefully
+                this tutorial has been clear on how to operate the Reduction
+                Toolkit. If you have any further questions or concerns about the
+                Toolkit please reach out to Jdprice@baptisthealthsystem.com.
+              </p>
             </div>
           </div>
         </div>
