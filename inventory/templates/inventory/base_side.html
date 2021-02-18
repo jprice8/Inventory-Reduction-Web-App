@@ -29,7 +29,7 @@
     header {
       position: fixed;
       background: #22242A;
-      padding: 20px;
+      padding: 15px;
       width: 100%;
       height: 70px;
       z-index: 1;
@@ -47,28 +47,30 @@
       color: #0099ff;
     }
 
-    .logout_btn {
-      padding: 5px;
-      font-size: small;
-      background: #0099ff;
-      text-decoration: none;
-      float: right;
-      margin-top: -25px;
-      margin-right: 40px;
-      border-radius: 2px;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
-      color: #fff;
-      transition: 0.5s;
-      transition-property: background;
+    .inline-block-child {
+      display: inline-block;
     }
 
-    .logout_btn span {
-      padding: 12px 24px;
+    .toolbox {
+      color: white;
+      margin-right: 14px;
+      margin-left: 4px;
     }
 
-    .logout_btn:hover {
-      background: #4682B4;
-      text-decoration: none;
+    .barbtn {
+      color: white;
+      cursor: pointer;
+      margin: 0 4px;
+      background-color: transparent;
+      border: 10px solid transparent;
+      border-radius: 100%;
+      transition: border 0.1s;
+    }
+
+    .barbtn:hover {
+      background-color: #303030;
+      border-radius: 100%;
+      border: 10px solid #303030;
     }
 
     .sidebar {
@@ -81,6 +83,7 @@
       height: 100%;
       transition: 0.5s;
       transition-property: left;
+      z-index: 1;
     }
 
     .sidebar a {
@@ -106,24 +109,59 @@
 /* if authenticated then margin left is 250... if not then margin left is 0 */
     .content {
       padding-top: 80px;
+      transition: 0.5s;
+      margin-left: 250px;
+    }
+
+    hr.solid {
+      border-top: 1px solid;
+    }
+
+
+    #check:checked ~ .sidebar {
+      left: -190px;
+    }
+
+    #check:checked ~ .sidebar a span {
+      display: none;
+    }
+
+    #check:checked ~ .sidebar a {
+      font-size: 20px;
+      margin-left: 170px;
+      width: 80px;
+    }
+
+    #check:checked ~ .content {
+      margin-left: 60px;
+    }
+
+    #check {
+      display: none;
     }
 
   </style>
 </head>
 <body>
-  
+  <!-- checkbox for tucking sidedrawer -->
+  <input type="checkbox" id="check">
+
   <!-- header area start -->
   <header>
-    <div class="left_area">
-      <h3>Reduction <span>Toolkit</span></h3>
-    </div>
-    <div class="right_area">
-    {% if user.is_authenticated %}
-    <a class="logout_btn" href="{% url 'logout' %}"><span>Logout</span></a>
-    {% else %}
-    <a class="logout_btn" href="{% url 'login' %}"><span>Login</span></a>
-    <a class="logout_btn" href="{% url 'register' %}"><span>Register</span></a>
-    {% endif %}
+    <div class="parent">
+      {% if user.is_authenticated %}
+      <label for="check">
+      <span class="barbtn child inline-block-child hover-border">
+        <i class="fas fa-bars fa-md"></i>
+      </span>
+      {% endif %}
+      <span class="toolbox child inline-block-child"><i class="fas fa-toolbox fa-2x"></i></span>
+      </label>
+
+      <div class="left_area child inline-block-child">
+        <h3>Reduction <span>Toolkit</span></h3>
+      </div>
+
     </div>
   </header>
   <!-- header area end -->
@@ -131,17 +169,20 @@
   {% if user.is_authenticated %}
   <!-- sidebar start -->
   <div class="sidebar">
-    <a href="{% url 'act-page' %}"><i class="fas fa-check mr-1"></i><span>Action Profile</span></a>
+    <a href="{% url 'act-page' %}"><i class="fas fa-user mr-1"></i><span>Action Profile</span></a>
     <a href="{% url 'no-intake-list' %}"><i class="fas fa-clock mr-1"></i><span>Target No Intake</span></a>
     <a href="{% url 'inventory-list' %}"><i class="fas fa-money-bill"></i><span>Target High Ext</span></a>
     <a href="{% url 'review-targets' %}"><i class="fas fa-clipboard-check mr-2"></i><span>Review Targets</span></a>
+    <hr class="solid" />
     <a href="{% url 'view-docs' %}"><i class="fas fa-book mr-1"></i><span>Documentation</span></a>
+    <hr class="solid" />
+    <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt mr-1"></i><span>Logout</span></a>
   </div>
   <!-- sidebar end -->
   
-  <div class="content" style="margin-left: 250px;">
-  {% else %}
   <div class="content">
+  {% else %}
+  <div class="content" style="margin-left: 0;">
   {% endif %}
 
   <!-- page content -->
