@@ -240,6 +240,9 @@
     const selectedId = $(this).attr('data-id');
 
     finalizePlan(selectedId, host);
+
+    // refresh page to update UI (item off of outgoing requests and updated metrics)
+    window.location.reload(true);
   });
 
   // function for AJAX request to finalize button
@@ -257,9 +260,6 @@
     .fail(function(error) {
       console.log(error);
     });
-
-    // refresh page to update UI (item off of outgoing requests and updated metrics)
-    window.location.reload();
   }
 
 </script>
