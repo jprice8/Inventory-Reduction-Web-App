@@ -40,6 +40,9 @@ class CountUsageList(models.Model):
         if self.issue_qty == 0 & self.po_qty == 0:
             return True
 
+    def calc_ext_cost(self):
+        return self.count_qty * self.luom_cost
+
 
 class MovementPlan(models.Model):
     dmm = models.ForeignKey(User, on_delete=models.CASCADE)

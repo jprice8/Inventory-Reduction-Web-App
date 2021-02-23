@@ -45,14 +45,14 @@
         <td>{{ item.uom_conv }}</td>
         <td>{{ item.uom }}</td>
         <td>${{ item.luom_cost|floatformat:0|intcomma }}</td>
-        <td>${{ item.ext_cost|floatformat:0|intcomma }}</td>
+        <td>${{ item.calc_ext_cost|floatformat:0|intcomma }}</td>
         <td>{{ item.isHidden }}</td>
       </tr>
     {% endfor %}
     </tbody>
   </table>
   {% if not targeted_items %}
-  <h4 class="m-5">You have not accepted any movement plans yet.</h4>
+  <h4 class="m-5">You have not targeted any items yet.</h4>
   {% endif %}
   
 </section>

@@ -34,14 +34,22 @@ def act_page(request):
         luom_po_qty=0
     ).filter(
         isTarget=False
-    ).aggregate(Sum('ext_cost'))
+    )
+    # get ext for no intake items
+    no_intake_ext = 0
+    for t in total_no_move:
+        no_intake_ext += t.count_qty * t.luom_cost
 
     # total ext cost of targeted items
     total_target = CountUsageList.objects.filter(
         fac=dmm.fac
     ).filter(
         isTarget=True
-    ).aggregate(Sum('ext_cost'))
+    )
+    # get ext for items targeted
+    targeted_ext = 0
+    for t in total_target:
+        targeted_ext +=  t.count_qty * t.luom_cost
 
     # total movement plan ext for action of not 0
     completed_plans = MovementPlan.objects.filter(
@@ -87,8 +95,8 @@ def act_page(request):
 
     context = {
         'facility': dmm,
-        'no_move_ext': total_no_move['ext_cost__sum'],
-        'target_ext': total_target['ext_cost__sum'],
+        'no_move_ext': no_intake_ext,
+        'target_ext': targeted_ext,
         'completed_ext': completed_ext,
         'accepted_ext': accepted_ext,
         'incoming_plans': incoming_plans,
@@ -171,11 +179,7 @@ def finalize_plan_handler(request, pk):
                 # update count qty
                 new_qty = plan.item.count_qty - plan.accepted_qty
                 plan.item.count_qty = new_qty
-
-                # update ext cost
-                new_ext = new_qty * plan.item.luom_cost
-                plan.item.ext_cost = new_ext
-                plan.item.save(update_fields=['count_qty', 'ext_cost'])
+                plan.item.save(update_fields=['count_qty'])
 
                 # set isFinalized to True
                 plan.isFinalized = True
@@ -199,10 +203,7 @@ def finalize_plan_handler(request, pk):
             # update count qty
             new_qty = plan.item.count_qty - plan.accepted_qty
             plan.item.count_qty = new_qty
-            # update ext cost
-            new_ext = new_qty * plan.item.luom_cost
-            plan.item.ext_cost = new_ext
-            plan.item.save(update_fields=['count_qty', 'ext_cost'])
+            plan.item.save(update_fields=['count_qty'])
             
     response_data = {
         'django_response': f'plan had isFinalized of...'
