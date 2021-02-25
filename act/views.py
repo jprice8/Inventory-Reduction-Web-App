@@ -45,6 +45,8 @@ def act_page(request):
         fac=dmm.fac
     ).filter(
         isTarget=True
+    ).filter(
+        isHidden=False
     )
     # get ext for items targeted
     targeted_ext = 0
