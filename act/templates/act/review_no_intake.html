@@ -1,0 +1,10 @@
+{% extends 'inventory/base_side.html' %} 
+{% load render_table from django_tables2 %}
+{% load humanize %} 
+{% block content %}
+<section class="container-fluid">
+  <h2 class="mt-4">Review No Intake Items<i class="fas fa-snowflake"></i></h2>
+
+  {% render_table no_intake_table %}
+</section>
+{% endblock %}

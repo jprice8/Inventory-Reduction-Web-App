@@ -8,6 +8,7 @@ from django.urls import reverse_lazy, reverse
 
 from inventory.models import Facility
 from target.models import CountUsageList, MovementPlan
+from .tables import NoIntakeReviewTable
 
 from excel_response import ExcelResponse
 
@@ -215,40 +216,41 @@ def finalize_plan_handler(request, pk):
 
 #### Metric Views ####
 
+# Top 100 Items With No Intake
 @login_required
-def review_accepted(request):
-    # facility of requesting dmm
-    dmm = Facility.objects.filter(dmm=request.user)[0]
+def review_no_intake(request):
+    # get dmm variable
+    matching_facility = Facility.objects.filter(dmm=request.user)
+    if matching_facility.exists():
+        # facility of requesting dmm
+        dmm = Facility.objects.filter(dmm=request.user)[0]
+    else:
+        return render(request, 'inventory/non_dmm_redir.html')
 
-    accepted_plans = MovementPlan.objects.filter(
-        ship_fac=dmm.fac
+    no_intake_items = CountUsageList.objects.filter(
+        fac=dmm.fac
     ).filter(
-        isFinalized=True
+        issue_qty=0
+    ).filter(
+        luom_po_qty=0
+    ).filter(
+        isTarget=False
     )
 
+    no_intake_table = NoIntakeReviewTable(no_intake_items)
+
     context = {
-        'accepted_plans': accepted_plans,
+        'no_intake_table': no_intake_table,
     }
 
-    return render(request, 'act/review_accepted.html', context)
+    return render(request, 'act/review_no_intake.html', context)
 
+# Top 100 Items With Intake
 @login_required
-def review_completed(request):
-    # facility of requesting dmm
-    dmm = Facility.objects.filter(dmm=request.user)[0]
+def review_intake(request):
+    return render(request, 'act/review_intake.html')
 
-    completed_plans = MovementPlan.objects.filter(
-        dmm=request.user
-    ).filter(
-        isFinalized=True
-    )
-
-    context = {
-        'completed_plans': completed_plans,
-    }
-
-    return render(request, 'act/review_completed.html', context)
-
+# Currently Targeted
 @login_required
 def review_targets(request):
     matching_facility = Facility.objects.filter(dmm=request.user)
@@ -273,62 +275,43 @@ def review_targets(request):
 
     return render(request, 'act/review_targeted.html', context)
 
+# Removed Inventory
 @login_required
-def accepted_export_excel(request):
+def review_completed(request):
     # facility of requesting dmm
     dmm = Facility.objects.filter(dmm=request.user)[0]
 
-    # get the date for the output filename
-    t_day = dt.datetime.today().day
-    t_month = dt.datetime.today().month
-    t_year = dt.datetime.today().year
+    completed_plans = MovementPlan.objects.filter(
+        dmm=request.user
+    ).filter(
+        isFinalized=True
+    )
 
-    # queryset of plans that the user has accepted
+    context = {
+        'completed_plans': completed_plans,
+    }
+
+    return render(request, 'act/review_completed.html', context)
+
+# Accepted Inventory
+@login_required
+def review_accepted(request):
+    # facility of requesting dmm
+    dmm = Facility.objects.filter(dmm=request.user)[0]
+
     accepted_plans = MovementPlan.objects.filter(
         ship_fac=dmm.fac
     ).filter(
-        result=MovementPlan.Result.accepted
+        isFinalized=True
     )
 
-    # our list of lists
-    list_of_plans = []
-    # column headers
-    column_headers = [
-        'Sending Facility', 
-        'Receiving Facility', 
-        'Date Requested', 
-        'Expense Account Desc', 
-        'Expense Account No', 
-        'Item Description', 
-        'Item IMMS No', 
-        'Item Mfr Cat No', 
-        'Shipping Qty', 
-        'LUOM Cost',
-        'EXT Cost',
-    ]
-    list_of_plans.append(column_headers)
+    context = {
+        'accepted_plans': accepted_plans,
+    }
 
-    # iterate through the query set and append desired fields to new list
-    for plan in accepted_plans:
-        plan_x = []
+    return render(request, 'act/review_accepted.html', context)
 
-        ext = plan.accepted_qty * plan.item.luom_cost
-        
-        plan_x.append(plan.item.fac)
-        plan_x.append(plan.ship_fac)
-        plan_x.append(plan.created_at)
-        plan_x.append(plan.item.expense_account_desc)
-        plan_x.append(plan.item.expense_account_no)
-        plan_x.append(plan.item.description)
-        plan_x.append(plan.item.imms)
-        plan_x.append(plan.item.mfr_cat_no)
-        plan_x.append(plan.accepted_qty)
-        plan_x.append(plan.item.luom_cost)
-        plan_x.append(ext)
-
-        list_of_plans.append(plan_x)
-
-    return ExcelResponse(list_of_plans, output_filename=f'Reduction App Accepted Items {t_month} {t_day} {t_year}')
+#### Export to Excel ####
     
 @login_required
 def completed_export_excel(request):
@@ -388,6 +371,63 @@ def completed_export_excel(request):
         list_of_plans.append(plan_x)
 
     return ExcelResponse(list_of_plans, output_filename=f'Reduction App Reduced Items {t_month} {t_day} {t_year}')
+
+@login_required
+def accepted_export_excel(request):
+    # facility of requesting dmm
+    dmm = Facility.objects.filter(dmm=request.user)[0]
+
+    # get the date for the output filename
+    t_day = dt.datetime.today().day
+    t_month = dt.datetime.today().month
+    t_year = dt.datetime.today().year
+
+    # queryset of plans that the user has accepted
+    accepted_plans = MovementPlan.objects.filter(
+        ship_fac=dmm.fac
+    ).filter(
+        result=MovementPlan.Result.accepted
+    )
+
+    # our list of lists
+    list_of_plans = []
+    # column headers
+    column_headers = [
+        'Sending Facility', 
+        'Receiving Facility', 
+        'Date Requested', 
+        'Expense Account Desc', 
+        'Expense Account No', 
+        'Item Description', 
+        'Item IMMS No', 
+        'Item Mfr Cat No', 
+        'Shipping Qty', 
+        'LUOM Cost',
+        'EXT Cost',
+    ]
+    list_of_plans.append(column_headers)
+
+    # iterate through the query set and append desired fields to new list
+    for plan in accepted_plans:
+        plan_x = []
+
+        ext = plan.accepted_qty * plan.item.luom_cost
+        
+        plan_x.append(plan.item.fac)
+        plan_x.append(plan.ship_fac)
+        plan_x.append(plan.created_at)
+        plan_x.append(plan.item.expense_account_desc)
+        plan_x.append(plan.item.expense_account_no)
+        plan_x.append(plan.item.description)
+        plan_x.append(plan.item.imms)
+        plan_x.append(plan.item.mfr_cat_no)
+        plan_x.append(plan.accepted_qty)
+        plan_x.append(plan.item.luom_cost)
+        plan_x.append(ext)
+
+        list_of_plans.append(plan_x)
+
+    return ExcelResponse(list_of_plans, output_filename=f'Reduction App Accepted Items {t_month} {t_day} {t_year}')
 
 #### Generic CBV's ####
 

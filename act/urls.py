@@ -11,11 +11,13 @@ urlpatterns = [
     path('<int:pk>/finalizeplanhandler/', views.finalize_plan_handler, name='finalize-plan'),
 
     # review to export out plans
-    path('review/accepted/', views.review_accepted, name='review-accepted'),
-    path('review/accepted/export/', views.accepted_export_excel, name='export-accepted'),
+    path('review/nointake/', views.review_no_intake, name='review-nointake'),
+    path('review/intake/', views.review_intake, name='review-intake'),
+    path('review/targets/', views.review_targets, name='review-targeted'),
     path('review/completed/', views.review_completed, name='review-completed'),
     path('review/completed/export/', views.completed_export_excel, name='export-completed'),
-    path('review/targets/', views.review_targets, name='review-targeted'),
+    path('review/accepted/', views.review_accepted, name='review-accepted'),
+    path('review/accepted/export/', views.accepted_export_excel, name='export-accepted'),
 
     # generic class views for editing movement plans
     path('<int:pk>/itemplans/edit/', views.MovementPlanUpdate.as_view(), name='edit-plan'),
