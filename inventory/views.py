@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 
 import os
 
@@ -23,16 +24,23 @@ def inventory_list(request):
     else:
         return render(request, 'inventory/non_dmm_redir.html')
 
+    count_usage_list = CountUsageList.objects.filter(
+        fac=dmm.fac
+    ).filter(
+        isTarget=False
+    ).exclude(
+        issue_qty=0, luom_po_qty=0
+    )[:100]
+
+    paginator = Paginator(count_usage_list, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     context = {
-        'count_usage_list': CountUsageList.objects.filter(
-            fac=dmm.fac
-        ).filter(
-            isTarget=False
-        ).exclude(
-            issue_qty=0, luom_po_qty=0
-        )[:100],
+        'count_usage_list': count_usage_list,
         'dmm': dmm,
         'DEBUG': debug,
+        'page_obj': page_obj,
     }
 
     return render(request, 'inventory/inventory_list.html', context)

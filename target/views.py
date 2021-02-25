@@ -5,7 +5,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.urls import reverse, reverse_lazy
 from django.core.exceptions import ValidationError
-from django.core.mail import send_mail
+from django.core.paginator import Paginator
 from django.db.models import Sum, Count
 
 import json, os
@@ -26,18 +26,23 @@ def no_intake_list(request):
     else:
         return render(request, 'inventory/non_dmm_redir.html')
 
+    no_move_list = CountUsageList.objects.filter(
+        fac=dmm.fac
+    ).filter(
+        issue_qty=0, luom_po_qty=0
+    ).filter(
+        count_qty__gt=0
+    ).filter(
+        isTarget=False
+    )[:100]
+
+    paginator = Paginator(no_move_list, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
-        'no_move_list': CountUsageList.objects.filter(
-            fac=dmm.fac
-        ).filter(
-            issue_qty=0, luom_po_qty=0
-        ).filter(
-            count_qty__gt=0
-        ).filter(
-            isTarget=False
-        )[:100],
         'DEBUG': debug,
+        'page_obj': page_obj,
     }
 
     return render(request, 'target/no_intake_list.html', context)
@@ -73,11 +78,16 @@ def review_target_items(request):
         isHidden=False
     )[:100]
 
+    paginator = Paginator(target_items_list, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'target_list': target_items_list,
         'DEBUG': debug,
         'agg_plans': agg_plans_per_item,
         'plan_ids': plan_ids,
+        'page_obj': page_obj,
     }
 
     return render(request, 'target/review_targets.html', context)

@@ -1,8 +1,4 @@
-{% extends 'inventory/base_side.html' %}
-
-{% load humanize %}
-
-{% block content %}
+{% extends 'inventory/base_side.html' %} {% load humanize %} {% block content %}
 <section class="container-fluid">
   <h2 class="mt-4">Review Targeted Items<i class="fas fa-crosshairs"></i></h2>
 
@@ -24,7 +20,6 @@
         <th>LUOM</th>
         <th>LUOM Price</th>
         <th>Ext Cost</th>
-        <th>Is Hidden</th>
       </tr>
     </thead>
 
@@ -46,15 +41,13 @@
         <td>{{ item.uom }}</td>
         <td>${{ item.luom_cost|floatformat:0|intcomma }}</td>
         <td>${{ item.calc_ext_cost|floatformat:0|intcomma }}</td>
-        <td>{{ item.isHidden }}</td>
       </tr>
-    {% endfor %}
+      {% endfor %}
     </tbody>
   </table>
   {% if not targeted_items %}
   <h4 class="m-5">You have not targeted any items yet.</h4>
   {% endif %}
-  
 </section>
 
 {% endblock %}

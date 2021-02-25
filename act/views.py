@@ -263,6 +263,8 @@ def review_targets(request):
         fac=dmm.fac
     ).filter(
         isTarget=True
+    ).filter(
+        isHidden=False
     )
 
     context = {

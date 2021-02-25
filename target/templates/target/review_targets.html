@@ -3,6 +3,44 @@
 {% load humanize %}
 {% load static %}
 
+{% block extra_head %}
+<style>
+  .pagination {
+    margin-left: 40px;
+  }
+
+  .pagination a {
+    text-decoration: none;
+  }
+
+  .pagination-number {
+    padding: 0.5em 0.8em;
+    border-radius: 2px;
+    color: #fff;
+    background-color: #0099ff8e;
+  }
+
+  .pagination-number:hover,
+  .pagination-current {
+    background-color: #0099FF;
+  }
+
+  .pagination-action {
+    margin: 0 0.1em;
+    display: inline-block;
+    padding: 0.5em 0.5em;
+    color: #B9B9B9;
+    font-size: 1.3em;
+  }
+
+  .pagination-action:hover,
+  .pagination-previous,
+  .pagination-next {
+    color: #0099FF;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 <main role="main" class="container">
   <!--Modal for selecting reduction qty-->
@@ -14,9 +52,9 @@
       <p class="ml-4">Click on "Set Movement Plan" to continue or click the Target Item check to remove item from the list.</p>
     </div>
   </div>
-  {% if target_list %}
+  {% if page_obj %}
   <ul id="targetlist">
-    {% for item in target_list %}
+    {% for item in page_obj %}
     <li
       style="list-style-type: none;"
       id={{ item.id }}
@@ -33,10 +71,10 @@
           </div>
           <div class="row">
             <div class="col-sm">
-              <p class="card-text">Mfr Cat No: {{ item.mfr_cat_no }}</p>
+              <p class="card-text">IMMS #: {{ item.imms }}</p>
             </div>
             <div class="col-sm">
-              <p class="card-text">IMMS #: {{ item.imms }}</p>
+              <p class="card-text">Mfr Cat No: {{ item.mfr_cat_no }}</p>
             </div>
             <div class="col-sm">
               {% if item.id in plan_ids %}
@@ -89,6 +127,39 @@
     </li>
     {% endfor %}
   </ul>
+
+  <!-- Pagination -->
+  <div class="row m-5">
+    <div class="pagination">
+      <span class="step-links">
+        {% if page_obj.has_previous %}
+          <a class="pagination-action" href="?page=1">
+            <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+          </a>
+          <a class="pagination-action" href="?page={{ page_obj.previous_page_number }}">
+            <i class="fa fa-angle-left" aria-hidden="true"></i>
+          </a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+            <span class="pagination-number pagination-current">{{ num }}</span>
+          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a class="pagination-number" href="?page={{ num }}">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+          <a class="pagination-action" href="?page={{ page_obj.next_page_number }}">
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+          </a>
+          <a class="pagination-action" href="?page={{ page_obj.paginator.num_pages }}">
+            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+          </a>
+        {% endif %}
+      </span>
+    </div>
+  </div>
 </main>
 
 {% else %}
