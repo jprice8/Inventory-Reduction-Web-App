@@ -5,6 +5,8 @@ from django.db.models import Sum
 from django.http import JsonResponse
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.urls import reverse_lazy, reverse
+from django_tables2 import SingleTableView
+from django_tables2.export.views import ExportMixin
 
 from inventory.models import Facility
 from target.models import CountUsageList, MovementPlan
@@ -244,6 +246,38 @@ def review_no_intake(request):
     }
 
     return render(request, 'act/review_no_intake.html', context)
+
+
+class CountUsageListListView(SingleTableView):
+    model = CountUsageList
+    table_class = NoIntakeReviewTable
+    template_name = 'act/review_no_intake.html'
+
+    def get_context_data(self, **kwargs):
+        # get dmm variable
+        matching_facility = Facility.objects.filter(dmm=request.user)
+        if matching_facility.exists():
+            # facility of requesting dmm
+            dmm = Facility.objects.filter(dmm=request.user)[0]
+        else:
+            return render(request, 'inventory/non_dmm_redir.html')
+        # get queryset for no intake items
+        no_intake_items = CountUsageList.objects.filter(
+            fac=dmm.fac
+        ).filter(
+            issue_qty=0
+        ).filter(
+            luom_po_qty=0
+        ).filter(
+            isTarget=False
+        )
+
+        # Call the base implementation to get a context
+        context = super().get_context_data(**kwargs)
+        # Pass in the queryset
+        context['no_intake_items'] = no_intake_items
+        return context
+
 
 # Top 100 Items With Intake
 @login_required

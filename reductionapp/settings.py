@@ -159,7 +159,10 @@ STATICFILES_DIRS = [
 LOGIN_REDIRECT_URL = 'act-page'
 LOGIN_URL = 'login'
 
+# Django crispy forms
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+# Django tables template set to bs4
+DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap4.html'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
