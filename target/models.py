@@ -65,7 +65,7 @@ class MovementPlan(models.Model):
     )
 
     class ShipFacilities(models.TextChoices):
-        TEN = 'TEN', _('Shipping to Tenet Facility')
+        TEN = 'TEN', _('Tenet Facility')
         NON = 'NON', _('Selling or Discarding')
         BMC = '939', _('Baptist Medical Center')
         MTB = '971', _('Mission Trail Baptist Hospital')

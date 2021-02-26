@@ -19,23 +19,23 @@
     <div class="col-md-2"></div>
     <div class="card shadow col-md-4" align="center">
       <div hidden id="debug" data-id={{ DEBUG }}></div>
-      <h2 class="pt-2">Welcome, {{ user.get_username }}</h2>
+      <h2 class="pt-2">Welcome back, {{ user.get_username }}!</h2>
       <h5>DMM at {{ facility.facility_name }}</h5>
       <i class="far fa-hospital fa-5x"></i>
     </div>
     <div class="col-md-4">
       <div class="card shadow"> 
         <ul class="list-group list-group-flush">
-          <li class="list-group-item"><a href="{% url 'review-nointake' %}"><i class="far fa-times-circle"></i><span class="ml-2"></span> Top 100 Items With No Intake: <span style="float: right;"><mark>${{ no_move_ext|floatformat:0|intcomma }}</mark></span></a></li>
-          <li class="list-group-item"><a href="{% url 'review-intake' %}"><i class="far fa-times-circle"></i><span class="ml-2"></span> Top 100 Items With Intake: <span style="float: right;"><mark>${{ intake_ext|floatformat:0|intcomma }}</mark></span></a></li>
+          <li class="list-group-item"><a href="{% url 'review-nointake' %}"><i class="fas fa-snowflake"></i><span class="ml-2"></span> Top 100 Items With No Intake: <span style="float: right;"><mark>${{ no_move_ext|floatformat:0|intcomma }}</mark></span></a></li>
+          <li class="list-group-item"><a href="{% url 'review-intake' %}"><i class="fas fa-fire-alt"></i><span class="ml-2"></span> Top 100 Items With Intake: <span style="float: right;"><mark>${{ intake_ext|floatformat:0|intcomma }}</mark></span></a></li>
           <!-- If no target ext then 0 else show figure -->
           {% if target_ext %}
-          <li class="list-group-item"><a href="{% url 'review-targeted' %}"><i class="fas fa-bullseye"></i><span class="ml-2"></span> Currently Targeted: <span style="float: right;"><mark>${{ target_ext|floatformat:0|intcomma }}</mark></span></a></li>
+          <li class="list-group-item"><a href="{% url 'review-targeted' %}"><i class="fas fa-crosshairs"></i><span class="ml-2"></span> Currently Targeted: <span style="float: right;"><mark>${{ target_ext|floatformat:0|intcomma }}</mark></span></a></li>
           {% else %}
-          <li class="list-group-item"><a href="{% url 'review-targeted' %}"><i class="fas fa-bullseye"></i><span class="ml-2"></span> Currently Targeted: <span style="float: right;"><mark>$0</mark></span></a></li>
+          <li class="list-group-item"><a href="{% url 'review-targeted' %}"><i class="fas fa-crosshairs"></i><span class="ml-2"></span> Currently Targeted: <span style="float: right;"><mark>$0</mark></span></a></li>
           {% endif %}
           <li class="list-group-item"><a href="{% url 'review-completed' %}"><i class="far fa-check-circle"></i><span class="ml-2"></span> Removed Inventory: <span style="float: right;"><mark>${{ completed_ext|floatformat:0|intcomma }}</mark></span></a></li>
-          <li class="list-group-item"><a href="{% url 'review-accepted' %}"><i class="fas fa-truck"></i><span class="ml-1"></span> Accepted Inventory: <span style="float: right;"><mark>${{ accepted_ext|floatformat:0|intcomma }}</mark></span></a></li>
+          <li class="list-group-item"><a href="{% url 'review-accepted' %}"><i class="fas fa-plus-circle"></i><span class="ml-2"></span> Accepted Inventory: <span style="float: right;"><mark>${{ accepted_ext|floatformat:0|intcomma }}</mark></span></a></li>
         </ul>
       </div>
     </div>

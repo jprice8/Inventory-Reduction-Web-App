@@ -10,8 +10,7 @@ from django_tables2.export.views import ExportMixin
 
 from inventory.models import Facility
 from target.models import CountUsageList, MovementPlan
-from .tables import NoIntakeReviewTable
-
+from .tables import CountUsageListReviewTable, MovementPlanReviewTable
 from excel_response import ExcelResponse
 
 import datetime as dt
@@ -235,7 +234,7 @@ def finalize_plan_handler(request, pk):
 # Top 100 Items With No Intake
 class ItemsWithNoIntakeTableView(ExportMixin, SingleTableView):
     model = CountUsageList
-    table_class = NoIntakeReviewTable
+    table_class = CountUsageListReviewTable
     template_name = 'act/review_no_intake.html'
     export_name = 'no_intake_items_list'
 
@@ -259,10 +258,11 @@ class ItemsWithNoIntakeTableView(ExportMixin, SingleTableView):
 
         return no_intake_items
 
+
 # Top 100 Items With Intake
 class ItemsWithIntakeTableView(ExportMixin, SingleTableView):
     model = CountUsageList
-    table_class = NoIntakeReviewTable
+    table_class = CountUsageListReviewTable
     template_name = 'act/review_intake.html'
     export_name = 'intake_items_list'
 
@@ -285,49 +285,58 @@ class ItemsWithIntakeTableView(ExportMixin, SingleTableView):
         return intake_items
 
 # Currently Targeted
-@login_required
-def review_targets(request):
-    matching_facility = Facility.objects.filter(dmm=request.user)
-    if matching_facility.exists():
-        # facility of requesting dmm
-        dmm = Facility.objects.filter(dmm=request.user)[0]
-    else:
-        return render(request, 'inventory/non_dmm_redir.html')
+class ReviewTargetedItemsTableView(ExportMixin, SingleTableView):
+    model = CountUsageList
+    table_class = CountUsageListReviewTable
+    template_name = 'act/review_targeted.html'
+    export_name = 'targeted_items_list'
 
-    # get all target items
-    targeted_items = CountUsageList.objects.filter(
-        fac=dmm.fac
-    ).filter(
-        isTarget=True
-    ).filter(
-        isHidden=False
-    )
-
-    context = {
-        'targeted_items': targeted_items,
-    }
-
-    return render(request, 'act/review_targeted.html', context)
+    def get_table_data(self, **kwargs):
+        # get dmm variable
+        dmm = Facility.objects.filter(dmm=self.request.user)[0]
+        # get queryset for targeted items
+        targeted_items = CountUsageList.objects.filter(
+            fac=dmm.fac
+        ).filter(
+            isTarget=True
+        ).filter(
+            isHidden=False
+        )
+        return targeted_items
 
 # Removed Inventory
-@login_required
-def review_completed(request):
-    # facility of requesting dmm
-    dmm = Facility.objects.filter(dmm=request.user)[0]
+class ReviewCompletedPlansTableView(ExportMixin, SingleTableView):
+    model = MovementPlan
+    table_class = MovementPlanReviewTable
+    template_name = 'act/review_completed.html'
+    export_name = 'items_removed_from_facility'
 
-    completed_plans = MovementPlan.objects.filter(
-        dmm=request.user
-    ).filter(
-        isFinalized=True
-    )
-
-    context = {
-        'completed_plans': completed_plans,
-    }
-
-    return render(request, 'act/review_completed.html', context)
+    def get_table_data(self, **kwargs):
+        # get queryset for removed items
+        completed_plans = MovementPlan.objects.filter(
+            dmm=self.request.user
+        ).filter(
+            isFinalized=True
+        )
+        return completed_plans
 
 # Accepted Inventory
+class ReviewAcceptedPlansTableView(ExportMixin, SingleTableView):
+    model = MovementPlan
+    table_class = MovementPlanReviewTable
+    template_name = 'act/review_accepted.html'
+    export_name = 'items_accepted_into_facility'
+
+    def get_table_data(self, **kwargs):
+        dmm = Facility.objects.filter(dmm=self.request.user)[0]
+        # get queryset for removed items
+        accepted_plans = MovementPlan.objects.filter(
+            ship_fac=dmm.fac
+        ).filter(
+            isFinalized=True
+        )
+        return accepted_plans
+
 @login_required
 def review_accepted(request):
     # facility of requesting dmm

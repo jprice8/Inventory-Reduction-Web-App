@@ -1,53 +1,20 @@
 {% extends 'inventory/base_side.html' %}
-
-{% load humanize %}
-
+{% load render_table from django_tables2 %}
+{% load querystring from django_tables2 %}
 {% block content %}
-<section class="container">
-  <h2 class="mt-4">Review Accepted Movement Plans <i class="fas fa-truck"></i></h2>
-  <p>NOTE: In excel, "Date Requested" will be in UTC timezone.</p>
+<section class="container-fluid">
+  <div style="display: flex; margin-left: 20px;">
+    <h2 class="mt-4 mb-4">Review Items Accepted Into Facility <i class="fas fa-plus-circle"></i></h2>
+    <div style="padding: 5px; margin-top: 18px; margin-left: 20px;">
+      <a href="{% querystring '_export'='csv' %}" class="btn btn-outline-primary">
+        Export to Excel
+      </a>
+    </div>
+  </div>
 
-  <table class="table table-hover">
-    <thead>
-      <tr scope="col">
-        <th>Sending Facility</th>
-        <th>Receiving Facility</th>
-        <th>Date Requested</th>
-        <th>Expense Account Desc</th>
-        <th>Expense Account No</th>
-        <th>Item Description</th>
-        <th>Mfr Cat No</th>
-        <th>IMMS No</th>
-        <th>Accepted Qty</th>
-        <th>Unit Cost</th>
-        <th>Ext Cost</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      {% for plan in accepted_plans %}
-      <tr>
-        <td>{{ plan.item.fac }}</td>
-        <td>{{ plan.ship_fac }}</td>
-        <td>{{ plan.created_at }}</td>
-        <td>{{ plan.item.expense_account_desc }}</td>
-        <td>{{ plan.item.expense_account_no }}</td>
-        <td>{{ plan.item.description }}</td>
-        <td>{{ plan.item.mfr_cat_no }}</td>
-        <td>{{ plan.item.imms }}</td>
-        <td>{{ plan.accepted_qty }}</td>
-        <td>${{ plan.item.luom_cost|floatformat:0|intcomma }}</td>
-        <td>${{ plan.calc_accepted_ext|floatformat:0|intcomma }}</td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-  {% if accepted_plans %}
-  <a href="{% url 'export-accepted' %}" class="btn btn-outline-primary">Export to Excel</a>
-  {% else %}
-  <h4 class="m-5">You have not accepted any movement plans yet.</h4>
-  {% endif %}
-  
+  <div style="margin: 0 20px 20px 20px">
+    {% render_table table %}
+  </div>
 </section>
 
 {% endblock %}

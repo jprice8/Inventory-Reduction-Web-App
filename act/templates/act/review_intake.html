@@ -4,15 +4,16 @@
 {% load humanize %} 
 {% block content %}
 <section class="container-fluid">
-  <div style="display: inline-flex;">
-    <h3>Review Items With Intake</h3>
-    <a>
-      Export to Excel
-    </a>
+  <div style="display: flex; margin-left: 20px;">
+    <h2 class="mt-4 mb-4">Review Items With Intake <i class="fas fa-fire-alt"></i></h2>
+    <div style="padding: 5px; margin-top: 18px; margin-left: 20px;">
+      <a href="{% querystring '_export'='csv' %}" class="btn btn-outline-primary">
+        Export to Excel
+      </a>
+    </div>
   </div>
-  <div>
+  <div style="margin: 0 20px 20px 20px">
     {% render_table table %}
   </div>
-
 </section>
 {% endblock %}

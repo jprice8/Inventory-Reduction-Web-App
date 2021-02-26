@@ -3,16 +3,18 @@
 {% load querystring from django_tables2 %}
 {% load humanize %}
 {% block content %}
-  <div id="content">
-    <div style="display: inline-flex;">
-    <h3 style="margin-left: 20px; margin-right: 20px;">Review Items With No Intake</h3>
-      <a href="{% querystring '_export'='csv' %}" class="btn btn-outline-primary">
-        Export Excel
-      </a>
+  <section class="container-fluid">
+    <div style="display: flex; margin-left: 20px;">
+      <h2 class="mt-4 mb-4">Review Items With No Intake <i class="fas fa-snowflake"></i></h2>
+      <div style="padding: 5px; margin-top: 18px; margin-left: 20px;">
+        <a href="{% querystring '_export'='csv' %}" class="btn btn-outline-primary">
+          Export to Excel
+        </a>
+      </div>
     </div>
-    <div style="margin: 20px;">
+    <div style="margin: 0 20px 20px 20px;">
       {% render_table table %}
     </div>
-  </div>
+  </section>
 {% endblock %}
 
