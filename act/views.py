@@ -253,14 +253,9 @@ class CountUsageListListView(SingleTableView):
     table_class = NoIntakeReviewTable
     template_name = 'act/review_no_intake.html'
 
-    def get_context_data(self, **kwargs):
+    def get_table_data(self, **kwargs):
         # get dmm variable
-        matching_facility = Facility.objects.filter(dmm=request.user)
-        if matching_facility.exists():
-            # facility of requesting dmm
-            dmm = Facility.objects.filter(dmm=request.user)[0]
-        else:
-            return render(request, 'inventory/non_dmm_redir.html')
+        dmm = Facility.objects.filter(dmm=self.request.user)[0]
         # get queryset for no intake items
         no_intake_items = CountUsageList.objects.filter(
             fac=dmm.fac
@@ -273,11 +268,10 @@ class CountUsageListListView(SingleTableView):
         )
 
         # Call the base implementation to get a context
-        context = super().get_context_data(**kwargs)
+        # context = super().get_context_data(**kwargs)
         # Pass in the queryset
-        context['no_intake_items'] = no_intake_items
-        return context
-
+        # context['no_intake_table'] = no_intake_items
+        return no_intake_items
 
 # Top 100 Items With Intake
 @login_required
