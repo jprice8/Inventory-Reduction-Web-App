@@ -1,9 +1,15 @@
 {% extends 'inventory/base_side.html' %}
 {% load render_table from django_tables2 %}
+{% load querystring from django_tables2 %}
 {% load humanize %}
 {% block content %}
   <div id="content">
-    <h3 style="margin-left: 20px;">Review Items With No Intake</h3>
+    <div style="display: inline-flex;">
+    <h3 style="margin-left: 20px; margin-right: 20px;">Review Items With No Intake</h3>
+      <a href="{% querystring '_export'='csv' %}" class="btn btn-outline-primary">
+        Export Excel
+      </a>
+    </div>
     <div style="margin: 20px;">
       {% render_table table %}
     </div>

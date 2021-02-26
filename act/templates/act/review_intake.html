@@ -1,6 +1,18 @@
-{% extends 'inventory/base_side.html' %} {% load humanize %} {% block content %}
+{% extends 'inventory/base_side.html' %} 
+{% load render_table from django_tables2 %}
+{% load querystring from django_tables2 %}
+{% load humanize %} 
+{% block content %}
 <section class="container-fluid">
-  <h2 class="mt-4">Review Intake Items<i class="fas fa-fire-alt"></i></h2>
+  <div style="display: inline-flex;">
+    <h3>Review Items With Intake</h3>
+    <a>
+      Export to Excel
+    </a>
+  </div>
+  <div>
+    {% render_table table %}
+  </div>
 
 </section>
 {% endblock %}

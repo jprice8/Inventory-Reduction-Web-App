@@ -43,6 +43,19 @@ def act_page(request):
     for t in total_no_move:
         no_intake_ext += t.count_qty * t.luom_cost
 
+    # total ext cost of items with intake at dmm's facility
+    total_intake = CountUsageList.objects.filter(
+        fac=dmm.fac
+    ).filter(
+        isTarget=False
+    ).exclude(
+        issue_qty=0, luom_po_qty=0
+    )[:100]
+    # get ext for intake items
+    intake_ext = 0
+    for t in total_intake:
+        intake_ext += t.count_qty * t.luom_cost
+
     # total ext cost of targeted items
     total_target = CountUsageList.objects.filter(
         fac=dmm.fac
@@ -101,6 +114,7 @@ def act_page(request):
     context = {
         'facility': dmm,
         'no_move_ext': no_intake_ext,
+        'intake_ext': intake_ext,
         'target_ext': targeted_ext,
         'completed_ext': completed_ext,
         'accepted_ext': accepted_ext,
@@ -219,45 +233,17 @@ def finalize_plan_handler(request, pk):
 #### Metric Views ####
 
 # Top 100 Items With No Intake
-@login_required
-def review_no_intake(request):
-    # get dmm variable
-    matching_facility = Facility.objects.filter(dmm=request.user)
-    if matching_facility.exists():
-        # facility of requesting dmm
-        dmm = Facility.objects.filter(dmm=request.user)[0]
-    else:
-        return render(request, 'inventory/non_dmm_redir.html')
-
-    no_intake_items = CountUsageList.objects.filter(
-        fac=dmm.fac
-    ).filter(
-        issue_qty=0
-    ).filter(
-        luom_po_qty=0
-    ).filter(
-        isTarget=False
-    )
-
-    no_intake_table = NoIntakeReviewTable(no_intake_items)
-
-    context = {
-        'no_intake_table': no_intake_table,
-    }
-
-    return render(request, 'act/review_no_intake.html', context)
-
-
-class CountUsageListListView(SingleTableView):
+class ItemsWithNoIntakeTableView(ExportMixin, SingleTableView):
     model = CountUsageList
     table_class = NoIntakeReviewTable
     template_name = 'act/review_no_intake.html'
+    export_name = 'no_intake_items_list'
 
     def get_table_data(self, **kwargs):
         # get dmm variable
         dmm = Facility.objects.filter(dmm=self.request.user)[0]
         # get queryset for no intake items
-        no_intake_items = CountUsageList.objects.filter(
+        sliced_qs_ids = CountUsageList.objects.filter(
             fac=dmm.fac
         ).filter(
             issue_qty=0
@@ -265,18 +251,38 @@ class CountUsageListListView(SingleTableView):
             luom_po_qty=0
         ).filter(
             isTarget=False
-        )
+        ).values_list(
+            'id', flat=True
+        )[:100]
 
-        # Call the base implementation to get a context
-        # context = super().get_context_data(**kwargs)
-        # Pass in the queryset
-        # context['no_intake_table'] = no_intake_items
+        no_intake_items = CountUsageList.objects.filter(id__in=sliced_qs_ids)
+
         return no_intake_items
 
 # Top 100 Items With Intake
-@login_required
-def review_intake(request):
-    return render(request, 'act/review_intake.html')
+class ItemsWithIntakeTableView(ExportMixin, SingleTableView):
+    model = CountUsageList
+    table_class = NoIntakeReviewTable
+    template_name = 'act/review_intake.html'
+    export_name = 'intake_items_list'
+
+    def get_table_data(self, **kwargs):
+        # get dmm variable
+        dmm = Facility.objects.filter(dmm=self.request.user)[0]
+        # get queryset for intake items
+        sliced_qs_ids = CountUsageList.objects.filter(
+            fac=dmm.fac
+        ).filter(
+            isTarget=False
+        ).exclude(
+            issue_qty=0, luom_po_qty=0
+        ).values_list(
+            'id', flat=True
+        )[:100]
+
+        intake_items = CountUsageList.objects.filter(id__in=sliced_qs_ids)
+
+        return intake_items
 
 # Currently Targeted
 @login_required

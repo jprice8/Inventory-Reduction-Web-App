@@ -26,8 +26,8 @@
     <div class="col-md-4">
       <div class="card shadow"> 
         <ul class="list-group list-group-flush">
-          <li class="list-group-item"><a href="{% url 'review-nointake-table' %}"><i class="far fa-times-circle"></i><span class="ml-2"></span> Top 100 Items With No Intake: <span style="float: right;"><mark>${{ no_move_ext|floatformat:0|intcomma }}</mark></span></a></li>
-          <li class="list-group-item"><a href="{% url 'review-intake' %}"><i class="far fa-times-circle"></i><span class="ml-2"></span> Top 100 Items With Intake: <span style="float: right;"><mark>${{ no_move_ext|floatformat:0|intcomma }}</mark></span></a></li>
+          <li class="list-group-item"><a href="{% url 'review-nointake' %}"><i class="far fa-times-circle"></i><span class="ml-2"></span> Top 100 Items With No Intake: <span style="float: right;"><mark>${{ no_move_ext|floatformat:0|intcomma }}</mark></span></a></li>
+          <li class="list-group-item"><a href="{% url 'review-intake' %}"><i class="far fa-times-circle"></i><span class="ml-2"></span> Top 100 Items With Intake: <span style="float: right;"><mark>${{ intake_ext|floatformat:0|intcomma }}</mark></span></a></li>
           <!-- If no target ext then 0 else show figure -->
           {% if target_ext %}
           <li class="list-group-item"><a href="{% url 'review-targeted' %}"><i class="fas fa-bullseye"></i><span class="ml-2"></span> Currently Targeted: <span style="float: right;"><mark>${{ target_ext|floatformat:0|intcomma }}</mark></span></a></li>

@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import CountUsageListListView
+from .views import ItemsWithNoIntakeTableView, ItemsWithIntakeTableView
 
 urlpatterns = [
     # act urls
@@ -12,9 +12,8 @@ urlpatterns = [
     path('<int:pk>/finalizeplanhandler/', views.finalize_plan_handler, name='finalize-plan'),
 
     # review to export out plans
-    path('review/nointake/', views.review_no_intake, name='review-nointake'),
-    path('review/nointaketable/', CountUsageListListView.as_view(), name='review-nointake-table'),
-    path('review/intake/', views.review_intake, name='review-intake'),
+    path('review/nointaketable/', ItemsWithNoIntakeTableView.as_view(), name='review-nointake'),
+    path('review/intake/', ItemsWithIntakeTableView.as_view(), name='review-intake'),
     path('review/targets/', views.review_targets, name='review-targeted'),
     path('review/completed/', views.review_completed, name='review-completed'),
     path('review/completed/export/', views.completed_export_excel, name='export-completed'),
