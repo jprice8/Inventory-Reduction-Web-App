@@ -21,4 +21,6 @@ urlpatterns = [
 
     # act urls
     path('act/', include('act.urls')),
+
+    path('leaderboard/', include('leaderboard.urls')),
 ]

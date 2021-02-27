@@ -7,7 +7,7 @@
 <div class="container">
   <div class="row">
     <div class="col-sm">
-      <h3 class="mt-4 border-bottom">Set Movement Plan for Item:</h3>
+      <h1 style="padding-bottom: 4px;" class="mt-4 border-bottom">Set Movement Plan</h1>
     </div>
   </div>
 
@@ -27,7 +27,9 @@
     </div>
   </div>
 
-  <h4 class="mt-4 border-bottom">BHS Facilities Showing Inventory History or Intake History</h4>
+  <div style="margin-bottom: 8px;" class="border-bottom">
+    <h4 class="mt-4">BHS Facilities Showing Inventory History or Intake History</h4>
+  </div>
   {% for item in matched_items %}
     <div class="card shadow m-2" style="width: fit-content;">
       <div class="card-body">
@@ -38,8 +40,18 @@
       </div>
     </div>
   {% endfor %}
-
-  <h4 class="mt-5 border-bottom">Tenet Facilities Showing Purchase Order History</h4>
+  
+  <div style="display: flex;" class="border-bottom">
+    <h4 class="mt-5">Tenet Facilities Showing Purchase Order History</h4>
+    <a 
+      class="btn btn-outline-secondary"
+      style="margin: 38px 0 8px 48px;"
+      href="https://d3epl9dvc9angi.cloudfront.net/Tenet_DMM_Contact_List.xlsx"
+      download
+    >
+      Download Tenet DMM Contact Info
+    </a>
+  </div>
   {% if matched_pos %}
   {% for match in matched_pos %}
     <div class="card shadow m-2" style="width: auto;">

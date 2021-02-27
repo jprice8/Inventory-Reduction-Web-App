@@ -20,6 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 INVENTORY_TEMPLATE_DIR = os.path.join(BASE_DIR, "inventory", "templates")
 TARGET_TEMPLATE_DIR = os.path.join(BASE_DIR, "target", "templates")
 ACT_TEMPLATE_DIR = os.path.join(BASE_DIR, "act", "templates")
+LEADERBOARD_TEMPLATE_DIR = os.path.join(BASE_DIR, "leaderboard", "templates")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     'users',
     'target',
     'act',
+    'leaderboard',
 
     'django.contrib.humanize',
     'storages',
@@ -74,6 +76,7 @@ TEMPLATES = [
             INVENTORY_TEMPLATE_DIR,
             TARGET_TEMPLATE_DIR,
             ACT_TEMPLATE_DIR,
+            LEADERBOARD_TEMPLATE_DIR,
             ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -154,6 +157,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "inventory", "static"),
     os.path.join(BASE_DIR, "target", "static"),
     os.path.join(BASE_DIR, "act", "static"),
+    os.path.join(BASE_DIR, "leaderboard", "static"),
 ]
 
 LOGIN_REDIRECT_URL = 'act-page'
