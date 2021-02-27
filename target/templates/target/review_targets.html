@@ -46,7 +46,7 @@
   <!--Modal for selecting reduction qty-->
   <div class="row m-4">
     <!--No Move List-->
-    <div class="col-10">
+    <div class="col-10" style="margin-left: 20px;">
       <div hidden id="debug" data-id={{ DEBUG }}></div>
       <h1 class="mt-4 ml-2">Review Target Items <i class="fas fa-clipboard-check"></i></h1>
       <p class="ml-3">
@@ -135,7 +135,7 @@
                     <label class="form-check-label ml-2" for="flexSwitchCheckDefault">Target Item</label>
                   </div>
                 </div>
-                <div class="col-sm">
+                <div class="col-4-sm">
                   <div class="btn-group" role="group" aria-label="set plan and see plans">
                     <a class="btn btn-primary mt-3" href="{% url 'move-targets' item.id %}">Set Movement Plan</a>
                     <a class="btn btn-secondary mt-3" href="{% url 'see-item-plans' item.id %}">See All Plans</a>

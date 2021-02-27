@@ -23,7 +23,7 @@
       <p class="m-2">Default UOM: {{ target_item.default_uom }}</p>
       <p class="m-2">UOM Conv. Factor: {{ target_item.uom_conv }}</p>
       <p class="m-2">LUOM: {{ target_item.uom }}</p>
-      <p class="m-2">My Quantity at Last Count: {{ target_item.count_qty }}</p>
+      <p class="m-2">My Quantity on {{ target_item.period|date:"M d Y" }}: {{ target_item.count_qty }}</p>
     </div>
   </div>
 
@@ -34,7 +34,7 @@
     <div class="card shadow m-2" style="width: fit-content;">
       <div class="card-body">
         <h5 class="card-title">For Facility: <mark>{{ item.fac }}</mark></h5>
-        <p class="card-text">Recorded count quantity on {{ item.period|date:"M Y" }}: {{ item.count_qty|intcomma }}</p>
+        <p class="card-text">Recorded count quantity on {{ item.period|date:"M d Y" }}: {{ item.count_qty|intcomma }}</p>
         <p class="card-text">Purchase Order Quantity in 2020: {{ item.luom_po_qty|intcomma }}</p>
         <p class="card-text">Issue Quantity in 2020: {{ item.issue_qty|intcomma }}</p>
       </div>
