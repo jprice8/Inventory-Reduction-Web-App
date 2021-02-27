@@ -12,6 +12,7 @@ import json, os
 
 from .models import CountUsageList, MovementPlan, TenetPO
 from .forms import MovementPlanForm
+from .filters import ItemFilter
 from inventory.models import Facility
 
 from reductionapp.settings import EMAIL_HOST_USER
@@ -26,7 +27,7 @@ def no_intake_list(request):
     else:
         return render(request, 'inventory/non_dmm_redir.html')
 
-    no_move_list = CountUsageList.objects.filter(
+    sliced_qs = CountUsageList.objects.filter(
         fac=dmm.fac
     ).filter(
         issue_qty=0, luom_po_qty=0
@@ -34,15 +35,24 @@ def no_intake_list(request):
         count_qty__gt=0
     ).filter(
         isTarget=False
+    ).values_list(
+        'id', flat=True
     )[:100]
 
-    paginator = Paginator(no_move_list, 20)
+    no_move_list = CountUsageList.objects.filter(id__in=sliced_qs)
+
+    # django-filter our queryset
+    item_filter = ItemFilter(request.GET, queryset=no_move_list)
+
+    # built in pagination
+    paginator = Paginator(item_filter.qs, 20)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
     context = {
         'DEBUG': debug,
         'page_obj': page_obj,
+        'filter': item_filter,
     }
 
     return render(request, 'target/no_intake_list.html', context)
@@ -68,7 +78,7 @@ def review_target_items(request):
     for i in all_plans:
         plan_ids.append(i.item_id)
 
-    target_items_list = CountUsageList.objects.filter(
+    sliced_qs = CountUsageList.objects.filter(
         fac=dmm.fac
     ).filter(
         count_qty__gt=0
@@ -76,14 +86,23 @@ def review_target_items(request):
         isTarget=True
     ).filter(
         isHidden=False
+    ).values_list(
+        'id', flat=True
     )[:100]
 
-    paginator = Paginator(target_items_list, 20)
+    # make a copy so we can filter the qs
+    target_items_list = CountUsageList.objects.filter(id__in=sliced_qs)
+
+    # django-filter our queryset
+    item_filter = ItemFilter(request.GET, queryset=target_items_list)
+
+    # built in pagination
+    paginator = Paginator(item_filter.qs, 20)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
     context = {
-        'target_list': target_items_list,
+        'filter': item_filter,
         'DEBUG': debug,
         'agg_plans': agg_plans_per_item,
         'plan_ids': plan_ids,

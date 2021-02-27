@@ -1,5 +1,5 @@
 {% extends 'inventory/base_side.html' %}
-
+{% load crispy_forms_tags %}
 {% load humanize %}
 
 {% block extra_head %}
@@ -48,7 +48,21 @@
       <div class="col-sm-10">
         <div hidden id="debug" data-id={{ DEBUG }}></div>
         <h1 class="mt-4 ml-2">Target Items With Intake <i class="fas fa-fire-alt"></i></h1>
-        <p class="ml-4">Top 100 items, sorted by extended cost, from your Surgery/Cath Lab that are showing purchase order history or issue history for FY2020.</p>
+        <p class="ml-3">Top 100 items, sorted by extended cost, from your Surgery/Cath Lab that are showing purchase order history or issue history for FY2020.</p>
+      </div>
+    </div>
+
+    <!-- Django Filter -->
+    <div class="row">
+      <div class="col-sm-8">
+        <div class="card card-body shadow" style="margin-left: 150px;">
+          <form method="GET">
+            {{ filter.form|crispy }}
+            <button class="btn btn-primary" type="submit">
+              Filter
+            </button>
+          </form>
+        </div>
       </div>
     </div>
 

@@ -9,6 +9,7 @@ import os
 
 from .models import Invcount, Facility
 from target.models import CountUsageList
+from target.filters import ItemFilter
 
 def index(request):
     return render(request, 'inventory/landing.html')
@@ -24,20 +25,29 @@ def inventory_list(request):
     else:
         return render(request, 'inventory/non_dmm_redir.html')
 
-    count_usage_list = CountUsageList.objects.filter(
+    sliced_qs = CountUsageList.objects.filter(
         fac=dmm.fac
     ).filter(
         isTarget=False
     ).exclude(
         issue_qty=0, luom_po_qty=0
+    ).values_list(
+        'id', flat=True
     )[:100]
 
-    paginator = Paginator(count_usage_list, 20)
+    # make a copy so we can filter the qs
+    intake_list = CountUsageList.objects.filter(id__in=sliced_qs)
+
+    # django-filter our queryset
+    item_filter = ItemFilter(request.GET, queryset=intake_list)
+
+    # built in pagination
+    paginator = Paginator(item_filter.qs, 20)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
     context = {
-        'count_usage_list': count_usage_list,
+        'filter': item_filter,
         'dmm': dmm,
         'DEBUG': debug,
         'page_obj': page_obj,

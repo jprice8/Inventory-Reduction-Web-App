@@ -1,5 +1,5 @@
 {% extends 'inventory/base_side.html' %}
-
+{% load crispy_forms_tags %}
 {% load humanize %}
 {% load static %}
 
@@ -46,87 +46,112 @@
   <!--Modal for selecting reduction qty-->
   <div class="row m-4">
     <!--No Move List-->
-    <div class="col-8">
+    <div class="col-10">
       <div hidden id="debug" data-id={{ DEBUG }}></div>
       <h1 class="mt-4 ml-2">Review Target Items <i class="fas fa-clipboard-check"></i></h1>
-      <p class="ml-4">Click on "Set Movement Plan" to continue or click the Target Item check to remove item from the list.</p>
+      <p class="ml-3">
+        Click on "Set Movement Plan" to set a movement plan or click the Target Item check to remove the item from the list.
+        Once you are satisfied with the inventory level of the item, click the Blue "X" to dismiss the item from the app.
+      </p>
     </div>
   </div>
-  {% if page_obj %}
-  <ul id="targetlist">
-    {% for item in page_obj %}
-    <li
-      style="list-style-type: none;"
-      id={{ item.id }}
-    >
-      <div class="card shadow mt-3">
-        <div class="card-body">
-          <div class="row">
-            <div class="col-sm">
-              <h5 class="card-title">{{ item.description }}</h5>
-            </div>
-            <div class="col-sm-1">
-              <a href="{% url 'review-targets' %}" data-id={{ item.id }} class="hide-btn"><i class="fas fa-times fa-2x"></i></a>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm">
-              <p class="card-text">IMMS #: {{ item.imms }}</p>
-            </div>
-            <div class="col-sm">
-              <p class="card-text">Mfr Cat No: {{ item.mfr_cat_no }}</p>
-            </div>
-            <div class="col-sm">
-              {% if item.id in plan_ids %}
-                {% for plan in agg_plans %}
-                  {% if item.id == plan.item %}
-                  <p>Plans Set: {{ plan.agg_plans }}</p>
-                  {% endif %}
-                {% endfor %}
-              {% else %}
-              <p>Plans Set: 0</p>
-              {% endif %}
-            </div>
-          </div>
 
-          <div class="row">
-            <div class="col-sm">
-              <p class="card-text">Remaining Quantity: {{ item.count_qty|intcomma }}</p>
-            </div>
-            <div class="col-sm">
-              <p class="card-text">
-                LUOM Price: ${{ item.luom_cost|floatformat:0|intcomma }}
-              </p>
-            </div>
-            <div class="col-sm">
-              <p class="card-text">
-                Ext Cost: ${{ item.calc_ext_cost|floatformat:0|intcomma }}
-              </p>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm">
-              <div class="form-check form-switch mt-3">
-                <input class="form-check-input" checked type="checkbox" data-id={{ item.id }}>
-                <label class="form-check-label ml-2" for="flexSwitchCheckDefault">Target Item</label>
-              </div>
-            </div>
-            <div class="col-sm">
-              <div class="btn-group" role="group" aria-label="set plan and see plans">
-                <a class="btn btn-primary mt-3" href="{% url 'move-targets' item.id %}">Set Movement Plan</a>
-                <a class="btn btn-secondary mt-3" href="{% url 'see-item-plans' item.id %}">See All Plans</a>
-              </div>
-            </div>
-            <div class="col-sm mt-2">
-              
-            </div>
-          </div>
-        </div>
+  <!-- Django Filter -->
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="card card-body shadow" style="margin-left: 150px;">
+        <form method="GET">
+          {{ filter.form|crispy }}
+          <button class="btn btn-primary" type="submit">
+            Filter
+          </button>
+        </form>
       </div>
-    </li>
-    {% endfor %}
-  </ul>
+    </div>
+  </div>
+
+  <!-- List of target items -->
+
+  {% if page_obj %}
+  <div class="row m-4">
+    <div class="col-sm-10">
+
+      <ul id="targetlist">
+        {% for item in page_obj %}
+        <li
+          style="list-style-type: none;"
+          id={{ item.id }}
+        >
+          <div class="card shadow mt-3">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm">
+                  <h5 class="card-title">{{ item.description }}</h5>
+                </div>
+                <div class="col-sm-1">
+                  <a href="{% url 'review-targets' %}" data-id={{ item.id }} class="hide-btn"><i class="fas fa-times fa-2x"></i></a>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm">
+                  <p class="card-text">IMMS #: {{ item.imms }}</p>
+                </div>
+                <div class="col-sm">
+                  <p class="card-text">Mfr Cat No: {{ item.mfr_cat_no }}</p>
+                </div>
+                <div class="col-sm">
+                  {% if item.id in plan_ids %}
+                    {% for plan in agg_plans %}
+                      {% if item.id == plan.item %}
+                      <p>Plans Set: {{ plan.agg_plans }}</p>
+                      {% endif %}
+                    {% endfor %}
+                  {% else %}
+                  <p>Plans Set: 0</p>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm">
+                  <p class="card-text">Remaining Quantity: {{ item.count_qty|intcomma }}</p>
+                </div>
+                <div class="col-sm">
+                  <p class="card-text">
+                    LUOM Price: ${{ item.luom_cost|floatformat:0|intcomma }}
+                  </p>
+                </div>
+                <div class="col-sm">
+                  <p class="card-text">
+                    Ext Cost: ${{ item.calc_ext_cost|floatformat:0|intcomma }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm">
+                  <div class="form-check form-switch mt-3">
+                    <input class="form-check-input" checked type="checkbox" data-id={{ item.id }}>
+                    <label class="form-check-label ml-2" for="flexSwitchCheckDefault">Target Item</label>
+                  </div>
+                </div>
+                <div class="col-sm">
+                  <div class="btn-group" role="group" aria-label="set plan and see plans">
+                    <a class="btn btn-primary mt-3" href="{% url 'move-targets' item.id %}">Set Movement Plan</a>
+                    <a class="btn btn-secondary mt-3" href="{% url 'see-item-plans' item.id %}">See All Plans</a>
+                  </div>
+                </div>
+                <div class="col-sm mt-2">
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
 
   <!-- Pagination -->
   <div class="row m-5">
