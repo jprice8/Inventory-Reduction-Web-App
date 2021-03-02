@@ -237,9 +237,11 @@
   }
 
   // on clicking finalize button do...
-  $('.btn-outline-dark').click(function() {
+  $('.btn-outline-dark').click(function(btn) {
     const selectedId = $(this).attr('data-id');
 
+    btn.disabled = true;
+    btn.value = 'submitting...'
     finalizePlan(selectedId, host);
 
     // refresh page to update UI (item off of outgoing requests and updated metrics)

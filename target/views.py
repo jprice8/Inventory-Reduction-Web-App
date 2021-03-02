@@ -134,9 +134,11 @@ def move_targets(request, pk):
         '-luom_qty'
     )
 
-    # Cumulative ship qty for all of the item's plans.
+    # Cumulative ship qty for all respective outstanding item plans.
     agg_qty_set = MovementPlan.objects.filter(
         item=item_from_id
+    ).filter(
+        isFinalized=False
     ).aggregate(Sum('ship_qty'))
     cum_ship_qty = agg_qty_set['ship_qty__sum']
 
