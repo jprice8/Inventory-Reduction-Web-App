@@ -53,6 +53,7 @@
                   <th>Requesting DMM</th>
                   <th>Date Requested</th>
                   <th>Item Description</th>
+                  <th>IMMS</th>
                   <th>Mfr Cat No</th>
                   <th>Send Qty</th>
                   <th>Accept Qty</th>
@@ -68,6 +69,7 @@
                   <td>{{ plan.dmm }}</td>
                   <td>{{ plan.created_at }}</td>
                   <td>{{ plan.item.description }}</td>
+                  <td>{{ plan.item.imms }}</td>
                   <td>{{ plan.item.mfr_cat_no }}</td>
                   <td>{{ plan.ship_qty }}</td>
                   <td><input type="number" id="accept-qty-input-{{ plan.id }}" name="accept-qty-input" min="1" max={{ plan.ship_qty }} step="1" value="1" /></td>
@@ -104,6 +106,7 @@
             <th>Destination</th>
             <th>Item Description</th>
             <th>IMMS</th>
+            <th>Mfr Cat No</th>
             <th>Status</th>
             <th>Requested Qty</th>
             <th>Accepted Qty</th>
@@ -121,6 +124,7 @@
             <td>{{ plan.ship_fac }}</td>
             <td>{{ plan.item.description }}</td>
             <td>{{ plan.item.imms }}</td>
+            <td>{{ plan.item.mfr_cat_no }}</td>
             <td><mark>{{ plan.result }}</mark></td>
             <td>{{ plan.ship_qty }}</td>
             <td>{{ plan.accepted_qty }}</td>

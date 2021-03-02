@@ -106,7 +106,7 @@ def act_page(request):
     ).exclude(
         isFinalized=True
     ).order_by(
-        '-item', '-ship_qty'
+        'item', 'created_at'
     )
 
     context = {
