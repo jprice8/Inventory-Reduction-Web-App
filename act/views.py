@@ -193,10 +193,10 @@ def finalize_plan_handler(request, pk):
         if plan.decision == MovementPlan.MovementOptions.system:
             # check the result. If accepted, win. If rejected, delete. Else, pass.
             if plan.result == MovementPlan.Result.accepted:
-                # update count qty
-                new_qty = plan.item.count_qty - plan.accepted_qty
-                plan.item.count_qty = new_qty
-                plan.item.save(update_fields=['count_qty'])
+                
+                # add qty to item's shipped qty array
+                plan.item.shipped_qty.append(plan.accepted_qty)
+                plan.item.save(update_fields=['shipped_qty'])
 
                 # set isFinalized to True
                 plan.isFinalized = True
@@ -217,11 +217,10 @@ def finalize_plan_handler(request, pk):
             plan.isFinalized = True
             plan.save(update_fields=['result', 'accepted_qty', 'isFinalized'])
 
-            # update count qty
-            new_qty = plan.item.count_qty - plan.accepted_qty
-            plan.item.count_qty = new_qty
-            plan.item.save(update_fields=['count_qty'])
-            
+            # add qty to item's shipped qty array
+            plan.item.shipped_qty.append(plan.accepted_qty)
+            plan.item.save(update_fields=['shipped_qty'])
+
     response_data = {
         'django_response': f'plan had isFinalized of...'
     }

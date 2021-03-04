@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from django.contrib.postgres.fields import ArrayField
 
 
 class CountUsageList(models.Model):
@@ -28,6 +29,7 @@ class CountUsageList(models.Model):
     ext_cost = models.FloatField(null=False)
     isTarget = models.BooleanField(null=False, default=False)
     isHidden = models.BooleanField(null=False, default=False)
+    shipped_qty = ArrayField(models.IntegerField(blank=True), null=True, default=list)
 
     class Meta:
         ordering = ('-ext_cost', )
@@ -41,7 +43,19 @@ class CountUsageList(models.Model):
             return True
 
     def calc_ext_cost(self):
-        return self.count_qty * self.luom_cost
+        total = 0
+        for i in self.shipped_qty:
+            total += 1
+
+        remaining = self.count_qty - total
+        return remaining * self.luom_cost
+
+    def calc_remaining_qty(self):
+        total = 0
+        for i in self.shipped_qty:
+            total += i
+        
+        return self.count_qty - total
 
 
 class MovementPlan(models.Model):

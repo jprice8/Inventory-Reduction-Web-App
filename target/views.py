@@ -72,7 +72,7 @@ def review_target_items(request):
     ).annotate(
         agg_plans=Count('id')
     )
-    
+
     # get all item ids from plans
     plan_ids = []
     for i in all_plans:

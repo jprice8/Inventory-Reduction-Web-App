@@ -1,6 +1,7 @@
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.contrib.humanize.templatetags.humanize import naturalday
 import django_tables2 as tables
+from django_tables2.utils import Accessor
 from target.models import CountUsageList, MovementPlan
 
 class FloatColumn(tables.Column):
@@ -17,13 +18,18 @@ class DateColumn(tables.Column):
 
 class CountUsageListReviewTable(tables.Table):
     period = DateColumn(verbose_name="Count Date")
-    count_qty = IntColumn()
-    issue_qty = IntColumn()
+    issue_qty = IntColumn(verbose_name="Issue Qty")
     luom_po_qty = IntColumn(verbose_name="PO Qty")
     imms_create_date = DateColumn()
     uom_conv = IntColumn()
     luom_cost = FloatColumn()
-    ext_cost = FloatColumn()
+    ext_cost = FloatColumn(
+        accessor=Accessor('calc_ext_cost')
+    )
+    remaining_qty = IntColumn(
+        accessor=Accessor('calc_remaining_qty'),
+        verbose_name="Remaining Qty"
+    )
 
     class Meta:
         model = CountUsageList
@@ -31,7 +37,7 @@ class CountUsageListReviewTable(tables.Table):
         fields = (
             'period', 
             'imms', 
-            'count_qty', 
+            'remaining_qty', 
             'issue_qty', 
             'luom_po_qty',
             'mfr',

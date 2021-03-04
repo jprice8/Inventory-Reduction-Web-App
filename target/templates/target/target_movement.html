@@ -23,7 +23,7 @@
       <p class="m-2">Default UOM: {{ target_item.default_uom }}</p>
       <p class="m-2">UOM Conv. Factor: {{ target_item.uom_conv }}</p>
       <p class="m-2">LUOM: {{ target_item.uom }}</p>
-      <p class="m-2">My Quantity on {{ target_item.period|date:"M d Y" }}: {{ target_item.count_qty }}</p>
+      <p class="m-2">My Remaining Quantity: {{ target_item.calc_remaining_qty }}</p>
     </div>
   </div>
 
