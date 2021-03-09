@@ -26,7 +26,7 @@ class CountUsageListReviewTable(tables.Table):
     luom_po_qty = IntColumn(verbose_name="PO Qty")
     imms_create_date = DateColumn()
     uom_conv = IntColumn()
-    luom_cost = FloatColumn(verbose_name="Ext Cost")
+    luom_cost = FloatColumn(verbose_name="Ext Cost", orderable=False)
     shipped_qty = tables.Column(verbose_name="Shipped Qty")
 
     class Meta:
@@ -85,7 +85,7 @@ class MovementPlanReviewTable(tables.Table):
     item_description = tables.Column(accessor='item.description')
     item_mfr = tables.Column(accessor='item.mfr')
     item_mfr_cat_no = tables.Column(accessor='item.mfr_cat_no')
-    item_luom_cost = FloatColumn(accessor='item.luom_cost')
+    item_luom_cost = FloatColumn(accessor='item.luom_cost', verbose_name='Accepted Ext Cost', orderable=False)
 
     dmm = tables.Column(verbose_name='Sending DMM')
     ship_fac = tables.Column(verbose_name='Destination')
