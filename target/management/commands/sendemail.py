@@ -26,7 +26,7 @@ class Command(BaseCommand):
             mySubject = "Movement Plans Awaiting Your Decision"
             myBody = "Hello DMM at Facility " + dmm_fac + ", \n" \
                 " \n" \
-                "You have " + str(num_plans) + " outstanding requests from BHS DMMS waiting on your decision. \n" \
+                "You have " + str(num_plans) + " outstanding request(s) awaiting your decision. \n" \
                 " \n" \
                 "Please go to reductiontoolkit.com to either accept or reject them."
 
@@ -36,11 +36,7 @@ class Command(BaseCommand):
                 myBody,
                 mySender,
                 [dmm_email],
-                fail_silently=False,
             )
-
-            print('email function is working.')
-
 
         try:
             plans = MovementPlan.objects.filter(
@@ -61,22 +57,19 @@ class Command(BaseCommand):
 
                 # send email function
                 if shipFac == '939':
-                    sendWeeklyEmail(TEST2, shipFac, planQty)
-                    print(f'939 email sent to fac: {shipFac}. plan qty: {planQty}')
+                    sendWeeklyEmail(EMAIL939, shipFac, planQty)
                 elif shipFac == '971':
-                    sendWeeklyEmail(TEST1, shipFac, planQty)
+                    sendWeeklyEmail(EMAIL971, shipFac, planQty)
                 elif shipFac == '952':
-                    sendWeeklyEmail(TEST1, shipFac, planQty)
+                    sendWeeklyEmail(EMAIL952, shipFac, planQty)
                 elif shipFac == '872':
-                    sendWeeklyEmail(TEST1, shipFac, planQty)
+                    sendWeeklyEmail(EMAIL872, shipFac, planQty)
                 elif shipFac == '968':
-                    sendWeeklyEmail(TEST1, shipFac, planQty)
+                    sendWeeklyEmail(EMAIL968, shipFac, planQty)
                 elif shipFac == '954':
-                    sendWeeklyEmail(TEST1, shipFac, planQty)
+                    sendWeeklyEmail(EMAIL954, shipFac, planQty)
                 else:
                     self.stdout.write(self.style.WARNING('Check if/else code. Facility leakage.'))
                 
         except MovementPlan.DoesNotExist:
             raise CommandError('Could not find movement plans')
-
-        self.stdout.write(self.style.SUCCESS(f'Successfully sent this weeks emails. Plans sent: {plans}.'))
