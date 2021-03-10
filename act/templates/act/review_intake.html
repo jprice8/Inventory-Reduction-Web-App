@@ -1,7 +1,12 @@
 {% extends 'inventory/base_side.html' %} 
 {% load render_table from django_tables2 %}
 {% load querystring from django_tables2 %}
-{% load humanize %} 
+{% load humanize %}
+
+{% block extra_head %}
+  <title>Review Intake Items</title>
+{% endblock %}
+
 {% block content %}
 <section class="container-fluid">
   <div style="display: flex; margin-left: 20px;">
